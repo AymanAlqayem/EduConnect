@@ -21,7 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String NAME = "NAME";
     public static final String PASS = "PASS";
     public static final String FLAG = "FLAG";
-
     private EditText edtUserNameLogin;
     private EditText edtPassLogin;
     private Button btnLogin;

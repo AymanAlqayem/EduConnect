@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
         txtSlogan.startAnimation(textAnim);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

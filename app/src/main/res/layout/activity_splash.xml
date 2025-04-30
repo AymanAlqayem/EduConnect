@@ -10,6 +10,7 @@
     android:padding="20dp"
     tools:context=".SplashActivity">
 
+
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="250dp"
