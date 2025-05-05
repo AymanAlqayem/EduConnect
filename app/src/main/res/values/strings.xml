@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">EduConnect</string>
     <string name="appSlogan">Bridging Minds, Building Futures</string>
+    <string name="stdName">Student Name</string>
+    <string name="parentPhone">"Parent Phone"</string>
+    <string-array name="grades_array">
+        <item>10th</item>
+        <item>11th</item>
+        <item>12th</item>
+    </string-array>
 </resources>

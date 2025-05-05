@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/CustomLinearLayout"
     tools:context=".LoginActivity">
 
 
@@ -57,11 +58,12 @@
         android:id="@+id/btnLogin"
         android:layout_width="150dp"
         android:layout_height="0dp"
-        android:layout_marginStart="109dp"
+        android:layout_marginStart="117dp"
         android:layout_marginBottom="207dp"
+        android:padding="10dp"
         android:onClick="btnLoginOnClick"
         android:text="Login"
-        android:textSize="25sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginCheckBox" />
