@@ -42,8 +42,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         Handler handler = new Handler();
+
         handler.postDelayed(new Runnable() {
+
             @Override
             public void run() {
 //                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
