@@ -3,22 +3,15 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="18dp" />
-            <gradient
-                android:startColor="#67C3DD"
-                android:endColor="#8C6EF7"
-                android:angle="45" />
+            <gradient android:angle="45" android:endColor="#FFC371" android:startColor="#FF5F6D" />
         </shape>
     </item>
-
 
     <!-- Default State -->
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="18dp" />
-            <gradient
-                android:startColor="#7AD7F0"
-                android:endColor="#A083F7"
-                android:angle="45" />
+            <gradient android:angle="45" android:endColor="#38F9D7" android:startColor="#43E97B" />
         </shape>
     </item>
 </selector>
