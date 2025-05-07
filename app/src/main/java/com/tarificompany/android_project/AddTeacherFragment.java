@@ -55,7 +55,6 @@ public class AddTeacherFragment extends Fragment {
     }
 
     public void setUpViews(View view) {
-        // Initialize views
         etFullName = view.findViewById(R.id.etFullName);
         etEmail = view.findViewById(R.id.etEmail);
         etPhone = view.findViewById(R.id.etPhone);
@@ -76,6 +75,7 @@ public class AddTeacherFragment extends Fragment {
     public void setUpJoiningDate() {
         // Set the default date to the current date
         Calendar calendar = Calendar.getInstance();
+
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1; // Month is 0-based
         int day = calendar.get(Calendar.DAY_OF_MONTH);

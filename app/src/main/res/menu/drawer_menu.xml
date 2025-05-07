@@ -14,7 +14,7 @@
         <item
             android:id="@+id/nav_edit_student"
             android:icon="@android:drawable/ic_menu_edit"
-            android:title="Edit Student" />
+            android:title="Update Student" />
 
         <item
             android:id="@+id/nav_delete_student"
@@ -29,7 +29,7 @@
         <item
             android:id="@+id/nav_Update_teacher"
             android:icon="@android:drawable/ic_menu_edit"
-            android:title="Edit Teacher" />
+            android:title="Update Teacher" />
 
         <item
             android:id="@+id/nav_delete_teacher"

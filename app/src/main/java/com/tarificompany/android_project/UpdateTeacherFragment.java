@@ -43,6 +43,15 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_teacher, container, false);
 
+        setUpViews(view);
+
+        // Set up search functionality
+        setupSearchView();
+
+        return view;
+    }
+
+    public void setUpViews(View view) {
         // Initialize RecyclerView
         rvTeachers = view.findViewById(R.id.rvTeachers);
         rvTeachers.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -69,11 +78,6 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
         // Set up adapter with filtered list
         adapter = new UpdateTeacherAdapter(filteredTeacherList, this);
         rvTeachers.setAdapter(adapter);
-
-        // Set up search functionality
-        setupSearchView();
-
-        return view;
     }
 
     private void setupSearchView() {

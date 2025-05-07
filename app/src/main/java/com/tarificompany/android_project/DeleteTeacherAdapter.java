@@ -13,10 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class DeleteTeacherAdapter extends RecyclerView.Adapter<DeleteTeacherAdapter.TeacherViewHolder> {
-
     private List<Teacher> teacherList;
     private OnTeacherDeleteListener deleteListener;
 
+    /**
+     * OnTeacherDeleteListener interface lets the adapter notify the parent when a teacher is deleted by
+     * clicking the delete button. It ensures the parent can handle the deletion
+     * (e.g., remove the teacher from the list) without the adapter directly modifying the data itself.
+     */
     public interface OnTeacherDeleteListener {
         void onTeacherDelete(int position);
     }

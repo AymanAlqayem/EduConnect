@@ -2,248 +2,248 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:layout_margin="8dp"
     android:background="@android:color/white"
-    android:layout_margin="8dp">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update Teacher Information"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#1A237E"
         android:gravity="center"
-        android:paddingBottom="20dp" />
+        android:paddingBottom="20dp"
+        android:text="Update Teacher Information"
+        android:textColor="#1A237E"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="ID:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:textSize="16sp"
-            android:padding="8dp"
+            android:background="@android:drawable/edit_text"
             android:enabled="false"
-            android:background="@android:drawable/edit_text" />
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Name:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@android:drawable/edit_text"
             android:hint="Full Name"
-            android:textSize="16sp"
             android:padding="8dp"
-            android:background="@android:drawable/edit_text" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Email:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@android:drawable/edit_text"
             android:hint="Email"
-            android:textSize="16sp"
-            android:padding="8dp"
             android:inputType="textEmailAddress"
-            android:background="@android:drawable/edit_text" />
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Phone:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherPhone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@android:drawable/edit_text"
             android:hint="Phone Number"
-            android:textSize="16sp"
-            android:padding="8dp"
             android:inputType="phone"
-            android:background="@android:drawable/edit_text" />
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Gender:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherGender"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:textSize="16sp"
-            android:padding="8dp"
+            android:background="@android:drawable/edit_text"
             android:enabled="false"
-            android:background="@android:drawable/edit_text" />
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Subject:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/spTeacherSubject"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:padding="8dp"
-            android:background="@android:drawable/edit_text" />
+            android:background="@android:drawable/edit_text"
+            android:padding="8dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Joining Date:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherJoiningDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Select Date"
-            android:textSize="16sp"
-            android:padding="8dp"
+            android:background="@android:drawable/edit_text"
             android:focusable="false"
-            android:background="@android:drawable/edit_text" />
+            android:hint="Select Date"
+            android:padding="8dp"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Notes:"
-            android:textSize="16sp"
-            android:textColor="#424242" />
+            android:textColor="#424242"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etTeacherNotes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:background="@android:drawable/edit_text"
             android:hint="Notes"
-            android:textSize="16sp"
             android:padding="8dp"
-            android:background="@android:drawable/edit_text" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:textSize="16sp"
-            android:textColor="#C62828"
-            android:backgroundTint="#B0BEC5"
             android:layout_marginEnd="8dp"
-            android:padding="8dp" />
+            android:backgroundTint="#B0BEC5"
+            android:padding="8dp"
+            android:text="Cancel"
+            android:textColor="#C62828"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:textSize="16sp"
-            android:textColor="@android:color/white"
             android:backgroundTint="#2E7D32"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:text="Save"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

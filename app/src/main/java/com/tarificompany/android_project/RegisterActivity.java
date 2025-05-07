@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
                 title = "Add Student";
             } else if (id == R.id.nav_edit_student) {
                 fragment = GenericFragment.newInstance(R.layout.activity_update_student);
-                title = "Edit Student";
+                title = "Update Student";
             } else if (id == R.id.nav_delete_student) {
                 fragment = GenericFragment.newInstance(R.layout.activity_delete_student);
                 title = "Delete Student";
@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                 title = "Add Teacher";
             } else if (id == R.id.nav_Update_teacher) {
                 fragment = UpdateTeacherFragment.newInstance();
-                title = "Edit Teacher";
+                title = "Update Teacher";
             } else if (id == R.id.nav_delete_teacher) {
                 fragment = DeleteTeacherFragment.newInstance();
                 title = "Delete Teacher";
