@@ -81,13 +81,13 @@
         android:spinnerMode="dropdown" />
 
     <!-- Joining Date -->
-    <DatePicker
-        android:id="@+id/datePickerJoining"
+    <EditText
+        android:id="@+id/etJoiningDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
+        android:hint="Joining Date (YYYY-MM-DD)"
+        android:inputType="none"
         android:padding="12dp" />
 
     <!-- Bio / Notes -->

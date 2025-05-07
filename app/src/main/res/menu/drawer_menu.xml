@@ -27,7 +27,7 @@
             android:title="Add Teacher" />
 
         <item
-            android:id="@+id/nav_edit_teacher"
+            android:id="@+id/nav_Update_teacher"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Edit Teacher" />
 

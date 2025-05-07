@@ -74,8 +74,8 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (id == R.id.nav_add_teacher) {
                 fragment = AddTeacherFragment.newInstance();
                 title = "Add Teacher";
-            } else if (id == R.id.nav_edit_teacher) {
-//                fragment = GenericFragment.newInstance(R.layout.activity_edit_teacher);
+            } else if (id == R.id.nav_Update_teacher) {
+                fragment = UpdateTeacherFragment.newInstance();
                 title = "Edit Teacher";
             } else if (id == R.id.nav_delete_teacher) {
                 fragment = DeleteTeacherFragment.newInstance();

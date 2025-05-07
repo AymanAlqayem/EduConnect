@@ -1,5 +1,6 @@
 package com.tarificompany.android_project;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,15 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddTeacherFragment extends Fragment {
-    private EditText etFullName, etEmail, etPhone, etNotes;
+    private EditText etFullName, etEmail, etPhone, etNotes, etJoiningDate;
     private RadioGroup rgGender;
     private Spinner spinnerSubject;
-    private DatePicker datePickerJoining;
     private Button btnSave;
 
     private static final String[] SUBJECTS = {
@@ -36,14 +39,14 @@ public class AddTeacherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_teacher, container, false);
 
-        // initialize views
+        // Initialize views
         setUpViews(view);
 
         // Set up Spinner
         setUpSpinner();
 
-        // Set up DatePicker
-        setUpDatePicker();
+        // Set up Joining Date EditText
+        setUpJoiningDate();
 
         // Set up Save button
         btnSave.setOnClickListener(v -> saveTeacher());
@@ -58,7 +61,7 @@ public class AddTeacherFragment extends Fragment {
         etPhone = view.findViewById(R.id.etPhone);
         rgGender = view.findViewById(R.id.rgGender);
         spinnerSubject = view.findViewById(R.id.spinnerSubject);
-        datePickerJoining = view.findViewById(R.id.datePickerJoining);
+        etJoiningDate = view.findViewById(R.id.etJoiningDate);
         etNotes = view.findViewById(R.id.etNotes);
         btnSave = view.findViewById(R.id.btnSave);
     }
@@ -70,14 +73,69 @@ public class AddTeacherFragment extends Fragment {
         spinnerSubject.setAdapter(adapter);
     }
 
-    public void setUpDatePicker() {
+    public void setUpJoiningDate() {
+        // Set the default date to the current date
         Calendar calendar = Calendar.getInstance();
-        datePickerJoining.init(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH),
-                null
-        );
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Month is 0-based
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String defaultDate = String.format(Locale.US, "%d-%02d-%02d", year, month, day);
+        etJoiningDate.setText(defaultDate);
+
+        // Prevent manual typing in the EditText
+        etJoiningDate.setFocusable(false);
+        etJoiningDate.setOnClickListener(v -> showCustomDatePickerDialog(etJoiningDate));
+    }
+
+    private void showCustomDatePickerDialog(EditText editText) {
+        Dialog datePickerDialog = new Dialog(requireContext());
+        datePickerDialog.setContentView(R.layout.dialog_date_picker);
+
+        // Initialize views
+        DatePicker datePicker = datePickerDialog.findViewById(R.id.datePicker);
+        Button btnYes = datePickerDialog.findViewById(R.id.btnYes);
+        Button btnNo = datePickerDialog.findViewById(R.id.btnNo);
+
+        // Parse the current date in the EditText to set the initial date in the DatePicker
+        int year, month, day;
+        String currentDate = editText.getText().toString();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = sdf.parse(currentDate);
+            Calendar calendar = Calendar.getInstance();
+            if (date != null) {
+                calendar.setTime(date);
+            }
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+        } catch (Exception e) {
+            // Fallback to current date if parsing fails
+            Calendar calendar = Calendar.getInstance();
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+
+        // Set the initial date in the DatePicker
+        datePicker.init(year, month, day, null);
+
+        // Yes button click listener
+        btnYes.setOnClickListener(v -> {
+            int selectedYear = datePicker.getYear();
+            int selectedMonth = datePicker.getMonth() + 1; // Month is 0-based
+            int selectedDay = datePicker.getDayOfMonth();
+            String date = String.format(Locale.US, "%d-%02d-%02d", selectedYear, selectedMonth, selectedDay);
+            editText.setText(date);
+            datePickerDialog.dismiss();
+        });
+
+        // No button click listener
+        btnNo.setOnClickListener(v -> {
+            datePickerDialog.dismiss();
+        });
+
+        datePickerDialog.show();
     }
 
     private void saveTeacher() {
@@ -86,6 +144,7 @@ public class AddTeacherFragment extends Fragment {
         String phone = etPhone.getText().toString().trim();
         String notes = etNotes.getText().toString().trim();
         String subject = spinnerSubject.getSelectedItem().toString();
+        String joiningDate = etJoiningDate.getText().toString();
 
         if (fullName.isEmpty() || email.isEmpty() || phone.isEmpty()) {
             Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show();
@@ -103,11 +162,6 @@ public class AddTeacherFragment extends Fragment {
             return;
         }
 
-        int day = datePickerJoining.getDayOfMonth();
-        int month = datePickerJoining.getMonth() + 1;
-        int year = datePickerJoining.getYear();
-        String joiningDate = String.format("%d-%02d-%02d", year, month, day);
-
         // Save the teacher data (e.g., to a database or list)
         // For now, just show a success message
         Toast.makeText(requireContext(), "Teacher Added Successfully!", Toast.LENGTH_LONG).show();
@@ -119,6 +173,6 @@ public class AddTeacherFragment extends Fragment {
         etNotes.setText("");
         rgGender.clearCheck();
         spinnerSubject.setSelection(0);
-        setUpDatePicker(); // Reset DatePicker to current date
+        setUpJoiningDate(); // Reset Joining Date to current date
     }
 }
