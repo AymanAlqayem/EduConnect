@@ -9,4 +9,12 @@
     <color name="nav_header_background">#FFA000</color>
     <color name="nav_item_tint">#333333</color>
     <color name="nav_item_background">#FFF7E6</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="highlight">#0288D1</color>
+    <color name="delete_background">#FFCDD2</color>
+    <color name="delete_icon">#D32F2F</color>
+    <color name="gradient_start">#BBDEFB</color>
+    <color name="gradient_end">#E1BEE7</color>
+    <color name="text_primary">#1A237E</color>
 </resources>

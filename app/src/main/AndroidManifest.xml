@@ -13,6 +13,9 @@
         android:theme="@style/ourAppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".DeleteTeacherFragment"
+            android:exported="false" />
+        <activity
             android:name=".UpdateStudentActivity"
             android:exported="false" />
         <activity

@@ -78,14 +78,12 @@ public class RegisterActivity extends AppCompatActivity {
 //                fragment = GenericFragment.newInstance(R.layout.activity_edit_teacher);
                 title = "Edit Teacher";
             } else if (id == R.id.nav_delete_teacher) {
-//                fragment = GenericFragment.newInstance(R.layout.activity_delete_teacher);
+                fragment = DeleteTeacherFragment.newInstance();
                 title = "Delete Teacher";
             }
 
             if (fragment != null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                // Clear back stack to ensure only one fragment is visible
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);
