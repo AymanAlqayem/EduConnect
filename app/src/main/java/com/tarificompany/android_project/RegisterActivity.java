@@ -1,6 +1,7 @@
 package com.tarificompany.android_project;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,34 +27,37 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Initialize toolbar
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("School Dashboard");
         setSupportActionBar(toolbar);
+        toolbar.setTitle("School Dashboard");
 
+        // Initialize drawer and navigation view
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
+        // Set up drawer toggle
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Load DashboardFragment by default
+        // Load default fragment (Dashboard)
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new DashboardFragment())
-                    .commit();
-            // Set the Dashboard item as selected
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container, new DashboardFragment());
+            transaction.commit();
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
+        // Set up navigation item click listener
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             Fragment fragment = null;
-            String title = "School Dashboard"; // Default title
+            String title = "School Dashboard";
 
             if (id == R.id.nav_dashboard) {
                 fragment = new DashboardFragment();
@@ -68,27 +72,27 @@ public class RegisterActivity extends AppCompatActivity {
                 fragment = GenericFragment.newInstance(R.layout.activity_delete_student);
                 title = "Delete Student";
             } else if (id == R.id.nav_add_teacher) {
-                // Add Teacher layout (create if needed)
+                fragment = AddTeacherFragment.newInstance();
                 title = "Add Teacher";
             } else if (id == R.id.nav_edit_teacher) {
-                // Edit Teacher layout (create if needed)
+//                fragment = GenericFragment.newInstance(R.layout.activity_edit_teacher);
                 title = "Edit Teacher";
             } else if (id == R.id.nav_delete_teacher) {
-                // Delete Teacher layout (create if needed)
+//                fragment = GenericFragment.newInstance(R.layout.activity_delete_teacher);
                 title = "Delete Teacher";
             }
 
             if (fragment != null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                // Clear back stack to ensure only one fragment is visible
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
                 drawerLayout.closeDrawers();
+                toolbar.setTitle(title);
             }
-
-            // Update toolbar title
-            toolbar.setTitle(title);
 
             return true;
         });
@@ -96,7 +100,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) return true;
+        if (toggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
