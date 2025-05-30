@@ -3,82 +3,109 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    style="@style/CustomLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/CustomLinearLayout"
     tools:context=".LoginActivity">
 
-
+    <!-- Title: Sign In -->
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="51dp"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginBottom="89dp"
-        android:text="Let’s Get You Logged In"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/edtUserNameLogin"
+        android:id="@+id/titleTextView"
+        style="@style/CustomTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="Sign In"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/edtUserNameLogin"
+    <!-- Username Field -->
+    <TextView
+        android:id="@+id/usernameLabel"
+        style="@style/CustomTextView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="47dp"
-        android:ems="10"
-        android:hint="enter your ID"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/edtPassLogin"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:text="Username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <EditText
-        android:id="@+id/edtPassLogin"
+        android:id="@+id/edtUserNameLogin"
+        style="@style/CustomEditText"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="43dp"
-        android:ems="10"
-        android:hint="enter your password"
-        android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/loginCheckBox"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Enter your username"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLabel" />
+
+    <!-- Password Field -->
+    <TextView
+        android:id="@+id/passwordLabel"
+        style="@style/CustomTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:text="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtUserNameLogin" />
 
+    <EditText
+        android:id="@+id/edtPassLogin"
+        style="@style/CustomEditText"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Enter your password"
+        android:inputType="textPassword"
+        android:paddingStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLabel" />
+
+    <!-- Remember Me Checkbox -->
+    <CheckBox
+        android:id="@+id/loginCheckBox"
+        style="@style/CustomCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="Remember me"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtPassLogin" />
+
+    <!-- Login Button -->
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginBottom="207dp"
-        android:padding="10dp"
-        android:onClick="btnLoginOnClick"
+        style="@style/CustomButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
         android:text="Login"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginCheckBox" />
 
-    <CheckBox
-        android:id="@+id/loginCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="54dp"
-        android:text="Remeber me"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassLogin" />
-
+    <!-- Footer: Porgo Research -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

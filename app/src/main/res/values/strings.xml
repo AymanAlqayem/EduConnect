@@ -11,4 +11,20 @@
     <string name="menu_settings">Settings</string>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="teacher_dashboard_title">Teacher Dashboard</string>
+    <string name="teacher_schedule_title">My Schedule</string>
+    <string name="teacher_messages_title">Messages</string>
+    <string name="teacher_grades_title">Publish Grades</string>
+    <string name="publish_grades">Publish Grades</string>
+    <string name="submit">Submit</string>
+    <string name="course_icon_description">Course icon</string>
+    <string name="edit_schedule_description">Edit schedule</string>
+    <string name="no_classes_scheduled">No classes scheduled for this day</string>
+    <string name="empty_schedule_description">Empty schedule illustration</string>
+    <string name="publish_grades_title">Publish Student Grades</string>
+    <string name="select_course_description">Select course</string>
+    <string name="select_assessment_type_description">Select assessment type</string>
+    <string name="enter_percentage">Assessment Weight (%)</string>
+    <string name="enter_grade">Grade (0-100)</string>
+    <string name="submit_grades">Submit Grades</string>
 </resources>

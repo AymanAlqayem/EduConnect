@@ -17,4 +17,7 @@
     <color name="gradient_start">#BBDEFB</color>
     <color name="gradient_end">#E1BEE7</color>
     <color name="text_primary">#1A237E</color>
+    <color name="card_background">#FFF7E6</color>
+    <color name="text_color_primary">#333333</color>
+    <color name="gray_700">#757575</color>
 </resources>
