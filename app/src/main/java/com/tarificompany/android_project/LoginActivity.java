@@ -10,95 +10,171 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String NAME = "NAME";
-    public static final String PASS = "PASS";
-    public static final String FLAG = "FLAG";
-    private EditText edtUserNameLogin;
+    // SharedPreferences keys
+    private static final String USER_TYPE = "USER_TYPE";
+    private static final String USER_ID = "USER_ID";
+    private static final String USER_NAME = "USER_NAME";
+    private static final String USER_EMAIL = "USER_EMAIL";
+    private static final String REMEMBER_ME = "REMEMBER_ME";
+
+    private EditText edtEmailLogin;
     private EditText edtPassLogin;
     private Button btnLogin;
+    private Button btnRegister;
     private CheckBox loginCheckBox;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private RequestQueue requestQueue;
+
+    // Replace with your server URL
+    private static final String LOGIN_URL = "http://192.168.0.111/rest/info_json.php?cat=" + ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Initialize Volley RequestQueue
+        requestQueue = Volley.newRequestQueue(this);
+
         setUpViews();
         setUpSharedPref();
-        checkPrefs(); // Check if saved login data exists
+        checkPrefs();
     }
 
-    /**
-     * setUpViews method that will initialise the hooks, and create the animation.
-     */
-    public void setUpViews() {
-        edtUserNameLogin = findViewById(R.id.edtUserNameLogin);
+    private void setUpViews() {
+        edtEmailLogin = findViewById(R.id.edtUserNameLogin);
         edtPassLogin = findViewById(R.id.edtPassLogin);
         btnLogin = findViewById(R.id.btnLogin);
+        btnRegister = findViewById(R.id.btnRegister);
         loginCheckBox = findViewById(R.id.loginCheckBox);
+
+        btnLogin.setOnClickListener(this::btnLoginOnClick);
+        btnRegister.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        });
     }
 
-    /**
-     * setUpSharedPref method that will initialise the shared preferences objects.
-     */
-    public void setUpSharedPref() {
+    private void setUpSharedPref() {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
     }
 
-    /**
-     * checkPrefs method that will Check if saved login info exists and pre-fill it.
-     */
-    public void checkPrefs() {
-        boolean flag = pref.getBoolean(FLAG, false);
-        if (flag) {
-            String storedName = pref.getString(NAME, "");
-            String storedPass = pref.getString(PASS, "");
-
-            edtUserNameLogin.setText(storedName);
-            edtPassLogin.setText(storedPass);
+    private void checkPrefs() {
+        boolean rememberMe = pref.getBoolean(REMEMBER_ME, false);
+        if (rememberMe) {
+            String storedEmail = pref.getString(USER_EMAIL, "");
+            edtEmailLogin.setText(storedEmail);
             loginCheckBox.setChecked(true);
         }
     }
 
-    /**
-     * btnLoginOnClick method that will make actions for the login button.
-     */
-
     public void btnLoginOnClick(View view) {
-//        String name = edtUserNameLogin.getText().toString();
-//        String pass = edtPassLogin.getText().toString();
-//
-//        String storedName = pref.getString(NAME, "");
-//        String storedPass = pref.getString(PASS, "");
-//
-//        if (name.equals(storedName) && pass.equals(storedPass)) {
-//            if (loginCheckBox.isChecked()) {
-//                editor.putString(NAME, name);
-//                editor.putString(PASS, pass);
-//                editor.putBoolean(FLAG, true);
-//                editor.commit();
-//            }
-//            Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-//            startActivity(intent);
-//            finish();
-//        } else {
-//            Toast.makeText(this, "Invalid username or password!", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+        String email = edtEmailLogin.getText().toString().trim();
+        String password = edtPassLogin.getText().toString().trim();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        loginUser(email, password);
     }
 
+    private void loginUser(String email, String password) {
+        // Create JSON object for POST request
+        Map<String, String> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                LOGIN_URL,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                String userType = response.getString("user_type");
+                                int userId = response.getInt("user_id");
+                                String userName = response.getString("name");
+
+                                handleSuccessfulLogin(email, userId, userName, userType);
+                            } else {
+                                String message = response.getString("message");
+                                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this, "Login failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        requestQueue.add(request);
+    }
+
+    private void handleSuccessfulLogin(String email, int userId, String userName, String userType) {
+        // Save to SharedPreferences if "Remember me" is checked
+        if (loginCheckBox.isChecked()) {
+            editor.putString(USER_EMAIL, email);
+            editor.putBoolean(REMEMBER_ME, true);
+        } else {
+            editor.remove(USER_EMAIL);
+            editor.putBoolean(REMEMBER_ME, false);
+        }
+
+        // Save current user info
+        editor.putString(USER_TYPE, userType);
+        editor.putInt(USER_ID, userId);
+        editor.putString(USER_NAME, userName);
+        editor.apply();
+
+        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+
+        // Redirect to appropriate activity
+        Intent intent;
+        if (userType.equals("teacher")) {
+            intent = new Intent(this, TeacherHomeActivity.class);
+        } else {
+            intent = new Intent(this, StudentHomeActivity.class);
+        }
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this);
+        }
+    }
 }
