@@ -27,4 +27,9 @@
     <string name="enter_percentage">Assessment Weight (%)</string>
     <string name="enter_grade">Grade (0-100)</string>
     <string name="submit_grades">Submit Grades</string>
+    <string name="teacher">المعلم</string>
+    <string name="teacher_dashboard">لوحة التحكم</string>
+    <string name="my_schedule">جدول الحصص</string>
+    <string name="messages">الرسائل</string>
+
 </resources>
