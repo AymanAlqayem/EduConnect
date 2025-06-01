@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onResume();
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             try {
-                Intent intent = new Intent(SplashActivity.this, TeacherDashboardActivity.class);
+                Intent intent = new Intent(SplashActivity.this,TeacherActivity.class);
                 startActivity(intent);
                 finish();
             } catch (Exception e) {

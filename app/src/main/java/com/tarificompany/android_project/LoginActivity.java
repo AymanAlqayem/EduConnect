@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent;
         switch (userType.toLowerCase()) {
             case "teacher":
-                intent = new Intent(this, TeacherDashboardActivity.class);
+                intent = new Intent(this, TeacherActivity.class);
                 break;
             case "student":
                 intent = new Intent(this, StudentDashboardActivity.class);

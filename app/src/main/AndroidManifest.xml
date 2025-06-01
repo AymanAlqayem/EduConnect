@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".TeacherDashboardActivity"
+            android:name=".TeacherActivity"
             android:exported="false"
             android:theme="@style/ourAppTheme"/>
 

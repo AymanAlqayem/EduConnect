@@ -1,42 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <!-- Main Menu Group -->
-    <group android:checkableBehavior="single"
-        android:id="@+id/main_menu_group">
-
-        <item
-            android:id="@+id/nav_schedule"
-            android:title="Class Schedule"
-            app:showAsAction="ifRoom"
-            android:contentDescription="View your teaching schedule" />
-
-        <item
-            android:id="@+id/nav_grades"
-            android:title="Publish Grades"
-            app:showAsAction="ifRoom"
-            android:contentDescription="Publish student grades" />
-
-        <item
-            android:id="@+id/nav_messages"
-            android:title="Messages"
-            app:showAsAction="ifRoom"
-            android:contentDescription="View and send messages" />
-    </group>
-
-    <!-- Secondary Menu Group -->
-    <group android:id="@+id/secondary_group"
-        android:checkableBehavior="none">
-        <item
-            android:id="@+id/nav_settings"
-            android:title="Settings"
-            android:contentDescription="App settings" />
-
-        <item
-            android:id="@+id/nav_logout"
-            android:title="Logout"
-            android:contentDescription="Sign out of your account" />
-    </group>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_dashboard"
+        android:title="Dashboard"
+        />
+    <item
+        android:id="@+id/nav_schedule"
+        android:title="Schedule"
+        />
+    <item
+        android:id="@+id/nav_grades"
+        android:title="Publish Grades"
+         />
+    <item
+        android:id="@+id/nav_messages"
+        android:title="Messages"
+         />
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        />
 </menu>
