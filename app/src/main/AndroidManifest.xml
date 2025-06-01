@@ -12,36 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/ourAppTheme"
         tools:targetApi="31">
-        <activity
-            android:name=".UpdateTeacherFragment"
-            android:exported="false" />
-        <activity
-            android:name=".DeleteTeacherFragment"
-            android:exported="false" />
-        <activity
-            android:name=".UpdateStudentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DeleteStudentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddStudentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
+            android:name=".TeacherDashboardActivity"
+            android:exported="false"
+            android:theme="@style/ourAppTheme"/>
+
+
+        <activity android:name=".LoginActivity" android:exported="false"/>
+        <activity android:name=".RegisterActivity" android:exported="false"/>
+        <activity android:name=".StudentDashboardActivity" android:exported="false"/>
+        <activity android:name=".UpdateStudentActivity" android:exported="false"/>
+        <activity android:name=".DeleteStudentActivity" android:exported="false"/>
+        <activity android:name=".AddStudentActivity" android:exported="false"/>
+        <activity android:name=".AddAssignmentActivity" android:exported="false"/>
+        <activity android:name=".SendMessageActivity" android:exported="false"/>
 
     </application>
 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFF7E6"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_500"
+        app:title="إضافة واجب جديد"
+        app:titleTextAppearance="@style/ToolbarTextStyle"
+        android:elevation="10dp">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/white"
+            tools:ignore="UseAppTint" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- عنوان الواجب -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="عنوان الواجب"
+                style="@style/CustomTextView"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_assignment_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="أدخل عنوان الواجب"
+                style="@style/CustomEditText"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- وصف الواجب -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="وصف الواجب"
+                style="@style/CustomTextView"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_assignment_desc"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="أدخل وصف الواجب"
+                style="@style/CustomEditText"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- تاريخ التسليم -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="تاريخ التسليم"
+                style="@style/CustomTextView"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_due_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="اختر تاريخ التسليم"
+                style="@style/CustomEditText"
+                android:focusable="false"
+                android:clickable="true"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- الصف -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="الصف المستهدف"
+                style="@style/CustomTextView"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/spinner_class"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/CustomSpinner"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- زر الإضافة -->
+            <Button
+                android:id="@+id/btn_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="إضافة الواجب"
+                style="@style/CustomButton"
+                android:backgroundTint="@color/purple_500"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
