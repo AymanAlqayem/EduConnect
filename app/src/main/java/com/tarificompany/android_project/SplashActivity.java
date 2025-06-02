@@ -41,19 +41,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onResume();
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             try {
-                Intent intent = new Intent(SplashActivity.this,TeacherActivity.class);
+//                Intent intent = new Intent(SplashActivity.this,TeacherActivity.class);
+//                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             } catch (Exception e) {
                 Log.e("SplashError", "Failed to start TeacherDashboardActivity: " + e.getMessage(), e);
-                try {
-                    Intent fallbackIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(fallbackIntent);
-                    finish();
-                } catch (Exception fallbackException) {
-                    Log.e("SplashError", "Failed to start LoginActivity: " + fallbackException.getMessage(), fallbackException);
-                    Toast.makeText(SplashActivity.this, "Error starting app. Please try again.", Toast.LENGTH_LONG).show();
-                }
             }
         }, 2000);
     }

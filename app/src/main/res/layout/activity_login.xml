@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <EditText
-        android:id="@+id/edtUserNameLogin"
+        android:id="@+id/edtUserName"
         style="@style/CustomEditText"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -63,10 +63,10 @@
         android:text="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtUserNameLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/edtUserName" />
 
     <EditText
-        android:id="@+id/edtPassLogin"
+        android:id="@+id/edtPass"
         style="@style/CustomEditText"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -90,7 +90,7 @@
         android:layout_marginTop="24dp"
         android:text="Remember me"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPass" />
 
     <!-- Login Button -->
     <Button
@@ -101,11 +101,9 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
+        android:onClick="handleLogin"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginCheckBox" />
-
-    <!-- Footer: Porgo Research -->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.tarificompany.android_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -80,7 +81,13 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (id == R.id.nav_delete_teacher) {
                 fragment = DeleteTeacherFragment.newInstance();
                 title = "Delete Teacher";
+            } else if (id == R.id.nav_logout) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
+
 
             if (fragment != null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
