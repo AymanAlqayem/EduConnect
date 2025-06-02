@@ -1,5 +1,6 @@
 package com.tarificompany.android_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -68,8 +69,10 @@ public class TeacherActivity extends AppCompatActivity {
                 fragment = GenericFragment.newInstance(R.layout.fragment_messages);
                 title = "Messages";
             } else if (id == R.id.nav_logout) {
+                Intent intent = new Intent(TeacherActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
-                return true;
             }
 
             if (fragment != null) {

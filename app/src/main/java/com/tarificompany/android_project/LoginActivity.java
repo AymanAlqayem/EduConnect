@@ -6,14 +6,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                     startActivity(new Intent(this, RegisterActivity.class));
                                     break;
                                 case "student":
-//                                    startActivity(new Intent(this, StudentActivity.class));
+                                    startActivity(new Intent(this, StudentDashboardActivity.class));
                                     break;
                                 default:
                                     Toast.makeText(this, "Unknown role", Toast.LENGTH_SHORT).show();

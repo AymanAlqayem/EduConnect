@@ -21,11 +21,11 @@ public class StudentDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register); // Using same layout as register activity
-
-        setupToolbar();
-        setupNavigationDrawer();
-        updateHeaderInfo();
-        loadDashboardFragment();
+//
+//        setupToolbar();
+//        setupNavigationDrawer();
+//        updateHeaderInfo();
+//        loadDashboardFragment();
     }
 
     private void setupToolbar() {
@@ -33,7 +33,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle("Student Dashboard");
     }
-
+//
     private void setupNavigationDrawer() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -47,22 +47,22 @@ public class StudentDashboardActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
-
-    private void updateHeaderInfo() {
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        //View headerView = navigationView.getHeaderView(0);
-
-        //TextView title = headerView.findViewById(R.id.nav_header_title);
-        //TextView subtitle = headerView.findViewById(R.id.nav_header_subtitle);
-
-        String userName = getIntent().getStringExtra("USER_NAME");
-       // title.setText(userName);
-        //subtitle.setText("Student Dashboard");
-    }
-
-    private void loadDashboardFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new DashboardFragment())
-                .commit();
-    }
+//
+//    private void updateHeaderInfo() {
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        //View headerView = navigationView.getHeaderView(0);
+//
+//        //TextView title = headerView.findViewById(R.id.nav_header_title);
+//        //TextView subtitle = headerView.findViewById(R.id.nav_header_subtitle);
+//
+//        String userName = getIntent().getStringExtra("USER_NAME");
+//       // title.setText(userName);
+//        //subtitle.setText("Student Dashboard");
+//    }
+//
+//    private void loadDashboardFragment() {
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, new DashboardFragment())
+//                .commit();
+//    }
 }
