@@ -20,7 +20,7 @@ public class StudentDashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // Using same layout as register activity
+//        setContentView(R.layout.activity_register); // Using same layout as register activity
 //
 //        setupToolbar();
 //        setupNavigationDrawer();
@@ -28,25 +28,25 @@ public class StudentDashboardActivity extends AppCompatActivity {
 //        loadDashboardFragment();
     }
 
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Student Dashboard");
-    }
+//    private void setupToolbar() {
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        toolbar.setTitle("Student Dashboard");
+//    }
 //
-    private void setupNavigationDrawer() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_dashboard)
-                .setDrawerLayout(drawer)
-                .build();
-
-        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-    }
+//    private void setupNavigationDrawer() {
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//
+//        mAppBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.nav_dashboard)
+//                .setDrawerLayout(drawer)
+//                .build();
+//
+//        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
+//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+//        NavigationUI.setupWithNavController(navigationView, navController);
+//    }
 //
 //    private void updateHeaderInfo() {
 //        NavigationView navigationView = findViewById(R.id.nav_view);
