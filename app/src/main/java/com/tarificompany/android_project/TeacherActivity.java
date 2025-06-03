@@ -1,6 +1,8 @@
+// File: TeacherActivity.java
 package com.tarificompany.android_project;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -23,19 +25,22 @@ public class TeacherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher); // هذا XML فيه الـ Toolbar و FrameLayout فقط
+        setContentView(R.layout.activity_teacher);
 
-        // تهيئة الـ DrawerLayout و NavigationView
+        Intent intents = getIntent();
+        int teacherId = intents.getIntExtra("teacher_id", 0);
+
+        SharedPreferences pref = getSharedPreferences("teacher_prefs", MODE_PRIVATE);
+        pref.edit().putInt("teacher_id", teacherId).apply();
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_dashboard); // تحديد العنصر الافتراضي
+        navigationView.setCheckedItem(R.id.nav_dashboard);
 
-        // تهيئة الـ Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Teacher Dashboard");
 
-        // ربط زر الهامبرجر (Toggle) بالـ DrawerLayout والـ Toolbar
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -43,7 +48,6 @@ public class TeacherActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // تحميل Fragment لوحة التحكم افتراضياً عند فتح النشاط لأول مرة
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -60,18 +64,22 @@ public class TeacherActivity extends AppCompatActivity {
                 fragment = new TeacherDashboardFragment();
                 title = "Teacher Dashboard";
             } else if (id == R.id.nav_schedule) {
-                fragment = GenericFragment.newInstance(R.layout.fragment_schedule);
+                fragment = new ScheduleFragment();
                 title = "Class Schedule";
             } else if (id == R.id.nav_grades) {
-                fragment = GenericFragment.newInstance(R.layout.fragment_publish_grades);
+                fragment = new PublishGradesFragment();
                 title = "Publish Grades";
             } else if (id == R.id.nav_messages) {
-                fragment = GenericFragment.newInstance(R.layout.item_message);
+                fragment = new MessagesFragment();
                 title = "Messages";
             } else if (id == R.id.nav_assignment) {
-                fragment = GenericFragment.newInstance(R.layout.activity_add_assignment);
-                title = "Assignment";
+                fragment = new AddAssignmentFragment();
+                title = "Assignments";
             } else if (id == R.id.nav_logout) {
+                SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
+                editor.apply();
                 Intent intent = new Intent(TeacherActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -92,7 +100,6 @@ public class TeacherActivity extends AppCompatActivity {
             return true;
         });
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

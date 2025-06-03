@@ -1,5 +1,8 @@
+// File: ComposeMessageActivity.java
 package com.tarificompany.android_project;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,25 +11,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ComposeMessageActivity extends AppCompatActivity {
 
     private Spinner spinnerRecipientType, spinnerRecipient;
     private EditText etMessage;
     private Button btnSend;
+    private List<String> recipientIds;
+    private List<String> recipientNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_compose_message); // Reuse existing layout
+        setContentView(R.layout.fragment_compose_message);
+
         initViews();
         setupSpinners();
         setupClickListeners();
@@ -40,23 +53,20 @@ public class ComposeMessageActivity extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        // Setup recipient types spinner
         List<String> recipientTypes = new ArrayList<>();
         recipientTypes.add("Individual Student");
         recipientTypes.add("Entire Class");
         recipientTypes.add("Group of Students");
 
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                recipientTypes);
+                this, android.R.layout.simple_spinner_item, recipientTypes);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRecipientType.setAdapter(typeAdapter);
 
-        // Setup recipients spinner based on type
+        recipientIds = new ArrayList<>();
+        recipientNames = new ArrayList<>();
         updateRecipientsList();
 
-        // Listen for recipient type changes
         spinnerRecipientType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -70,28 +80,49 @@ public class ComposeMessageActivity extends AppCompatActivity {
 
     private void updateRecipientsList() {
         String selectedType = spinnerRecipientType.getSelectedItem().toString();
-        List<String> recipients = new ArrayList<>();
+        recipientIds.clear();
+        recipientNames.clear();
 
+        String url;
         if (selectedType.equals("Individual Student")) {
-            recipients.add("John Smith");
-            recipients.add("Sarah Johnson");
-            recipients.add("Michael Brown");
+            url = "http://10.0.2.2/AndroidProject/get_students.php";
         } else if (selectedType.equals("Entire Class")) {
-            recipients.add("Class A");
-            recipients.add("Class B");
-            recipients.add("Class C");
-        } else if (selectedType.equals("Group of Students")) {
-            recipients.add("Group 1 (5 students)");
-            recipients.add("Group 2 (3 students)");
-            recipients.add("Group 3 (7 students)");
+            url = "http://10.0.2.2/AndroidProject/get_classes.php";
+        } else {
+            url = "http://10.0.2.2/AndroidProject/get_groups.php";
         }
 
-        ArrayAdapter<String> recipientAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                recipients);
-        recipientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRecipient.setAdapter(recipientAdapter);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        recipientNames.clear();
+                        recipientIds.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject obj = response.getJSONObject(i);
+                            if (selectedType.equals("Individual Student")) {
+                                recipientNames.add(obj.getString("name"));
+                                recipientIds.add(obj.getString("student_id"));
+                            } else if (selectedType.equals("Entire Class")) {
+                                recipientNames.add(obj.getString("class_name"));
+                                recipientIds.add(obj.getString("class_id"));
+                            } else {
+                                recipientNames.add(obj.getString("group_name"));
+                                recipientIds.add(obj.getString("group_id"));
+                            }
+                        }
+                        ArrayAdapter<String> recipientAdapter = new ArrayAdapter<>(
+                                ComposeMessageActivity.this,
+                                android.R.layout.simple_spinner_item,
+                                recipientNames);
+                        recipientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerRecipient.setAdapter(recipientAdapter);
+                    } catch (Exception e) {
+                        Toast.makeText(ComposeMessageActivity.this, "Error loading recipients", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(ComposeMessageActivity.this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
+
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     private void setupClickListeners() {
@@ -107,38 +138,44 @@ public class ComposeMessageActivity extends AppCompatActivity {
             etMessage.setError("Message cannot be empty");
             return false;
         }
+        if (spinnerRecipient.getSelectedItem() == null) {
+            Toast.makeText(this, "Please select a recipient", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
     private void sendMessage() {
         String recipientType = spinnerRecipientType.getSelectedItem().toString();
-        String recipient = spinnerRecipient.getSelectedItem().toString();
+        String recipientId = recipientIds.get(spinnerRecipient.getSelectedItemPosition());
         String message = etMessage.getText().toString().trim();
 
-        // Show confirmation
-        String confirmation = String.format("Message to %s (%s) sent!", recipient, recipientType);
-        Snackbar.make(findViewById(android.R.id.content), confirmation, Snackbar.LENGTH_LONG)
-                .setAction("OK", v -> finish())
-                .show();
+        SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
+        String teacherId = prefs.getString("teacher_id", "");
 
-        // Add to message history
-        addMessageToHistory(recipient, message);
-    }
+        JSONObject payload = new JSONObject();
+        try {
+            payload.put("sender_id", teacherId);
+            payload.put("sender_type", "Teacher");
+            payload.put("recipient_id", recipientId);
+            payload.put("recipient_type", recipientType.equals("Individual Student") ? "Student" : recipientType.equals("Entire Class") ? "Class" : "Group");
+            payload.put("subject", "Message from Teacher");
+            payload.put("content", message);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error preparing message", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-    private void addMessageToHistory(String recipient, String content) {
-        // Get current date/time
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                .format(new Date());
+        String url = "http://10.0.2.2/AndroidProject/send_message.php";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, payload,
+                response -> {
+                    String confirmation = String.format("Message to %s (%s) sent!", spinnerRecipient.getSelectedItem().toString(), recipientType);
+                    Snackbar.make(findViewById(android.R.id.content), confirmation, Snackbar.LENGTH_LONG)
+                            .setAction("OK", v -> finish())
+                            .show();
+                },
+                error -> Toast.makeText(this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
-        // Create a new sent message
-        Message sentMessage = new Message(
-                "You", // sender
-                "To: " + recipient, // preview
-                timestamp,
-                content
-        );
-
-        // Here you would add it to your database or message list
-        Toast.makeText(this, "Message added to history", Toast.LENGTH_SHORT).show();
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 }
