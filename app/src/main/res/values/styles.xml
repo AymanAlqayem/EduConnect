@@ -119,7 +119,7 @@
 
     <style name="CardViewStyle">
         <item name="cardBackgroundColor">@color/card_background</item>
-        <item name="cardCornerRadius">8dp</item>
+        <item name="cardCornerRadius">16dp</item>
         <item name="cardElevation">4dp</item>
     </style>
 

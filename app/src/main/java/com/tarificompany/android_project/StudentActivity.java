@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class TeacherActivity extends AppCompatActivity {
+public class StudentActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -23,19 +23,19 @@ public class TeacherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher); // هذا XML فيه الـ Toolbar و FrameLayout فقط
+        setContentView(R.layout.activity_student);
 
-        // تهيئة الـ DrawerLayout و NavigationView
+        // Initialize DrawerLayout and NavigationView
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_dashboard); // تحديد العنصر الافتراضي
+        navigationView.setCheckedItem(R.id.nav_dashboard); // Set default selected item
 
-        // تهيئة الـ Toolbar
+        // Initialize Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Teacher Dashboard");
+        toolbar.setTitle("Student Dashboard");
 
-        // ربط زر الهامبرجر (Toggle) بالـ DrawerLayout والـ Toolbar
+        // Setup hamburger toggle with DrawerLayout and Toolbar
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -43,36 +43,33 @@ public class TeacherActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // تحميل Fragment لوحة التحكم افتراضياً عند فتح النشاط لأول مرة
+        // Load Dashboard Fragment by default when activity is first opened
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, new TeacherDashboardFragment())
+                    .replace(R.id.fragment_container, new StudentDashboardFragment())
                     .commit();
         }
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             Fragment fragment = null;
-            String title = "Teacher Dashboard";
+            String title = "Student Dashboard";
 
             if (id == R.id.nav_dashboard) {
-                fragment = new TeacherDashboardFragment();
-                title = "Teacher Dashboard";
+                fragment = new StudentDashboardFragment();
+                title = "Student Dashboard";
             } else if (id == R.id.nav_schedule) {
                 fragment = GenericFragment.newInstance(R.layout.fragment_schedule);
-                title = "Class Schedule";
+                title = "My Schedule";
             } else if (id == R.id.nav_grades) {
-                fragment = GenericFragment.newInstance(R.layout.fragment_publish_grades);
-                title = "Publish Grades";
+                fragment = GenericFragment.newInstance(R.layout.course_item);
+                title = "My Grades";
             } else if (id == R.id.nav_messages) {
                 fragment = GenericFragment.newInstance(R.layout.item_message);
                 title = "Messages";
-            } else if (id == R.id.nav_assignment) {
-                fragment = GenericFragment.newInstance(R.layout.activity_add_assignment);
-                title = "Assignment";
             } else if (id == R.id.nav_logout) {
-                Intent intent = new Intent(TeacherActivity.this, LoginActivity.class);
+                Intent intent = new Intent(StudentActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
@@ -92,7 +89,6 @@ public class TeacherActivity extends AppCompatActivity {
             return true;
         });
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

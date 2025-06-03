@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/purple_500"
-        app:title="إضافة واجب جديد"
+        app:title="Add New Assignment"
         app:titleTextAppearance="@style/ToolbarTextStyle"
         android:elevation="10dp">
 
@@ -36,11 +36,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- عنوان الواجب -->
+            <!-- Assignment Title -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="عنوان الواجب"
+                android:text="Assignment Title"
                 style="@style/CustomTextView"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
@@ -49,15 +49,15 @@
                 android:id="@+id/et_assignment_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="أدخل عنوان الواجب"
+                android:hint="Enter assignment title"
                 style="@style/CustomEditText"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- وصف الواجب -->
+            <!-- Assignment Description -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="وصف الواجب"
+                android:text="Assignment Description"
                 style="@style/CustomTextView"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
@@ -66,17 +66,17 @@
                 android:id="@+id/et_assignment_desc"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:hint="أدخل وصف الواجب"
+                android:hint="Enter assignment description"
                 style="@style/CustomEditText"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- تاريخ التسليم -->
+            <!-- Due Date -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="تاريخ التسليم"
+                android:text="Due Date"
                 style="@style/CustomTextView"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
@@ -85,17 +85,17 @@
                 android:id="@+id/et_due_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="اختر تاريخ التسليم"
+                android:hint="Select due date"
                 style="@style/CustomEditText"
                 android:focusable="false"
                 android:clickable="true"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- الصف -->
+            <!-- Target Class -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="الصف المستهدف"
+                android:text="Target Class"
                 style="@style/CustomTextView"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
@@ -107,12 +107,11 @@
                 style="@style/CustomSpinner"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- زر الإضافة -->
             <Button
                 android:id="@+id/btn_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="إضافة الواجب"
+                android:text="Add Assignment"
                 style="@style/CustomButton"
                 android:backgroundTint="@color/purple_500"
                 android:layout_marginTop="16dp"/>

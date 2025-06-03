@@ -31,6 +31,22 @@
     <string name="teacher_dashboard">Teacher Dashboard</string>
     <string name="my_schedule">Class Schedule</string>
     <string name="messages">Messages</string>
+    <string name="students_icon_description">students_icon_description</string>
+    <string name="calendar_icon_description">calendar_icon_description</string>
+    <string name="location_icon_description">location_icon_description</string>
+    <string name="time_icon_description">time_icon_description</string>
+    <string name="select_class">select_class</string>
+    <string name="select_assessment">select_assessment</string>
+    <string name="grades_breakdown">grades_breakdown</string>
+    <string name="class_rank">class_rank</string>
+    <string name="percentage">percentage</string>
+    <string name="final_grade">final_grade</string>
+    <string name="overall_grade">overall_grade</string>
+    <string name="back">back</string>
+    <string name="search_courses">search_courses</string>
+    <string name="my_courses">my_courses</string>
+    <string name="current_grade">Current Grade</string>
+    <string name="view_grades">view_grades</string>
 
 
 </resources>

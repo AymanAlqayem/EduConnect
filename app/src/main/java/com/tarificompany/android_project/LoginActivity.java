@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                     startActivity(new Intent(this, RegisterActivity.class));
                                     break;
                                 case "student":
-                                    startActivity(new Intent(this, StudentDashboardActivity.class));
+                                    startActivity(new Intent(this, StudentActivity.class));
                                     break;
                                 default:
                                     Toast.makeText(this, "Unknown role", Toast.LENGTH_SHORT).show();

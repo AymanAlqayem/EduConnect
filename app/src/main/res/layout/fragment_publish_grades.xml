@@ -1,36 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingVertical="8dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/background_color">
+
+    <!-- Class Selection -->
+    <Spinner
+        android:id="@+id/spinner_class"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Select Class"
+        android:prompt="@string/select_class"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Assessment Type Selection -->
+    <Spinner
+        android:id="@+id/spinner_assessment_type"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Select Assessment Type"
+        android:prompt="@string/select_assessment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_class"/>
+
+    <!-- Grade Percentage -->
+    <EditText
+        android:id="@+id/et_grade_percentage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Grade Percentage (out of 100)"
+        android:inputType="numberDecimal"
+        android:maxLength="5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spinner_assessment_type"/>
+
+    <!-- Load Students Button -->
+    <Button
+        android:id="@+id/btn_load_students"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Load Students"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_grade_percentage"/>
+
+    <!-- Student Counter -->
+    <TextView
+        android:id="@+id/tv_student_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Student 1 of 10"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_load_students"/>
 
     <!-- Student Name -->
     <TextView
         android:id="@+id/tv_student_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        style="@style/CustomTextView"
-        tools:text="John Doe"
+        android:layout_marginTop="8dp"
+        android:text="John Doe"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/et_student_grade"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/et_grade"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintTop_toBottomOf="@id/tv_student_counter"
+        app:layout_constraintWidth_percent="0.6"/>
 
     <!-- Grade Input -->
     <EditText
-        android:id="@+id/et_grade"
+        android:id="@+id/et_student_grade"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_grade"
+        android:hint="Enter Grade"
         android:inputType="numberDecimal"
-        android:maxLength="5"
-        style="@style/CustomEditText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_student_name"
         app:layout_constraintTop_toTopOf="@id/tv_student_name"
-        app:layout_constraintWidth_percent="0.4" />
+        app:layout_constraintWidth_percent="0.4"/>
+
+    <!-- Navigation Buttons -->
+    <Button
+        android:id="@+id/btn_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Previous"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_student_name"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_student_name"/>
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/btn_submit_all"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Submit All Grades"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_previous"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
