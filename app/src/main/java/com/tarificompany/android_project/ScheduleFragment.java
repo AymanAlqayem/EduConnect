@@ -26,7 +26,7 @@ public class ScheduleFragment extends Fragment {
     private RecyclerView rvSchedule;
     private UpcomingClassesAdapter adapter;
     private List<ClassSchedule> classSchedules;
-    private static final String BASE_URL = "http://your-api-domain.com/api/"; // Replace with your API URL
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
     public ScheduleFragment() {
         // Required empty public constructor

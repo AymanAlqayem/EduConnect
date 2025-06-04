@@ -33,7 +33,7 @@ public class MessagesFragment extends Fragment {
     private MessageAdapter messageAdapter;
     private FloatingActionButton fabCompose;
     private List<Message> messages;
-    private static final String BASE_URL = "http://your-api-domain.com/api/"; // Replace with your API URL
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

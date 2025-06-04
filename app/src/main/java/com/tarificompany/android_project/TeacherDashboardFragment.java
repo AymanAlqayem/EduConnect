@@ -46,14 +46,10 @@ public class TeacherDashboardFragment extends Fragment {
         adapter = new UpcomingClassesAdapter(classSchedules);
         rvUpcomingClasses.setAdapter(adapter);
 
-        // Get teacher ID from SharedPreferences (set during login)
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
 
-        // Set welcome message
-        //tvWelcome.setText("Welcome, " + prefs.getString("teacher_name", "Teacher"));
 
-        // Fetch upcoming classes
         fetchUpcomingClasses(teacherId);
 
         return view;
@@ -72,8 +68,13 @@ public class TeacherDashboardFragment extends Fragment {
                             String className = obj.getString("subject_name");
                             String time = obj.getString("start_time") + " - " + obj.getString("end_time");
                             String classGroup = obj.getString("class_name") + " (" + obj.getString("room") + ")";
-                            classSchedules.add(new ClassSchedule(className, time, classGroup));
+                            String room = obj.getString("room");
+                            String day = obj.optString("day", "Unknown");
+                            int studentCount = obj.optInt("student_count", 0);
+
+                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount));
                         }
+
                         adapter.updateData(classSchedules);
                     } catch (Exception e) {
                         Toast.makeText(getContext(), "Error parsing data", Toast.LENGTH_SHORT).show();

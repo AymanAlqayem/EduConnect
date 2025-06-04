@@ -1,9 +1,12 @@
 package com.tarificompany.android_project;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,11 +28,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUserName;
     private EditText edtPass;
-
     private Button btnLogin;
+    private CheckBox loginCheckBox;
 
     private RequestQueue queue;
-
     private String url = "http://10.0.2.2/AndroidProject/handleLogin.php";
 
     @Override
@@ -38,14 +40,29 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         setUpViews();
+        loadSavedCredentials();
     }
 
-    public void setUpViews() {
+    private void setUpViews() {
         edtUserName = findViewById(R.id.edtUserName);
         edtPass = findViewById(R.id.edtPass);
         btnLogin = findViewById(R.id.btnLogin);
+        loginCheckBox = findViewById(R.id.loginCheckBox);
 
         queue = Volley.newRequestQueue(LoginActivity.this);
+    }
+
+    private void loadSavedCredentials() {
+        SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        String savedUsername = prefs.getString("username", "");
+        String savedPassword = prefs.getString("password", "");
+        boolean isRemembered = prefs.getBoolean("rememberMe", false);
+
+        if (isRemembered) {
+            edtUserName.setText(savedUsername);
+            edtPass.setText(savedPassword);
+            loginCheckBox.setChecked(true);
+        }
     }
 
     public void handleLogin(View view) {
@@ -66,20 +83,46 @@ public class LoginActivity extends AppCompatActivity {
                         if (success) {
                             String role = json.getString("role");
 
+                            if (loginCheckBox.isChecked()) {
+                                SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+                                prefs.edit()
+                                        .putString("username", username)
+                                        .putString("password", password)
+                                        .putBoolean("rememberMe", true)
+                                        .apply();
+                            } else {
+                                SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+                                prefs.edit()
+                                        .clear()
+                                        .apply();
+                            }
+
                             switch (role.toLowerCase()) {
                                 case "teacher":
+                                    String teacherId = json.getString("teacher_id");
+
+                                    SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
+                                    prefs.edit()
+                                            .putString("teacher_id", teacherId)
+                                            .apply();
+
+                                    Log.d("LoginActivity", "Saved teacher ID: " + teacherId);
+
                                     startActivity(new Intent(this, TeacherActivity.class));
                                     break;
+
                                 case "register":
                                     startActivity(new Intent(this, RegisterActivity.class));
                                     break;
+
                                 case "student":
                                     startActivity(new Intent(this, StudentActivity.class));
                                     break;
+
                                 default:
                                     Toast.makeText(this, "Unknown role", Toast.LENGTH_SHORT).show();
                             }
-                            finish(); // Optional: close login screen
+                            finish();
                         } else {
                             Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show();
                         }

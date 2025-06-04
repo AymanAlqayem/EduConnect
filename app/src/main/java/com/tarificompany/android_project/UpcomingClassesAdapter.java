@@ -69,8 +69,7 @@ public class UpcomingClassesAdapter extends RecyclerView.Adapter<UpcomingClasses
             tvRoom.setText(classSchedule.getRoom());
             tvDay.setText(classSchedule.getDay());
             tvStudentsCount.setText(String.format("%d Students", classSchedule.getStudentCount()));
-            // Optionally set course icon based on className or other logic
-            // ivCourseIcon.setImageResource(R.drawable.ic_book_education); // Example
+
         }
     }
 }

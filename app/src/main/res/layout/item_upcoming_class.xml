@@ -19,7 +19,7 @@
         android:padding="12dp"
         android:background="@color/card_background">
 
-        <!-- Colored Indicator Strip with dynamic color based on course type -->
+        <!-- Colored Indicator Strip -->
         <View
             android:id="@+id/color_indicator"
             android:layout_width="6dp"
@@ -29,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Course Icon with circular background -->
+        <!-- Course Icon -->
         <LinearLayout
             android:id="@+id/icon_container"
             android:layout_width="48dp"
@@ -50,7 +50,7 @@
                 app:tint="@color/white" />
         </LinearLayout>
 
-        <!-- Course Name with elegant typography -->
+        <!-- Course Name -->
         <TextView
             android:id="@+id/tv_course_name"
             android:layout_width="0dp"
@@ -67,7 +67,7 @@
             app:layout_constraintStart_toEndOf="@id/icon_container"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Time with clock icon -->
+        <!-- Time with Clock Icon -->
         <LinearLayout
             android:id="@+id/time_container"
             android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                 android:text="10:00 - 11:00 AM" />
         </LinearLayout>
 
-        <!-- Room with location pin icon -->
+        <!-- Room with Location Icon -->
         <LinearLayout
             android:id="@+id/room_container"
             android:layout_width="0dp"
@@ -126,16 +126,15 @@
                 android:text="Room 101 - New Building" />
         </LinearLayout>
 
-        <!-- Day of Week with calendar icon -->
+        <!-- Day with Calendar Icon -->
         <LinearLayout
             android:id="@+id/day_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="@id/room_container"
-            app:layout_constraintEnd_toEndOf="@id/room_container"
             app:layout_constraintTop_toBottomOf="@id/room_container">
 
             <ImageView
@@ -153,20 +152,21 @@
                 android:textSize="14sp"
                 android:textColor="@color/gray_700"
                 style="@style/CustomTextView"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="Monday - Week 1" />
         </LinearLayout>
 
-        <!-- Students Count with people icon -->
+        <!-- Students Count with People Icon -->
         <LinearLayout
             android:id="@+id/students_container"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="@id/day_container"
-            app:layout_constraintEnd_toEndOf="@id/day_container"
-            app:layout_constraintTop_toBottomOf="@id/day_container">
+            app:layout_constraintTop_toBottomOf="@id/day_container"
+            app:layout_constraintStart_toStartOf="@id/day_container">
 
             <ImageView
                 android:layout_width="14dp"
@@ -178,12 +178,14 @@
 
             <TextView
                 android:id="@+id/tv_students_count"
+                style="@style/CustomTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="25 Students"
                 android:textColor="@color/gray_700"
-                style="@style/CustomTextView"
-                android:text="25 Students" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

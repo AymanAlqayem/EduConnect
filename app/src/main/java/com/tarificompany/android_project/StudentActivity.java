@@ -25,17 +25,14 @@ public class StudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        // Initialize DrawerLayout and NavigationView
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_dashboard); // Set default selected item
+        navigationView.setCheckedItem(R.id.nav_dashboard);
 
-        // Initialize Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Student Dashboard");
 
-        // Setup hamburger toggle with DrawerLayout and Toolbar
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -43,7 +40,6 @@ public class StudentActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Load Dashboard Fragment by default when activity is first opened
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()

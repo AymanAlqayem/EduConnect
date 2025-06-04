@@ -19,8 +19,13 @@ public class ClassSchedule implements Serializable {
         this.day = day;
         this.studentCount = studentCount;
     }
-
     public ClassSchedule(String className, String time, String classGroup) {
+        this.className = className;
+        this.time = time;
+        this.classGroup = classGroup;
+        this.room = "";
+        this.day = "";
+        this.studentCount = 0;
     }
 
     public String getClassName() {

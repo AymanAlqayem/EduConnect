@@ -51,20 +51,18 @@
             android:name=".AddStudentActivity"
             android:exported="false" />
         <activity
-            android:name=".AddAssignmentActivity"
-            android:exported="false" />
+            android:name=".AddAssignmentFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
 
         <activity android:name=".ComposeMessageActivity" />
         <activity android:name=".MessagesFragment"
             tools:ignore="Instantiatable" />
 
-        <activity android:name=".MessageDetailFragment"
-            tools:ignore="Instantiatable" />
+        <activity android:name=".MessagesFragment"
+            tools:ignore="DuplicateActivity,Instantiatable" />
 
 
-        <activity
-            android:name=".StudentDashboardActivity"
-            android:exported="false" />
 
     </application>
 

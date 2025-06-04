@@ -1,4 +1,3 @@
-// File: PublishGradesFragment.java
 package com.tarificompany.android_project;
 
 import android.content.Context;
@@ -18,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -46,7 +43,7 @@ public class PublishGradesFragment extends Fragment {
     private List<String> subjectIds = new ArrayList<>();
     private Map<String, String> studentGrades = new HashMap<>();
     private int currentStudentIndex = 0;
-    private static final String BASE_URL = "http://your-api-domain.com/api/"; // Replace with your API URL
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -85,7 +82,6 @@ public class PublishGradesFragment extends Fragment {
         assessmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAssessmentType.setAdapter(assessmentAdapter);
 
-        // Fetch classes and subjects
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
         if (teacherId.isEmpty()) {
@@ -256,6 +252,11 @@ public class PublishGradesFragment extends Fragment {
     }
 
     private void submitGrades() {
+        if (!studentList.isEmpty()) {
+            String currentStudentId = studentIds.get(currentStudentIndex);
+            studentGrades.put(currentStudentId, etStudentGrade.getText().toString());
+        }
+
         for (String studentId : studentGrades.keySet()) {
             String grade = studentGrades.get(studentId);
             if (grade.isEmpty()) {
@@ -303,38 +304,22 @@ public class PublishGradesFragment extends Fragment {
             return;
         }
 
-        String url = BASE_URL + "submit_grades.php";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, payload,
+        String url = BASE_URL + "insert_exam_grade.php";
+
+        JsonObjectRequest submitRequest = new JsonObjectRequest(Request.Method.POST, url, payload,
                 response -> {
-                    String summary = "Grades submitted successfully!\n\n" +
-                            "Class: " + spinnerClass.getSelectedItem().toString() + "\n" +
-                            "Subject: " + spinnerSubject.getSelectedItem().toString() + "\n" +
-                            "Assessment: " + assessmentType + "\n" +
-                            "Percentage: " + etGradePercentage.getText().toString() + "%\n";
-                    showToast(summary);
-                    resetForm();
+                    showToast("Grades submitted successfully");
+                    studentGrades.clear();
+                    studentList.clear();
+                    studentIds.clear();
+                    updateStudentDisplay();
                 },
-                error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
+                error -> showToast("Submission failed: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
-    }
-
-    private void resetForm() {
-        studentList.clear();
-        studentIds.clear();
-        studentGrades.clear();
-        currentStudentIndex = 0;
-        etStudentGrade.setText("");
-        tvStudentName.setText("Student Name");
-        tvStudentCounter.setText("Student 0 of 0");
-        btnSubmitAll.setVisibility(View.GONE);
-        etGradePercentage.setText("");
-        spinnerClass.setSelection(0);
-        spinnerSubject.setSelection(0);
-        spinnerAssessmentType.setSelection(0);
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(submitRequest);
     }
 
     private void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
