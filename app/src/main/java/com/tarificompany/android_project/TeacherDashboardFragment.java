@@ -1,4 +1,3 @@
-// File: TeacherDashboardFragment.java
 package com.tarificompany.android_project;
 
 import android.annotation.SuppressLint;
@@ -31,7 +30,10 @@ public class TeacherDashboardFragment extends Fragment {
     private RecyclerView rvUpcomingClasses;
     private UpcomingClassesAdapter adapter;
     private List<ClassSchedule> classSchedules;
-    private TextView tvWelcome;
+
+    private TextView tvWelcome, tvTodayClasses, tvStudentsCount, tvUnreadMessages;
+
+    private String teacherId;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -39,6 +41,10 @@ public class TeacherDashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_teacher_dashboard, container, false);
 
         tvWelcome = view.findViewById(R.id.tv_welcome);
+        tvTodayClasses = view.findViewById(R.id.tv_today_classes);
+        tvStudentsCount = view.findViewById(R.id.tv_students_count);
+        tvUnreadMessages = view.findViewById(R.id.tv_unread_messages);
+
         rvUpcomingClasses = view.findViewById(R.id.rv_upcoming_classes);
         rvUpcomingClasses.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -47,14 +53,13 @@ public class TeacherDashboardFragment extends Fragment {
         rvUpcomingClasses.setAdapter(adapter);
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
-        String teacherId = prefs.getString("teacher_id", "");
-
+        teacherId = prefs.getString("teacher_id", "");
 
         fetchUpcomingClasses(teacherId);
+        fetchTotalClassesAndStudents(teacherId);
 
         return view;
     }
-
 
     private void fetchUpcomingClasses(String teacherId) {
         String url = "http://10.0.2.2/AndroidProject/get_teacher_schedule.php?teacher_id=" + teacherId;
@@ -83,5 +88,80 @@ public class TeacherDashboardFragment extends Fragment {
                 error -> Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
         VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+    }
+
+    private void fetchTotalClassesAndStudents(String teacherId) {
+        String urlClasses = "http://10.0.2.2/AndroidProject/get_teacher_classes.php?teacher_id=" + teacherId;
+
+        JsonArrayRequest classesRequest = new JsonArrayRequest(Request.Method.GET, urlClasses, null,
+                response -> {
+                    int totalClasses = response.length();
+                    tvTodayClasses.setText(String.valueOf(totalClasses));
+
+                    fetchTotalStudentsForClasses(response);
+                },
+                error -> {
+                    Toast.makeText(getContext(), "Error loading classes", Toast.LENGTH_SHORT).show();
+                });
+
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(classesRequest);
+    }
+
+    private void fetchTotalStudentsForClasses(JSONArray classesArray) {
+        final int totalClasses = classesArray.length();
+        final int[] completedRequests = {0};
+        final int[] totalStudents = {0};
+
+        for (int i = 0; i < totalClasses; i++) {
+            try {
+                JSONObject classObj = classesArray.getJSONObject(i);
+                String classId = classObj.getString("class_id");
+                fetchStudentsCountForClass(classId, new StudentsCountCallback() {
+                    @Override
+                    public void onResult(int count) {
+                        totalStudents[0] += count;
+                        completedRequests[0]++;
+
+                        if (completedRequests[0] == totalClasses) {
+                            tvStudentsCount.setText(String.valueOf(totalStudents[0]));
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+                        completedRequests[0]++;
+                        if (completedRequests[0] == totalClasses) {
+                            tvStudentsCount.setText(String.valueOf(totalStudents[0]));
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                completedRequests[0]++;
+            }
+        }
+
+        if (totalClasses == 0) {
+            tvStudentsCount.setText("0");
+        }
+    }
+
+    private void fetchStudentsCountForClass(String classId, StudentsCountCallback callback) {
+        String url = "http://10.0.2.2/AndroidProject/get_class_students.php?class_id=" + classId;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    callback.onResult(response.length());
+                },
+                error -> {
+                    callback.onError();
+                });
+
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+    }
+
+    interface StudentsCountCallback {
+        void onResult(int count);
+
+        void onError();
     }
 }
