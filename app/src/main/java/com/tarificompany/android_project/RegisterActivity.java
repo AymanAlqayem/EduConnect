@@ -64,13 +64,13 @@ public class RegisterActivity extends AppCompatActivity {
                 fragment = new DashboardFragment();
                 title = "School Dashboard";
             } else if (id == R.id.nav_add_student) {
-                fragment = GenericFragment.newInstance(R.layout.activity_add_student);
+                fragment = AddStudentFragment.newInstance();
                 title = "Add Student";
             } else if (id == R.id.nav_edit_student) {
-                fragment = GenericFragment.newInstance(R.layout.activity_update_student);
+                fragment = UpdateStudentFragment.newInstance();
                 title = "Update Student";
             } else if (id == R.id.nav_delete_student) {
-                fragment = GenericFragment.newInstance(R.layout.activity_delete_student);
+                fragment = DeleteStudentFragment.newInstance();
                 title = "Delete Student";
             } else if (id == R.id.nav_add_teacher) {
                 fragment = AddTeacherFragment.newInstance();

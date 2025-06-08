@@ -1,16 +1,30 @@
 package com.tarificompany.android_project;
 
+import java.util.Date;
+
 public class Student {
     private String stdId;
     private String name;
     private double average;
-    private int stdGrade;
+    private String stdClass;
     private String parentPhone;
+    private String birthDate;
 
-    public Student(String name, int stdGrade, String parentPhone) {
+    public Student(String stdId, String name, double average, String stdClass, String parentPhone, String birthDate) {
+        this.stdId = stdId;
         this.name = name;
-        this.stdGrade = stdGrade;
+        this.average = average;
+        this.stdClass = stdClass;
         this.parentPhone = parentPhone;
+        this.birthDate = birthDate;
+    }
+
+    public String getStdId() {
+        return stdId;
+    }
+
+    public void setStdId(String stdId) {
+        this.stdId = stdId;
     }
 
     public String getName() {
@@ -29,12 +43,12 @@ public class Student {
         this.average = average;
     }
 
-    public int getStdGrade() {
-        return stdGrade;
+    public String getStdClass() {
+        return stdClass;
     }
 
-    public void setStdGrade(int stdGrade) {
-        this.stdGrade = stdGrade;
+    public void setStdClass(String stdClass) {
+        this.stdClass = stdClass;
     }
 
     public String getParentPhone() {
@@ -45,16 +59,11 @@ public class Student {
         this.parentPhone = parentPhone;
     }
 
-    public void setStdId(String stdId) {
-        this.stdId = stdId;
+    public String getBirthDate() {
+        return birthDate;
     }
 
-    public String getStdId() {
-        return stdId;
-    }
-
-    @Override
-    public String toString() {
-        return "[ID=" + stdId + ", Name=" + name + ", Class=" + stdGrade + "Parent PhoneNo=" + parentPhone + "]";
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }

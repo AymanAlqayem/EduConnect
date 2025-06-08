@@ -48,7 +48,7 @@
             android:name=".DeleteStudentActivity"
             android:exported="false" />
         <activity
-            android:name=".AddStudentActivity"
+            android:name=".AddStudentFragment"
             android:exported="false" />
         <activity
             android:name=".AddAssignmentFragment"

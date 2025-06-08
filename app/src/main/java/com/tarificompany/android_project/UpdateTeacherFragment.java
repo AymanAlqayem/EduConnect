@@ -35,6 +35,7 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
     private List<Teacher> teacherList;
     private List<Teacher> filteredTeacherList;
 
+
     public static UpdateTeacherFragment newInstance() {
         return new UpdateTeacherFragment();
     }

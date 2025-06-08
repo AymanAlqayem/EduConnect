@@ -12,7 +12,6 @@
         android:id="@+id/etFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:hint="Teacher Name"
         android:inputType="textPersonName"
         android:padding="12dp" />
@@ -94,14 +93,13 @@
     <EditText
         android:id="@+id/etNotes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:hint="Bio / Notes"
         android:inputType="textMultiLine"
         android:minLines="3"
         android:padding="12dp" />
 
-    <!-- Save Button -->
     <Button
         android:id="@+id/btnSave"
         android:layout_width="100dp"
@@ -109,5 +107,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:text="Save" />
+
+    <!-- Save Button -->
 
 </LinearLayout>

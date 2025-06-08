@@ -48,6 +48,6 @@
     <string name="current_grade">Current Grade</string>
     <string name="view_grades">view_grades</string>
     <string name="select_subject">Select Subject</string>
-
+    <string name="select_class_prompt">Select class</string>
 
 </resources>

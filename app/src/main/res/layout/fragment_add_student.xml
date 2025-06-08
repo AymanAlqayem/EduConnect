@@ -14,23 +14,34 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:hint="stdName" />
-
-        <Spinner
-            android:id="@+id/gradeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:padding="12dp"
-            android:spinnerMode="dropdown" />
+            android:hint="Student name" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="20dp"
+            android:inputType="phone"
             android:hint="Parent Phone" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:hint="Birth Date"
+            android:inputType="date"
+            />
+
+        <Spinner
+            android:id="@+id/addStudentSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:hint="Class"
+            android:padding="12dp"
+            android:spinnerMode="dropdown" />
 
         <Button
             android:layout_width="100dp"
