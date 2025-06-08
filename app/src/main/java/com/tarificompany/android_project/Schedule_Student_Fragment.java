@@ -2,183 +2,106 @@ package com.tarificompany.android_project;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Schedule_Student_Fragment extends Fragment {
 
-    private static final String TAG = "ScheduleFragment";
-    private RecyclerView recyclerView;
-    private ScheduleAdapter adapter;
-    private ArrayList<ScheduleItem> scheduleList = new ArrayList<>();
-    private ProgressBar progressBar;
-    private TextView emptyView;
+    private RecyclerView rvSchedule;
+    private UpcomingClassesAdapter adapter;
+    private List<ClassSchedule> classScheduleList;
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
+
+    public Schedule_Student_Fragment() {
+        // Required empty public constructor
+    }
+
+    public static Schedule_Student_Fragment newInstance() {
+        return new Schedule_Student_Fragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        // Initialize views
-        recyclerView = view.findViewById(R.id.rv_schedule);
-        progressBar = view.findViewById(R.id.progressBar);
-        emptyView = view.findViewById(R.id.tv_empty_view);
+        rvSchedule = view.findViewById(R.id.rv_schedule);
+        rvSchedule.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Setup RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ScheduleAdapter(scheduleList);
-        recyclerView.setAdapter(adapter);
+        classScheduleList = new ArrayList<>();
+        adapter = new UpcomingClassesAdapter(classScheduleList);
+        rvSchedule.setAdapter(adapter);
 
-        // Load data
-        new LoadScheduleTask().execute();
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String studentId = prefs.getString("student_id", "");
+
+        fetchSchedule(studentId);
 
         return view;
     }
 
-    private class LoadScheduleTask extends AsyncTask<Void, Void, String> {
-        private boolean isSuccess = false;
-        private ArrayList<ScheduleItem> tempList = new ArrayList<>();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.GONE);
+    private void fetchSchedule(String studentId) {
+        if (studentId.isEmpty()) {
+            Toast.makeText(getContext(), "Student ID not found", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            String jsonResponse = null;
+        String url = BASE_URL + "get_student_schedule.php?student_id=" + studentId;
 
-            try {
-                // Get student ID from SharedPreferences
-                // Get student ID from SharedPreferences
-                SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-                String studentId = prefs.getString("student_id", "0");
-
-                if (studentId.equals("0")) {
-                    return "Student ID not found in preferences";
-                }
-
-// Create URL
-                URL url = new URL("http://10.0.2.2/AndroidProject/get_student_schedule.php?student_id=" + studentId);
-                Log.d(TAG, "Request URL: " + url.toString());
-
-                // Create connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setConnectTimeout(10000); // 10 seconds
-                urlConnection.setReadTimeout(15000); // 15 seconds
-                urlConnection.connect();
-
-                // Check response code
-                int responseCode = urlConnection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    return "HTTP error code: " + responseCode;
-                }
-
-                // Read response
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuilder buffer = new StringBuilder();
-                if (inputStream == null) {
-                    return "Input stream is null";
-                }
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line).append("\n");
-                }
-
-                if (buffer.length() == 0) {
-                    return "Response is empty";
-                }
-
-                jsonResponse = buffer.toString();
-                Log.d(TAG, "Response: " + jsonResponse);
-
-                // Parse JSON
-                JSONObject response = new JSONObject(jsonResponse);
-                if (response.getString("status").equals("success")) {
-                    JSONArray data = response.getJSONArray("data");
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject item = data.getJSONObject(i);
-                        tempList.add(new ScheduleItem(
-                                item.getString("subject_name"),
-                                item.getString("day_of_week"),
-                                item.getString("start_time"),
-                                item.getString("end_time")
-                        ));
-                    }
-                    isSuccess = true;
-                    return "Successfully loaded " + tempList.size() + " schedule items";
-                } else {
-                    return "Server error: " + response.optString("message", "Unknown error");
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error fetching schedule", e);
-                return "Error: " + e.getMessage();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
                     try {
-                        reader.close();
+                        String status = response.optString("status", "error");
+                        if (!status.equals("success")) {
+                            String message = response.optString("message", "Unknown error");
+                            Toast.makeText(getContext(), "Server error: " + message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        classScheduleList.clear();
+                        JSONArray dataArray = response.getJSONArray("data");
+                        if (dataArray.length() == 0) {
+                            Toast.makeText(getContext(), "No schedules found", Toast.LENGTH_SHORT).show();
+                        }
+
+                        for (int i = 0; i < dataArray.length(); i++) {
+                            JSONObject obj = dataArray.getJSONObject(i);
+
+                            String className = obj.optString("subject_name", "No subject");
+                            String day = obj.optString("day_of_week", "Unknown");
+                            String startTime = obj.optString("start_time", "");
+                            String endTime = obj.optString("end_time", "");
+                            String time = startTime + " - " + endTime;
+                            String room = obj.optString("room", "N/A");
+                            int studentCount = obj.optInt("students_count", 0);
+                            String classGroup = obj.optString("class_group", "");
+
+                            ClassSchedule classSchedule = new ClassSchedule(className, time, classGroup, room, day, studentCount);
+                            classScheduleList.add(classSchedule);
+                        }
+                        adapter.updateData(classScheduleList);
                     } catch (Exception e) {
-                        Log.e(TAG, "Error closing stream", e);
+                        Toast.makeText(getContext(), "Error parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                }
-            }
-        }
+                },
+                error -> Toast.makeText(getContext(), "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show());
 
-        @Override
-        protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
-
-            if (isSuccess) {
-                if (tempList.isEmpty()) {
-                    emptyView.setText("No schedule items found");
-                    emptyView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                } else {
-                    scheduleList.clear();
-                    scheduleList.addAll(tempList);
-                    adapter.notifyDataSetChanged();
-                    recyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
-                }
-            } else {
-                emptyView.setText("Error: " + result);
-                emptyView.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Failed to load schedule", Toast.LENGTH_SHORT).show();
-            }
-
-            Log.d(TAG, result);
-        }
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 }

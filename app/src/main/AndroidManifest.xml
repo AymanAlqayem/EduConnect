@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- REQUIRED for network requests -->
+    <!-- تصريح ضروري للإنترنت -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -31,46 +31,35 @@
             android:exported="false"
             android:theme="@style/ourAppTheme" />
 
-
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
+
         <activity
             android:name=".StudentActivity"
             android:exported="false" />
+
         <activity
             android:name=".AddStudentFragment"
             android:exported="false" />
+
         <activity
             android:name=".AddAssignmentFragment"
             android:exported="false"
             tools:ignore="Instantiatable" />
 
         <activity android:name=".ComposeMessageActivity" />
-        <activity android:name=".MessagesFragment"
+
+        <activity
+            android:name=".MessagesFragment"
             tools:ignore="Instantiatable" />
-
-        <activity android:name=".MessagesFragment"
-            tools:ignore="DuplicateActivity,Instantiatable" />
-
-        <activity
-            android:name=".Schedule_Student_Fragment"
-            android:exported="false" />
-
-        <activity
-            android:name=".ScheduleAdapter"
-            android:exported="false" />
-        <activity
-            android:name=".ScheduleItem"
-            android:exported="false" />
 
 
 
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
