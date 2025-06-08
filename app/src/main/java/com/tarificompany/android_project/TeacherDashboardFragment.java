@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -87,7 +86,7 @@ public class TeacherDashboardFragment extends Fragment {
                 },
                 error -> Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 
     private void fetchTotalClassesAndStudents(String teacherId) {
@@ -97,14 +96,11 @@ public class TeacherDashboardFragment extends Fragment {
                 response -> {
                     int totalClasses = response.length();
                     tvTodayClasses.setText(String.valueOf(totalClasses));
-
                     fetchTotalStudentsForClasses(response);
                 },
-                error -> {
-                    Toast.makeText(getContext(), "Error loading classes", Toast.LENGTH_SHORT).show();
-                });
+                error -> Toast.makeText(getContext(), "Error loading classes", Toast.LENGTH_SHORT).show());
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(classesRequest);
+        Volley.newRequestQueue(requireContext()).add(classesRequest);
     }
 
     private void fetchTotalStudentsForClasses(JSONArray classesArray) {
@@ -116,12 +112,12 @@ public class TeacherDashboardFragment extends Fragment {
             try {
                 JSONObject classObj = classesArray.getJSONObject(i);
                 String classId = classObj.getString("class_id");
+
                 fetchStudentsCountForClass(classId, new StudentsCountCallback() {
                     @Override
                     public void onResult(int count) {
                         totalStudents[0] += count;
                         completedRequests[0]++;
-
                         if (completedRequests[0] == totalClasses) {
                             tvStudentsCount.setText(String.valueOf(totalStudents[0]));
                         }
@@ -149,19 +145,14 @@ public class TeacherDashboardFragment extends Fragment {
         String url = "http://10.0.2.2/AndroidProject/get_class_students.php?class_id=" + classId;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    callback.onResult(response.length());
-                },
-                error -> {
-                    callback.onError();
-                });
+                response -> callback.onResult(response.length()),
+                error -> callback.onError());
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 
     interface StudentsCountCallback {
         void onResult(int count);
-
         void onError();
     }
 }

@@ -1,4 +1,3 @@
-// File: ScheduleFragment.java
 package com.tarificompany.android_project;
 
 import android.content.Context;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
@@ -47,11 +47,9 @@ public class Schedule_Teacher_Fragment extends Fragment {
         adapter = new UpcomingClassesAdapter(classSchedules);
         rvSchedule.setAdapter(adapter);
 
-        // Get teacher ID from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
 
-        // Fetch schedule
         fetchSchedule(teacherId);
 
         return view;
@@ -89,6 +87,6 @@ public class Schedule_Teacher_Fragment extends Fragment {
                 },
                 error -> Toast.makeText(getContext(), "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show());
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 }
