@@ -64,7 +64,7 @@ public class TeacherActivity extends AppCompatActivity {
                 fragment = new TeacherDashboardFragment();
                 title = "Teacher Dashboard";
             } else if (id == R.id.nav_schedule) {
-                fragment = new ScheduleFragment();
+                fragment = new Schedule_Teacher_Fragment();
                 title = "Class Schedule";
             } else if (id == R.id.nav_grades) {
                 fragment = new PublishGradesFragment();

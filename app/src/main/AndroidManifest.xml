@@ -42,12 +42,6 @@
             android:name=".StudentActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateStudentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DeleteStudentActivity"
-            android:exported="false" />
-        <activity
             android:name=".AddStudentFragment"
             android:exported="false" />
         <activity
@@ -61,6 +55,17 @@
 
         <activity android:name=".MessagesFragment"
             tools:ignore="DuplicateActivity,Instantiatable" />
+
+        <activity
+            android:name=".Schedule_Student_Fragment"
+            android:exported="false" />
+
+        <activity
+            android:name=".ScheduleAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".ScheduleItem"
+            android:exported="false" />
 
 
 

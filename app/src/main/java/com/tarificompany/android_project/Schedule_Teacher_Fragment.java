@@ -21,19 +21,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment {
+public class Schedule_Teacher_Fragment extends Fragment {
 
     private RecyclerView rvSchedule;
     private UpcomingClassesAdapter adapter;
     private List<ClassSchedule> classSchedules;
     private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
-    public ScheduleFragment() {
+    public Schedule_Teacher_Fragment() {
         // Required empty public constructor
     }
 
-    public static ScheduleFragment newInstance() {
-        return new ScheduleFragment();
+    public static Schedule_Teacher_Fragment newInstance() {
+        return new Schedule_Teacher_Fragment();
     }
 
     @Override
