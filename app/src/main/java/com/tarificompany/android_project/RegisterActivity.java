@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container, new DashboardFragment());
+            transaction.replace(R.id.fragment_container, new RegisterDashboardFragment());
             transaction.commit();
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             String title = "School Dashboard";
 
             if (id == R.id.nav_dashboard) {
-                fragment = new DashboardFragment();
+                fragment = new RegisterDashboardFragment();
                 title = "School Dashboard";
             } else if (id == R.id.nav_add_student) {
                 fragment = AddStudentFragment.newInstance();

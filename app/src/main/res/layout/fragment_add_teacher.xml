@@ -1,113 +1,266 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/CustomLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <!-- Full Name -->
-    <EditText
-        android:id="@+id/etFullName"
+    <LinearLayout
+        style="@style/CustomLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Teacher Name"
-        android:inputType="textPersonName"
-        android:padding="12dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Email -->
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:padding="12dp" />
-
-    <!-- Phone -->
-    <EditText
-        android:id="@+id/etPhone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:padding="12dp" />
-
-    <!-- Gender -->
-    <TextView
-        android:id="@+id/tvGenderLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:labelFor="@id/rgGender"
-        android:text="Gender"
-        android:textStyle="bold" />
-
-    <RadioGroup
-        android:id="@+id/rgGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:padding="12dp">
-
-        <RadioButton
-            android:id="@+id/rbMale"
-            android:layout_width="0dp"
+        <!-- Teacher Information Section -->
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Male" />
+            android:layout_marginBottom="8dp"
+            android:text="Teacher Information"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <RadioButton
-            android:id="@+id/rbFemale"
-            android:layout_width="0dp"
+        <!-- Full Name -->
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Female" />
-    </RadioGroup>
+            android:hint="Teacher Name"
+            android:inputType="textPersonName"
+            android:padding="12dp" />
 
-    <!-- Subject Specialization -->
-    <Spinner
-        android:id="@+id/spinnerSubject"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Subject Specialization"
-        android:padding="12dp"
-        android:spinnerMode="dropdown" />
+        <!-- Email -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
 
-    <!-- Joining Date -->
-    <EditText
-        android:id="@+id/etJoiningDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Joining Date (YYYY-MM-DD)"
-        android:inputType="none"
-        android:padding="12dp" />
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:padding="12dp" />
 
-    <!-- Bio / Notes -->
-    <EditText
-        android:id="@+id/etNotes"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:hint="Bio / Notes"
-        android:inputType="textMultiLine"
-        android:minLines="3"
-        android:padding="12dp" />
+        <!-- Date of Birth -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Date of Birth"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:text="Save" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
-    <!-- Save Button -->
+            <EditText
+                android:id="@+id/etDOB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:hint="Select date"
+                android:inputType="none"
+                android:padding="12dp" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select" />
+        </LinearLayout>
+
+        <!-- Password -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Password"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Enter password"
+                android:inputType="textPassword"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/btnGeneratePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generate" />
+        </LinearLayout>
+
+        <!-- Gender -->
+        <TextView
+            android:id="@+id/tvGenderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:labelFor="@id/rgGender"
+            android:text="Gender"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Female" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tfMajor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Major"
+            android:textStyle="bold" />
+
+        <!-- Subject Specialization -->
+        <Spinner
+            android:id="@+id/spinnerSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Subject Specialization"
+            android:padding="12dp"
+            android:spinnerMode="dropdown" />
+
+        <!-- Class/Section Assignment Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Classes"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Class Selection -->
+        <Spinner
+            android:id="@+id/spinnerClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Select Class"
+            android:padding="12dp" />
+
+        <!-- Section Selection -->
+        <Spinner
+            android:id="@+id/spinnerSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Select Section"
+            android:padding="12dp" />
+
+        <!-- Add Class/Section Button -->
+        <Button
+            android:id="@+id/btnAddAssignment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:text="Add Assignment" />
+
+        <!-- Assigned Classes Section -->
+        <TextView
+            android:id="@+id/tvAssignedClassesLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Current Assignments (0):"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Use a fixed height with maxHeight constraint -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/listViewAssignedClasses"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="1dp"
+                android:maxHeight="300dp"
+                android:minHeight="80dp"
+                android:nestedScrollingEnabled="true"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Bio / Notes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Additional Information"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etNotes"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="8dp"
+            android:hint="Bio / Notes"
+            android:inputType="textMultiLine"
+            android:padding="12dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Save"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>
