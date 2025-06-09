@@ -87,6 +87,7 @@ public class AddTeacherFragment extends Fragment {
         return view;
     }
 
+
     public void showDatePickerDialog() {
         // Disable manual editing
         etDOB.setFocusable(false);
@@ -95,7 +96,6 @@ public class AddTeacherFragment extends Fragment {
         // Show the custom date picker dialog immediately
         showCustomDatePickerDialog(etDOB);
     }
-
 
     private void showCustomDatePickerDialog(EditText editText) {
         Dialog datePickerDialog = new Dialog(requireContext());

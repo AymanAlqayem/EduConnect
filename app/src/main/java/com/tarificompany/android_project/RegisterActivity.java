@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
 
 public class RegisterActivity extends AppCompatActivity {
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
