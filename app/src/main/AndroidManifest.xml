@@ -56,12 +56,13 @@
             tools:ignore="Instantiatable" />
 
         <activity android:name=".ComposeMessageActivity" />
-        <activity android:name=".MessagesFragment"
+        <activity
+            android:name=".MessagesFragment"
             tools:ignore="Instantiatable" />
 
-        <activity android:name=".MessagesFragment"
+        <activity
+            android:name=".MessagesFragment"
             tools:ignore="DuplicateActivity,Instantiatable" />
-
 
 
     </application>
