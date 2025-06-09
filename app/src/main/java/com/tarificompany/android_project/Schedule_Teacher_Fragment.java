@@ -1,4 +1,3 @@
-// File: ScheduleFragment.java
 package com.tarificompany.android_project;
 
 import android.content.Context;
@@ -15,25 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment {
+public class Schedule_Teacher_Fragment extends Fragment {
 
     private RecyclerView rvSchedule;
     private UpcomingClassesAdapter adapter;
     private List<ClassSchedule> classSchedules;
     private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
-    public ScheduleFragment() {
+    public Schedule_Teacher_Fragment() {
         // Required empty public constructor
     }
 
-    public static ScheduleFragment newInstance() {
-        return new ScheduleFragment();
+    public static Schedule_Teacher_Fragment newInstance() {
+        return new Schedule_Teacher_Fragment();
     }
 
     @Override
@@ -47,11 +47,9 @@ public class ScheduleFragment extends Fragment {
         adapter = new UpcomingClassesAdapter(classSchedules);
         rvSchedule.setAdapter(adapter);
 
-        // Get teacher ID from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
 
-        // Fetch schedule
         fetchSchedule(teacherId);
 
         return view;
@@ -89,6 +87,6 @@ public class ScheduleFragment extends Fragment {
                 },
                 error -> Toast.makeText(getContext(), "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show());
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 }

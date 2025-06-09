@@ -49,5 +49,10 @@
     <string name="view_grades">view_grades</string>
     <string name="select_subject">Select Subject</string>
     <string name="select_class_prompt">Select class</string>
-
+    <string name="no_grades_available">No grades available</string>
+    <string-array name="assignment_filter_options">
+        <item>All Assignments</item>
+        <item>Pending</item>
+        <item>Submitted</item>
+    </string-array>
 </resources>

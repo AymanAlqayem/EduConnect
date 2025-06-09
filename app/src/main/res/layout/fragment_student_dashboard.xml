@@ -39,7 +39,6 @@
                     android:id="@+id/tv_student_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="John Doe"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
@@ -81,7 +80,6 @@
                         android:id="@+id/tv_today_classes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:textColor="@color/white" />
@@ -114,7 +112,6 @@
                         android:id="@+id/tv_pending_assignments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:textColor="@color/white" />
@@ -148,7 +145,6 @@
                     android:id="@+id/tv_unread_messages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1 message"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />

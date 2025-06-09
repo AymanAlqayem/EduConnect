@@ -100,14 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                             switch (role.toLowerCase()) {
                                 case "teacher":
                                     String teacherId = json.getString("teacher_id");
-
-                                    SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
-                                    prefs.edit()
+                                    SharedPreferences teacherPrefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
+                                    teacherPrefs.edit()
                                             .putString("teacher_id", teacherId)
                                             .apply();
-
                                     Log.d("LoginActivity", "Saved teacher ID: " + teacherId);
-
                                     startActivity(new Intent(this, TeacherActivity.class));
                                     break;
 
@@ -116,6 +113,12 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
 
                                 case "student":
+                                    String studentId = json.getString("student_id");
+                                    SharedPreferences studentPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                    studentPrefs.edit()
+                                            .putString("student_id", studentId)  // Keep as string for consistency
+                                            .apply();
+                                    Log.d("LoginActivity", "Saved student ID: " + studentId);
                                     startActivity(new Intent(this, StudentActivity.class));
                                     break;
 
@@ -128,6 +131,9 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         Toast.makeText(this, "Response error", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(this, "Invalid student ID format", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 },

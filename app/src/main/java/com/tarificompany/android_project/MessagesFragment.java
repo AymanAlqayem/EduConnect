@@ -1,4 +1,3 @@
-// File: MessagesFragment.java
 package com.tarificompany.android_project;
 
 import android.content.Context;
@@ -16,12 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,32 +35,24 @@ public class MessagesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the correct layout
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        // Initialize views
         rvMessages = view.findViewById(R.id.rv_messages);
         fabCompose = view.findViewById(R.id.fab_compose);
 
-        // Setup RecyclerView
         rvMessages.setLayoutManager(new LinearLayoutManager(getContext()));
         messages = new ArrayList<>();
         messageAdapter = new MessageAdapter(messages, message -> {
-            // Handle message click to open detail view
             Intent intent = new Intent(requireContext(), MessageDetailActivity.class);
             intent.putExtra("message", message);
             startActivity(intent);
         }, false);
         rvMessages.setAdapter(messageAdapter);
 
-        // Get teacher ID from SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
 
-        // Load messages from API
         loadMessages(teacherId);
-
-        // Setup click listeners
         setupClickListeners();
 
         return view;
@@ -102,7 +91,7 @@ public class MessagesFragment extends Fragment {
                     Toast.makeText(getContext(), "Network error: " + errorMsg, Toast.LENGTH_SHORT).show();
                 });
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 
     private void setupClickListeners() {

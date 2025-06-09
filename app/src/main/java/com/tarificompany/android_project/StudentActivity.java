@@ -1,6 +1,7 @@
 package com.tarificompany.android_project;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -24,6 +25,15 @@ public class StudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
+
+        // Get student ID from SharedPreferences
+        SharedPreferences pref = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String studentId = pref.getString("student_id", "0");
+
+        // Save to local prefs if needed
+        SharedPreferences localPrefs = getSharedPreferences("student_prefs", MODE_PRIVATE);
+        localPrefs.edit().putString("student_id", studentId).apply();
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -56,14 +66,18 @@ public class StudentActivity extends AppCompatActivity {
                 fragment = new StudentDashboardFragment();
                 title = "Student Dashboard";
             } else if (id == R.id.nav_schedule) {
-                fragment = GenericFragment.newInstance(R.layout.fragment_schedule);
+                fragment = new Schedule_Student_Fragment();
                 title = "My Schedule";
             } else if (id == R.id.nav_grades) {
-                fragment = GenericFragment.newInstance(R.layout.course_item);
+                fragment = new StudentGradesFragment();
                 title = "My Grades";
+            } else if (id == R.id.nav_assignment) {
+                fragment = new StudentAssignmentsFragment();
+                title = "Assignment";
             } else if (id == R.id.nav_messages) {
                 fragment = GenericFragment.newInstance(R.layout.item_message);
                 title = "Messages";
+
             } else if (id == R.id.nav_logout) {
                 Intent intent = new Intent(StudentActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

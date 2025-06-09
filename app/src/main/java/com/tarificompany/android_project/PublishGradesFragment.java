@@ -17,8 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,11 +46,13 @@ public class PublishGradesFragment extends Fragment {
     private Map<String, String> studentGrades = new HashMap<>();
     private int currentStudentIndex = 0;
     private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
+    private RequestQueue requestQueue;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_publish_grades, container, false);
+        requestQueue = Volley.newRequestQueue(requireContext());
         initViews(view);
         setupSpinners();
         setupClickListeners();
@@ -70,7 +74,6 @@ public class PublishGradesFragment extends Fragment {
     }
 
     private void setupSpinners() {
-        // Assessment type spinner
         List<String> assessments = new ArrayList<>();
         assessments.add("Quiz");
         assessments.add("Assignment");
@@ -118,7 +121,7 @@ public class PublishGradesFragment extends Fragment {
                 },
                 error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        requestQueue.add(request);
     }
 
     private void fetchSubjects(String teacherId) {
@@ -147,7 +150,7 @@ public class PublishGradesFragment extends Fragment {
                 },
                 error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        requestQueue.add(request);
     }
 
     private void setupClickListeners() {
@@ -216,7 +219,7 @@ public class PublishGradesFragment extends Fragment {
                 },
                 error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+        requestQueue.add(request);
     }
 
     private void navigateStudent(int direction) {
@@ -316,7 +319,7 @@ public class PublishGradesFragment extends Fragment {
                 },
                 error -> showToast("Submission failed: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(submitRequest);
+        requestQueue.add(submitRequest);
     }
 
     private void showToast(String message) {
