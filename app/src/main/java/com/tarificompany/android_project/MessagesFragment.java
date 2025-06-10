@@ -72,23 +72,42 @@ public class MessagesFragment extends Fragment {
                         messages.clear();
                         if (response.length() == 0) {
                             Toast.makeText(getContext(), "No messages found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject obj = response.getJSONObject(i);
+                                if (obj.has("error")) {
+                                    Toast.makeText(getContext(), "Error: " + obj.getString("error"), Toast.LENGTH_LONG).show();
+                                    continue;
+                                }
+                                String sender = obj.getString("sender_name");
+                                String subject = obj.optString("subject", "No Subject");
+                                String timestamp = obj.getString("sent_at");
+                                String content = obj.getString("content");
+                                messages.add(new Message(sender, subject, timestamp, content));
+                            }
+                            messageAdapter.updateMessages(messages);
                         }
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            String sender = obj.getString("sender_name");
-                            String subject = obj.optString("subject", "No Subject");
-                            String timestamp = obj.getString("sent_at");
-                            String content = obj.getString("content");
-                            messages.add(new Message(sender, subject, timestamp, content));
-                        }
-                        messageAdapter.updateMessages(messages);
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Error parsing messages: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error parsing messages: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        try {
+                            String rawResponse = response.toString();
+                            Toast.makeText(getContext(), "Raw response: " + rawResponse, Toast.LENGTH_LONG).show();
+                        } catch (Exception ex) {
+                            Toast.makeText(getContext(), "Cannot display raw response", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
                 error -> {
                     String errorMsg = error.getMessage() != null ? error.getMessage() : "Unknown error";
                     Toast.makeText(getContext(), "Network error: " + errorMsg, Toast.LENGTH_SHORT).show();
+                    try {
+                        if (error.networkResponse != null) {
+                            String rawResponse = new String(error.networkResponse.data, "UTF-8");
+                            Toast.makeText(getContext(), "Server response: " + rawResponse, Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Cannot parse error response", Toast.LENGTH_SHORT).show();
+                    }
                 });
 
         Volley.newRequestQueue(requireContext()).add(request);

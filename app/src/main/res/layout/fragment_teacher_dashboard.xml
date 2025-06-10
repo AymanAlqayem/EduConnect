@@ -6,11 +6,47 @@
     android:fillViewport="true"
     android:background="@color/background_color">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/gray"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome Teacher:"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_welcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
 
         <!-- Summary Cards -->
         <LinearLayout
@@ -38,7 +74,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today's Classes"
+                        android:text="Total Classes"
                         android:textSize="16sp"
                         android:textColor="@color/white" />
 
@@ -120,22 +156,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Upcoming Classes -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upcoming Classes"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/purple_500"
-            android:layout_marginBottom="8dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_upcoming_classes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 </ScrollView>

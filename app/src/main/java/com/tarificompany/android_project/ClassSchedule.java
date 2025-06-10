@@ -1,4 +1,3 @@
-// File: ClassSchedule.java
 package com.tarificompany.android_project;
 
 import java.io.Serializable;
@@ -10,15 +9,18 @@ public class ClassSchedule implements Serializable {
     private String room;
     private String day;
     private int studentCount;
+    private String sectionName;
 
-    public ClassSchedule(String className, String time, String classGroup, String room, String day, int studentCount) {
+    public ClassSchedule(String className, String time, String classGroup, String room, String day, int studentCount, String sectionName) {
         this.className = className;
         this.time = time;
         this.classGroup = classGroup;
         this.room = room;
         this.day = day;
         this.studentCount = studentCount;
+        this.sectionName = sectionName;
     }
+
     public ClassSchedule(String className, String time, String classGroup) {
         this.className = className;
         this.time = time;
@@ -26,6 +28,7 @@ public class ClassSchedule implements Serializable {
         this.room = "";
         this.day = "";
         this.studentCount = 0;
+        this.sectionName = "";
     }
 
     public String getClassName() {
@@ -50,5 +53,9 @@ public class ClassSchedule implements Serializable {
 
     public int getStudentCount() {
         return studentCount;
+    }
+
+    public String getSectionName() {
+        return sectionName;
     }
 }

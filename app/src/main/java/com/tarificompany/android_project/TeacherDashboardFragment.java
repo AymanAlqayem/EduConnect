@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -26,7 +28,6 @@ import java.util.List;
 
 public class TeacherDashboardFragment extends Fragment {
 
-    private RecyclerView rvUpcomingClasses;
     private UpcomingClassesAdapter adapter;
     private List<ClassSchedule> classSchedules;
 
@@ -44,50 +45,101 @@ public class TeacherDashboardFragment extends Fragment {
         tvStudentsCount = view.findViewById(R.id.tv_students_count);
         tvUnreadMessages = view.findViewById(R.id.tv_unread_messages);
 
-        rvUpcomingClasses = view.findViewById(R.id.rv_upcoming_classes);
-        rvUpcomingClasses.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        classSchedules = new ArrayList<>();
-        adapter = new UpcomingClassesAdapter(classSchedules);
-        rvUpcomingClasses.setAdapter(adapter);
+        //rvUpcomingClasses = view.findViewById(R.id.rv_upcoming_classes);
+        //rvUpcomingClasses.setLayoutManager(new LinearLayoutManaager(getContext()));
+
+        //classSchedules = new ArrayList<>();
+        //adapter = new UpcomingClassesAdapter(classSchedules);
+        //rvUpcomingClasses.setAdapter(adapter);
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         teacherId = prefs.getString("teacher_id", "");
 
-        fetchUpcomingClasses(teacherId);
+        fetchTeacherName(teacherId);
         fetchTotalClassesAndStudents(teacherId);
 
         return view;
     }
 
-    private void fetchUpcomingClasses(String teacherId) {
-        String url = "http://10.0.2.2/AndroidProject/get_teacher_schedule.php?teacher_id=" + teacherId;
+    private void fetchTeacherName(String teacherId) {
+        String url = "http://10.0.2.2/AndroidProject/get_teachers.php?teacher_id=" + teacherId;
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET, url, null,
                 response -> {
                     try {
-                        classSchedules.clear();
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            String className = obj.getString("subject_name");
-                            String time = obj.getString("start_time") + " - " + obj.getString("end_time");
-                            String classGroup = obj.getString("class_name") + " (" + obj.getString("room") + ")";
-                            String room = obj.getString("room");
-                            String day = obj.optString("day", "Unknown");
-                            int studentCount = obj.optInt("student_count", 0);
+                        Log.d("API_RESPONSE", response.toString());
 
-                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount));
+                        if (response.getString("status").equals("success")) {
+                            JSONArray teachersArray = response.getJSONArray("teachers");
+                            boolean teacherFound = false;
+
+                            for (int i = 0; i < teachersArray.length(); i++) {
+                                JSONObject teacherObj = teachersArray.getJSONObject(i);
+                                if (teacherObj.getString("id").equals(teacherId)) {
+                                    String fullName = teacherObj.getString("full_name");
+                                    if (null != tvWelcome) {
+                                        tvWelcome.setText(fullName);
+                                    } else {
+                                        Log.e("UI_ERROR", "tvWelcome is null");
+                                    }
+                                    teacherFound = true;
+                                    break;
+                                }
+                            }
+
+                            if (!teacherFound) {
+                                Toast.makeText(getContext(), "Teacher ID not found in list", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "API returned error", Toast.LENGTH_SHORT).show();
                         }
-
-                        adapter.updateData(classSchedules);
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Error parsing data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error parsing data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("PARSING_ERROR", "Error: ", e);
                     }
                 },
-                error -> Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
+                error -> {
+                    Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("NETWORK_ERROR", "Error: ", error);
+                }
+        );
 
         Volley.newRequestQueue(requireContext()).add(request);
     }
+
+
+
+
+//    private void fetchUpcomingClasses(String teacherId) {
+//        String url = "http://10.0.2.2/AndroidProject/get_teacher_schedule.php?teacher_id=" + teacherId;
+//
+//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+//                response -> {
+//                    try {
+//                        classSchedules.clear();
+//                        for (int i = 0; i < response.length(); i++) {
+//                            JSONObject obj = response.getJSONObject(i);
+//                            String className = obj.getString("subject_name");
+//                            String time = obj.getString("start_time") + " - " + obj.getString("end_time");
+//                            String classGroup = obj.getString("class_name") + " (" + obj.getString("room") + ")";
+//                            String room = obj.getString("room");
+//                            String day = obj.optString("day", "Unknown");
+//                            int studentCount = obj.optInt("student_count", 0);
+//
+//                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount));
+//                        }
+//
+//                        adapter.updateData(classSchedules);
+//                    } catch (Exception e) {
+//                        Toast.makeText(getContext(), "Error parsing data", Toast.LENGTH_SHORT).show();
+//                    }
+//                },
+//                error -> Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
+//
+//        Volley.newRequestQueue(requireContext()).add(request);
+//    }
 
     private void fetchTotalClassesAndStudents(String teacherId) {
         String urlClasses = "http://10.0.2.2/AndroidProject/get_teacher_classes.php?teacher_id=" + teacherId;

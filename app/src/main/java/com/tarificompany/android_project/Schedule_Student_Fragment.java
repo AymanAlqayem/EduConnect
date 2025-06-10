@@ -91,8 +91,10 @@ public class Schedule_Student_Fragment extends Fragment {
                             String room = obj.optString("room", "N/A");
                             int studentCount = obj.optInt("students_count", 0);
                             String classGroup = obj.optString("class_group", "");
+                            String sectionName = obj.optString("class_section", "");
 
-                            ClassSchedule classSchedule = new ClassSchedule(className, time, classGroup, room, day, studentCount);
+
+                            ClassSchedule classSchedule = new ClassSchedule(className, time, classGroup, room, day, studentCount,sectionName);
                             classScheduleList.add(classSchedule);
                         }
                         adapter.updateData(classScheduleList);
