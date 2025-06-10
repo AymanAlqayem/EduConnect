@@ -60,18 +60,23 @@ public class StudentActivity extends AppCompatActivity {
             Fragment fragment = null;
             String title = "Student";
 
+
             if (id == R.id.nav_dashboard) {
                 fragment = new StudentDashboardFragment();
                 title = "Student Dashboard";
+
             } else if (id == R.id.nav_schedule) {
 //                fragment = AddStudentFragment.newInstance();
                 title = "Schedule";
+
             } else if (id == R.id.nav_grades) {
 //                fragment = UpdateStudentFragment.newInstance();
                 title = "Grades";
+
             } else if (id == R.id.nav_assignment) {
 //                fragment = DeleteStudentFragment.newInstance();
                 title = "Assignments";
+
             } else if (id == R.id.nav_messages) {
 //                fragment = AddTeacherFragment.newInstance();
                 title = "Messages.";
