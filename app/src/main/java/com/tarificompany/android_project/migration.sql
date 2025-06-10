@@ -188,7 +188,18 @@ CREATE TABLE announcements
     FOREIGN KEY (created_by) REFERENCES registrars (registrar_id)
 );
 
-
+--new table for message
+CREATE TABLE messages (
+    message_id INT PRIMARY KEY AUTO_INCREMENT,
+    sender_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    recipient_type ENUM('Teacher', 'Student', 'Registrar') NOT NULL,
+    subject VARCHAR(100),
+    content TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES students(student_id),
+    FOREIGN KEY (recipient_id) REFERENCES teachers(teacher_id)
+);
 
 # ===========================   DATA  ===================================
 

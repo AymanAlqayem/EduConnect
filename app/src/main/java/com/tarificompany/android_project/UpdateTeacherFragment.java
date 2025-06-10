@@ -1,6 +1,8 @@
 package com.tarificompany.android_project;
 
 import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +53,12 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
     private List<Teacher> teacherList;
     private List<Teacher> filteredTeacherList;
     private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
+
+    private RequestQueue queue;
+
+    private List<String> subjectList;
+    private List<String> assignedClasses;
+    private ArrayAdapter<String> assignedClassesAdapter;
 
     public static UpdateTeacherFragment newInstance() {
         return new UpdateTeacherFragment();
@@ -160,6 +168,7 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
     private void showUpdateDialog(Teacher teacher, int position) {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_update_teacher);
+
         dialog.setCancelable(true);
 
         dialog.getWindow().setLayout(
@@ -173,26 +182,43 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
         EditText etFullName = dialog.findViewById(R.id.etFullName);
         EditText etEmail = dialog.findViewById(R.id.etEmail);
         EditText etPhone = dialog.findViewById(R.id.etPhone);
-        EditText etDOB = dialog.findViewById(R.id.etDOB);
-        Button btnDatePicker = dialog.findViewById(R.id.btnDatePicker);
         Spinner spinnerSubject = dialog.findViewById(R.id.spinnerSubject);
         Spinner spinnerClass = dialog.findViewById(R.id.spinnerClass);
         Spinner spinnerSection = dialog.findViewById(R.id.spinnerSection);
+        Spinner spinnerDayOfWeek = dialog.findViewById(R.id.spinnerDayOfWeek);
+        EditText etNotes = dialog.findViewById(R.id.etNotes);
+        EditText etRoom = dialog.findViewById(R.id.etRoom);
+        Button btnSave = dialog.findViewById(R.id.btnSave);
         Button btnAddAssignment = dialog.findViewById(R.id.btnAddAssignment);
+        Button btnStartTime = dialog.findViewById(R.id.btnStartTime);
+        Button btnEndTime = dialog.findViewById(R.id.btnEndTime);
         ListView listViewAssignedClasses = dialog.findViewById(R.id.listViewAssignedClasses);
         TextView tvAssignedClassesLabel = dialog.findViewById(R.id.tvAssignedClassesLabel);
-        EditText etNotes = dialog.findViewById(R.id.etNotes);
-        Button btnSave = dialog.findViewById(R.id.btnSave);
+
+
+        btnStartTime.setOnClickListener(v -> showTimePickerDialog(true, btnStartTime, btnEndTime));
+        btnEndTime.setOnClickListener(v -> showTimePickerDialog(false, btnStartTime, btnEndTime));
+
+        subjectList = new ArrayList<>();
+        assignedClasses = new ArrayList<String>();
+
+        queue = Volley.newRequestQueue(requireContext());
+
+        // Setup Day of Week spinner
+        ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.days_of_week,
+                android.R.layout.simple_spinner_item
+        );
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDayOfWeek.setAdapter(dayAdapter);
+
 
         // Populate teacher data
         etFullName.setText(teacher.getFullName());
         etEmail.setText(teacher.getEmail());
         etPhone.setText(teacher.getPhone());
-        etDOB.setText(teacher.getJoiningDate());
         etNotes.setText(teacher.getNotes());
-
-        // Date picker setup
-        btnDatePicker.setOnClickListener(v -> showCustomDatePickerDialog(etDOB));
 
         // Load spinners data
         loadSpinnerData(spinnerSubject, "get_subjects.php", "subjects");
@@ -206,9 +232,15 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
                 android.R.layout.simple_list_item_1,
                 assignedClasses
         );
+
+
+        // Inside showUpdateDialog method, replace the ListView setup code with this:
         listViewAssignedClasses.setAdapter(assignedClassesAdapter);
 
-        // Long-click to remove assignments
+        ViewGroup.LayoutParams params = listViewAssignedClasses.getLayoutParams();
+        params.height = (int) (200 * requireContext().getResources().getDisplayMetrics().density); // Set height to ~200dp
+        listViewAssignedClasses.setLayoutParams(params);
+
         listViewAssignedClasses.setOnItemLongClickListener((parent, view, pos, id) -> {
             String removed = assignedClasses.remove(pos);
             assignedClassesAdapter.notifyDataSetChanged();
@@ -224,19 +256,41 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
         btnAddAssignment.setOnClickListener(v -> {
             String selectedClass = spinnerClass.getSelectedItem() != null ? ((ClassItem) spinnerClass.getSelectedItem()).getName() : "";
             String selectedSection = spinnerSection.getSelectedItem() != null ? spinnerSection.getSelectedItem().toString() : "";
+            String startTime = btnStartTime.getText().toString();
+            String endTime = btnEndTime.getText().toString();
+            String room = etRoom.getText().toString().trim();
 
-            if (!selectedClass.isEmpty() && !selectedSection.isEmpty()) {
-                String newAssignment = selectedClass + " - " + selectedSection;
-                if (!assignedClasses.contains(newAssignment)) {
-                    assignedClasses.add(newAssignment);
-                    assignedClassesAdapter.notifyDataSetChanged();
-                    updateAssignedClassesLabel(tvAssignedClassesLabel, assignedClasses.size());
-                    Toast.makeText(requireContext(), "Added: " + newAssignment, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "This assignment already exists", Toast.LENGTH_SHORT).show();
-                }
+            // Validate all required fields
+            if (selectedClass.isEmpty()) {
+                Toast.makeText(requireContext(), "Please select a class", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedSection.isEmpty()) {
+                Toast.makeText(requireContext(), "Please select a section", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (startTime.equals("Select Start Time") || startTime.isEmpty()) {
+                Toast.makeText(requireContext(), "Please select a start time", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (endTime.equals("Select End Time") || endTime.isEmpty()) {
+                Toast.makeText(requireContext(), "Please select an end time", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (room.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter a room", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Create the assignment string including all required fields
+            String newAssignment = selectedClass + " - " + selectedSection + " - " + startTime + " to " + endTime + " - Room: " + room;
+            if (!assignedClasses.contains(newAssignment)) {
+                assignedClasses.add(newAssignment);
+                assignedClassesAdapter.notifyDataSetChanged();
+                updateAssignedClassesLabel(tvAssignedClassesLabel, assignedClasses.size());
+                Toast.makeText(requireContext(), "Added: " + newAssignment, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(requireContext(), "Please select both class and section", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "This assignment already exists", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -246,7 +300,6 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
             String fullName = etFullName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String phone = etPhone.getText().toString().trim();
-            String dob = etDOB.getText().toString().trim();
             String notes = etNotes.getText().toString().trim();
             String subject = spinnerSubject.getSelectedItem() != null ? spinnerSubject.getSelectedItem().toString() : "";
 
@@ -271,7 +324,6 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
                 jsonBody.put("email", email);
                 jsonBody.put("phone", phone);
                 jsonBody.put("subject", subject);
-                jsonBody.put("joining_date", dob);
                 jsonBody.put("notes", notes);
 
                 // Add assigned classes
@@ -348,6 +400,35 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
                 updateTeacher(teacher.getId(), jsonBody, position, dialog);
             }
         });
+    }
+
+    private void showTimePickerDialog(boolean isStartTime, Button btnStartTime, Button btnEndTime) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                requireContext(),
+                R.style.TimePickerDialogTheme,
+                (view, hourOfDay, minuteOfHour) -> {
+                    String time = String.format(Locale.US, "%02d:%02d", hourOfDay, minuteOfHour);
+                    if (isStartTime) {
+                        btnStartTime.setText(time);
+                    } else {
+                        btnEndTime.setText(time);
+                    }
+                },
+                hour, minute, true);
+
+        timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+            // The OnTimeSetListener will handle setting the time
+        });
+
+        timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
+            // Do nothing, just dismiss
+        });
+
+        timePickerDialog.show();
     }
 
     private void updateAssignedClassesLabel(TextView label, int count) {
@@ -512,57 +593,6 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
         queue.add(request);
     }
 
-    private void showCustomDatePickerDialog(EditText editText) {
-        Dialog datePickerDialog = new Dialog(requireContext());
-        datePickerDialog.setContentView(R.layout.dialog_date_picker);
-
-        // Initialize views
-        DatePicker datePicker = datePickerDialog.findViewById(R.id.datePicker);
-        Button btnYes = datePickerDialog.findViewById(R.id.btnYes);
-        Button btnNo = datePickerDialog.findViewById(R.id.btnNo);
-
-        // Parse the current date in the EditText to set the initial date in the DatePicker
-        int year, month, day;
-        String currentDate = editText.getText().toString();
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            Date date = sdf.parse(currentDate);
-            Calendar calendar = Calendar.getInstance();
-            if (date != null) {
-                calendar.setTime(date);
-            }
-            year = calendar.get(Calendar.YEAR);
-            month = calendar.get(Calendar.MONTH);
-            day = calendar.get(Calendar.DAY_OF_MONTH);
-        } catch (Exception e) {
-            // Fallback to current date if parsing fails
-            Calendar calendar = Calendar.getInstance();
-            year = calendar.get(Calendar.YEAR);
-            month = calendar.get(Calendar.MONTH);
-            day = calendar.get(Calendar.DAY_OF_MONTH);
-        }
-
-        // Set the initial date in the DatePicker
-        datePicker.init(year, month, day, null);
-
-        // Yes button click listener
-        btnYes.setOnClickListener(v -> {
-            int selectedYear = datePicker.getYear();
-            int selectedMonth = datePicker.getMonth() + 1; // Month is 0-based
-            int selectedDay = datePicker.getDayOfMonth();
-            String date = String.format(Locale.US, "%d-%02d-%02d", selectedYear, selectedMonth, selectedDay);
-            editText.setText(date);
-            datePickerDialog.dismiss();
-        });
-
-        // No button click listener
-        btnNo.setOnClickListener(v -> {
-            datePickerDialog.dismiss();
-        });
-
-        datePickerDialog.show();
-    }
-
     private void updateTeacher(String teacherId, JSONObject jsonBody, int position, Dialog dialog) {
         String url = BASE_URL + "update_teacher.php";
         RequestQueue queue = Volley.newRequestQueue(requireContext());
@@ -624,7 +654,6 @@ public class UpdateTeacherFragment extends Fragment implements UpdateTeacherAdap
         queue.add(request);
     }
 
-    // Helper class for Spinner with ID and Name
     private static class ClassItem {
         private final String id;
         private final String name;

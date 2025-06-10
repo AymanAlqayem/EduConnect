@@ -78,7 +78,8 @@ public class Schedule_Teacher_Fragment extends Fragment {
                             String room = obj.getString("room");
                             String day = obj.optString("day", "Unknown");
                             int studentCount = obj.optInt("student_count", 0);
-                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount));
+                            String sectionName = obj.optString("section_name", "");
+                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount, sectionName));
                         }
                         adapter.updateData(classSchedules);
                     } catch (Exception e) {

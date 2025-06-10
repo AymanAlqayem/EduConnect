@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -32,7 +33,7 @@ import java.util.Map;
 
 public class PublishGradesFragment extends Fragment {
 
-    private Spinner spinnerClass, spinnerAssessmentType, spinnerSubject;
+    private Spinner spinnerClass, spinnerAssessmentType;
     private EditText etGradePercentage, etStudentGrade;
     private Button btnLoadStudents, btnPrevious, btnNext, btnSubmitAll;
     private TextView tvStudentName, tvStudentCounter;
@@ -41,8 +42,6 @@ public class PublishGradesFragment extends Fragment {
     private List<String> studentIds = new ArrayList<>();
     private List<String> classList = new ArrayList<>();
     private List<String> classIds = new ArrayList<>();
-    private List<String> subjectList = new ArrayList<>();
-    private List<String> subjectIds = new ArrayList<>();
     private Map<String, String> studentGrades = new HashMap<>();
     private int currentStudentIndex = 0;
     private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
@@ -56,13 +55,22 @@ public class PublishGradesFragment extends Fragment {
         initViews(view);
         setupSpinners();
         setupClickListeners();
+
+        // Handle back press to prevent Activity destruction
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showToast("Back press intercepted, staying on Publish Grades");
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
         return view;
     }
 
     private void initViews(View view) {
         spinnerClass = view.findViewById(R.id.spinner_class);
         spinnerAssessmentType = view.findViewById(R.id.spinner_assessment_type);
-        spinnerSubject = view.findViewById(R.id.spinner_subject);
         etGradePercentage = view.findViewById(R.id.et_grade_percentage);
         etStudentGrade = view.findViewById(R.id.et_student_grade);
         btnLoadStudents = view.findViewById(R.id.btn_load_students);
@@ -74,6 +82,7 @@ public class PublishGradesFragment extends Fragment {
     }
 
     private void setupSpinners() {
+        // Setup assessment types
         List<String> assessments = new ArrayList<>();
         assessments.add("Quiz");
         assessments.add("Assignment");
@@ -85,14 +94,16 @@ public class PublishGradesFragment extends Fragment {
         assessmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAssessmentType.setAdapter(assessmentAdapter);
 
+        // Fetch teacher ID
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
         if (teacherId.isEmpty()) {
             showToast("Teacher ID not found");
             return;
         }
+
+        // Fetch classes
         fetchClasses(teacherId);
-        fetchSubjects(teacherId);
     }
 
     private void fetchClasses(String teacherId) {
@@ -108,7 +119,7 @@ public class PublishGradesFragment extends Fragment {
                         }
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
-                            classList.add(obj.getString("class_name"));
+                            classList.add(obj.getString("class_name")); // e.g., "Grade 10 (Section A)"
                             classIds.add(obj.getString("class_id"));
                         }
                         ArrayAdapter<String> classAdapter = new ArrayAdapter<>(
@@ -117,35 +128,6 @@ public class PublishGradesFragment extends Fragment {
                         spinnerClass.setAdapter(classAdapter);
                     } catch (Exception e) {
                         showToast("Error loading classes: " + e.getMessage());
-                    }
-                },
-                error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
-
-        requestQueue.add(request);
-    }
-
-    private void fetchSubjects(String teacherId) {
-        String url = BASE_URL + "get_teacher_subjects.php?teacher_id=" + teacherId;
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        subjectList.clear();
-                        subjectIds.clear();
-                        if (response.length() == 0) {
-                            showToast("No subjects found");
-                        }
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            subjectList.add(obj.getString("subject_name"));
-                            subjectIds.add(obj.getString("subject_id"));
-                        }
-                        ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(
-                                requireContext(), android.R.layout.simple_spinner_item, subjectList);
-                        subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerSubject.setAdapter(subjectAdapter);
-                    } catch (Exception e) {
-                        showToast("Error loading subjects: " + e.getMessage());
                     }
                 },
                 error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
@@ -167,10 +149,6 @@ public class PublishGradesFragment extends Fragment {
         }
         if (spinnerAssessmentType.getSelectedItem() == null) {
             showToast("Please select an assessment type");
-            return;
-        }
-        if (spinnerSubject.getSelectedItem() == null) {
-            showToast("Please select a subject");
             return;
         }
         String percentage = etGradePercentage.getText().toString();
@@ -202,6 +180,7 @@ public class PublishGradesFragment extends Fragment {
                         currentStudentIndex = 0;
                         if (response.length() == 0) {
                             showToast("No students found");
+                            updateStudentDisplay();
                             return;
                         }
                         for (int i = 0; i < response.length(); i++) {
@@ -217,7 +196,10 @@ public class PublishGradesFragment extends Fragment {
                         showToast("Error loading students: " + e.getMessage());
                     }
                 },
-                error -> showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
+                error -> {
+                    showToast("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"));
+                    updateStudentDisplay();
+                });
 
         requestQueue.add(request);
     }
@@ -242,6 +224,7 @@ public class PublishGradesFragment extends Fragment {
             etStudentGrade.setText("");
             btnPrevious.setEnabled(false);
             btnNext.setEnabled(false);
+            btnSubmitAll.setVisibility(View.GONE);
             return;
         }
 
@@ -252,6 +235,7 @@ public class PublishGradesFragment extends Fragment {
 
         btnPrevious.setEnabled(currentStudentIndex > 0);
         btnNext.setEnabled(currentStudentIndex < studentList.size() - 1);
+        btnSubmitAll.setVisibility(View.VISIBLE);
     }
 
     private void submitGrades() {
@@ -263,22 +247,23 @@ public class PublishGradesFragment extends Fragment {
         for (String studentId : studentGrades.keySet()) {
             String grade = studentGrades.get(studentId);
             if (grade.isEmpty()) {
-                showToast("Please enter grade for all students");
+                showToast("Please enter grades for all students");
                 return;
             }
             try {
                 float score = Float.parseFloat(grade);
-                if (score < 0 || score > Float.parseFloat(etGradePercentage.getText().toString())) {
-                    showToast("Invalid grade for student ID " + studentId);
+                float maxScore = Float.parseFloat(etGradePercentage.getText().toString());
+                if (score < 0 || score > maxScore) {
+                    showToast("Invalid grade for student ID: " + studentId);
                     return;
                 }
             } catch (NumberFormatException e) {
-                showToast("Invalid grade format for student ID " + studentId);
+                showToast("Invalid grade format for student ID: " + studentId);
                 return;
             }
         }
 
-        String subjectId = subjectIds.get(spinnerSubject.getSelectedItemPosition());
+        String classId = classIds.get(spinnerClass.getSelectedItemPosition());
         String assessmentType = spinnerAssessmentType.getSelectedItem().toString();
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
@@ -298,9 +283,10 @@ public class PublishGradesFragment extends Fragment {
 
         JSONObject payload = new JSONObject();
         try {
-            payload.put("subject_id", subjectId);
+            payload.put("class_id", classId);
             payload.put("teacher_id", teacherId);
             payload.put("exam_name", assessmentType);
+            payload.put("max_score", gradesArray);
             payload.put("grades", gradesArray);
         } catch (Exception e) {
             showToast("Error preparing submission: " + e.getMessage());
@@ -311,11 +297,12 @@ public class PublishGradesFragment extends Fragment {
 
         JsonObjectRequest submitRequest = new JsonObjectRequest(Request.Method.POST, url, payload,
                 response -> {
-                    showToast("Grades submitted successfully");
+                    showToast("Grades submitted successfully!");
                     studentGrades.clear();
                     studentList.clear();
                     studentIds.clear();
                     updateStudentDisplay();
+                    btnSubmitAll.setVisibility(View.GONE);
                 },
                 error -> showToast("Submission failed: " + (error.getMessage() != null ? error.getMessage() : "Unknown error")));
 

@@ -13,6 +13,7 @@ public class ClassViewHolder extends RecyclerView.ViewHolder {
     public final TextView tvRoom;
     public final TextView tvDay;
     public final TextView tvStudentsCount;
+    public final TextView tvSection;
     public final ImageView ivCourseIcon;
 
     public ClassViewHolder(@NonNull View itemView) {
@@ -22,6 +23,7 @@ public class ClassViewHolder extends RecyclerView.ViewHolder {
         tvRoom = itemView.findViewById(R.id.tv_room);
         tvDay = itemView.findViewById(R.id.tv_day);
         tvStudentsCount = itemView.findViewById(R.id.tv_students_count);
+        tvSection = itemView.findViewById(R.id.tv_section);
         ivCourseIcon = itemView.findViewById(R.id.iv_course_icon);
     }
 
@@ -32,6 +34,7 @@ public class ClassViewHolder extends RecyclerView.ViewHolder {
         tvTime.setText(classSchedule.getTime());
         tvRoom.setText(classSchedule.getRoom());
         tvDay.setText(classSchedule.getDay());
+        tvSection.setText(classSchedule.getSectionName());
 
         Integer studentCount = classSchedule.getStudentCount();
         if (studentCount == null) {
@@ -39,6 +42,5 @@ public class ClassViewHolder extends RecyclerView.ViewHolder {
         } else {
             tvStudentsCount.setText(String.format("%d Students", studentCount));
         }
-
     }
 }

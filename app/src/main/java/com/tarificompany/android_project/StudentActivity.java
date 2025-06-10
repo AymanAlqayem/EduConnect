@@ -28,7 +28,7 @@ public class StudentActivity extends AppCompatActivity {
 
         // Get student ID from SharedPreferences
         SharedPreferences pref = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String studentId = pref.getString("student_id", "0");
+        String studentId = pref.getString("student_id", "");
 
         // Save to local prefs if needed
         SharedPreferences localPrefs = getSharedPreferences("student_prefs", MODE_PRIVATE);

@@ -1,178 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="24dp">
 
+        <!-- Personal Information Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full Name"
-            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:text="Personal Information"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- Full Name -->
         <EditText
             android:id="@+id/etFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Enter full name" />
+            android:layout_marginBottom="16dp"
+            android:hint="Full Name"
+            android:inputType="textPersonName" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Email"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
+        <!-- Email -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Enter email"
+            android:layout_marginBottom="16dp"
+            android:hint="Email"
             android:inputType="textEmailAddress" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Phone"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
+        <!-- Phone -->
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Enter phone number"
+            android:layout_marginBottom="16dp"
+            android:hint="Phone Number (10 digits)"
             android:inputType="phone" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Date of Birth"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/etDOB"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="YYYY-MM-DD"
-                android:inputType="date" />
-
-            <Button
-                android:id="@+id/btnDatePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pick Date" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Subject"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
+        <!-- Subject -->
         <Spinner
             android:id="@+id/spinnerSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="24dp" />
 
+        <!-- Class Assignment Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Class"
-            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:text="Assign Class and Schedule"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- Class -->
         <Spinner
             android:id="@+id/spinnerClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="8dp"
+            android:prompt="@string/select_class_prompt" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Section"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
+        <!-- Section -->
         <Spinner
             android:id="@+id/spinnerSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="8dp" />
 
+        <!-- Day of Week -->
+        <Spinner
+            android:id="@+id/spinnerDayOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:entries="@array/days_of_week" />
+
+        <!-- Start and End Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnStartTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select Start Time" />
+
+            <Button
+                android:id="@+id/btnEndTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Select End Time" />
+        </LinearLayout>
+
+        <!-- Room -->
+        <EditText
+            android:id="@+id/etRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Room (e.g., Room 101)"
+            android:inputType="text" />
+
+        <!-- Add Assignment Button -->
         <Button
             android:id="@+id/btnAddAssignment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Add Class Assignment" />
+            android:layout_marginBottom="24dp"
+            android:text="Add Assignment" />
 
+        <!-- Assigned Classes List -->
         <TextView
             android:id="@+id/tvAssignedClassesLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Current Assignments (0):"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="8dp"
+            android:text="Current Assignments (0):" />
 
-        <ListView
-            android:id="@+id/listViewAssignedClasses"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:maxHeight="200dp"
-            android:nestedScrollingEnabled="true" />
+            android:layout_marginBottom="24dp"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Long press an assignment to remove it"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp" />
+
+            <ListView
+                android:id="@+id/listViewAssignedClasses"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="true"
+                android:padding="8dp"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+
+
+        <!-- Notes -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:text="Notes"
-            android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Enter notes"
-            android:inputType="textMultiLine" />
+            android:layout_marginBottom="24dp"
+            android:hint="Enter any additional notes here"
+            android:inputType="textMultiLine"
+            android:minLines="3" />
 
+        <!-- Save Button -->
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Save" />
-
+            android:backgroundTint="@color/primaryColor"
+            android:text="Save Teacher"
+            android:textColor="@android:color/white" />
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>
