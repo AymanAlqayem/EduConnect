@@ -39,7 +39,7 @@ public class TeacherDashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_teacher_dashboard, container, false);
 
-        tvWelcome = view.findViewById(R.id.tv_welcome);
+        tvWelcome = view.findViewById(R.id.tv_welcome_message);
         tvTodayClasses = view.findViewById(R.id.tv_today_classes);
         tvStudentsCount = view.findViewById(R.id.tv_students_count);
         tvUnreadMessages = view.findViewById(R.id.tv_unread_messages);
@@ -153,6 +153,7 @@ public class TeacherDashboardFragment extends Fragment {
 
     interface StudentsCountCallback {
         void onResult(int count);
+
         void onError();
     }
 }

@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
 public class StudentActivity extends AppCompatActivity {
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
@@ -26,23 +27,17 @@ public class StudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        // Get student ID from SharedPreferences
-        SharedPreferences pref = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String studentId = pref.getString("student_id", "0");
 
-        // Save to local prefs if needed
-        SharedPreferences localPrefs = getSharedPreferences("student_prefs", MODE_PRIVATE);
-        localPrefs.edit().putString("student_id", studentId).apply();
-
-
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_dashboard);
-
-        toolbar = findViewById(R.id.toolbar);
+        // Initialize toolbar
+        toolbar = findViewById(R.id.studentToolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Student Dashboard");
 
+        // Initialize drawer and navigation view
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        // Set up drawer toggle
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -50,34 +45,36 @@ public class StudentActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        // Load default fragment (Dashboard)
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new StudentDashboardFragment())
-                    .commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container, new StudentDashboardFragment());
+            transaction.commit();
+            navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
+        // Set up navigation item click listener
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             Fragment fragment = null;
-            String title = "Student Dashboard";
+            String title = "Student";
 
             if (id == R.id.nav_dashboard) {
                 fragment = new StudentDashboardFragment();
                 title = "Student Dashboard";
             } else if (id == R.id.nav_schedule) {
-                fragment = new Schedule_Student_Fragment();
-                title = "My Schedule";
+//                fragment = AddStudentFragment.newInstance();
+                title = "Schedule";
             } else if (id == R.id.nav_grades) {
-                fragment = new StudentGradesFragment();
-                title = "My Grades";
+//                fragment = UpdateStudentFragment.newInstance();
+                title = "Grades";
             } else if (id == R.id.nav_assignment) {
-                fragment = new StudentAssignmentsFragment();
-                title = "Assignment";
+//                fragment = DeleteStudentFragment.newInstance();
+                title = "Assignments";
             } else if (id == R.id.nav_messages) {
-                fragment = GenericFragment.newInstance(R.layout.item_message);
-                title = "Messages";
-
+//                fragment = AddTeacherFragment.newInstance();
+                title = "Messages.";
             } else if (id == R.id.nav_logout) {
                 Intent intent = new Intent(StudentActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -85,19 +82,20 @@ public class StudentActivity extends AppCompatActivity {
                 finish();
             }
 
+
             if (fragment != null) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
                 drawerLayout.closeDrawers();
                 toolbar.setTitle(title);
-                navigationView.setCheckedItem(id);
             }
 
             return true;
         });
+
     }
 
     @Override

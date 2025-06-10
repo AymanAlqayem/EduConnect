@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String studentId = json.getString("student_id");
                                     SharedPreferences studentPrefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                                     studentPrefs.edit()
-                                            .putString("student_id", studentId)  // Keep as string for consistency
+                                            .putString("student_id", studentId)
                                             .apply();
                                     Log.d("LoginActivity", "Saved student ID: " + studentId);
                                     startActivity(new Intent(this, StudentActivity.class));

@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/studentToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/purple_500"
@@ -33,10 +33,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:elevation="8dp"
-        app:headerLayout="@layout/nav_header"
+        app:headerLayout="@layout/nav_student_header"
         app:itemHorizontalPadding="16dp"
         app:itemIconPadding="12dp"
-        app:itemRippleColor="@color/teal_200"
+        app:itemRippleColor="@color/material_dynamic_neutral20"
         app:menu="@menu/student_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
