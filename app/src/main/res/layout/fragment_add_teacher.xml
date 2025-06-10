@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:padding="16dp">
 
     <LinearLayout
-        style="@style/CustomLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingBottom="24dp">
 
-        <!-- Teacher Information Section -->
+        <!-- Personal Information Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Teacher Information"
+            android:text="Personal Information"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -26,42 +25,33 @@
             android:id="@+id/etFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Teacher Name"
-            android:inputType="textPersonName"
-            android:padding="12dp" />
+            android:layout_marginBottom="16dp"
+            android:hint="Full Name"
+            android:inputType="textPersonName" />
 
         <!-- Email -->
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
-            android:padding="12dp" />
+            android:layout_marginBottom="16dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
         <!-- Phone -->
         <EditText
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:padding="12dp" />
+            android:layout_marginBottom="16dp"
+            android:hint="Phone Number (10 digits)"
+            android:inputType="phone" />
 
-        <!-- Date of Birth -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Date of Birth"
-            android:textStyle="bold" />
-
+        <!-- DOB -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <EditText
@@ -70,29 +60,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:focusable="false"
-                android:hint="Select date"
-                android:inputType="none"
-                android:padding="12dp" />
+                android:hint="Date of Birth (YYYY-MM-DD)"
+                android:inputType="none" />
 
             <Button
                 android:id="@+id/btnDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select" />
+                android:layout_marginStart="8dp"
+                android:text="Pick Date" />
         </LinearLayout>
 
         <!-- Password -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Password"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <EditText
@@ -100,167 +83,162 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Enter password"
-                android:inputType="textPassword"
-                android:padding="12dp" />
+                android:hint="Password"
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/btnGeneratePassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="Generate" />
         </LinearLayout>
 
         <!-- Gender -->
-        <TextView
-            android:id="@+id/tvGenderLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:labelFor="@id/rgGender"
-            android:text="Gender"
-            android:textStyle="bold" />
-
         <RadioGroup
             android:id="@+id/rgGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/rbMale"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
                 android:text="Male" />
 
             <RadioButton
                 android:id="@+id/rbFemale"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Female" />
         </RadioGroup>
 
-        <TextView
-            android:id="@+id/tfMajor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Major"
-            android:textStyle="bold" />
-
-        <!-- Subject Specialization -->
+        <!-- Subject -->
         <Spinner
             android:id="@+id/spinnerSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Subject Specialization"
-            android:padding="12dp"
-            android:spinnerMode="dropdown" />
+            android:layout_marginBottom="24dp" />
 
-        <!-- Class/Section Assignment Section -->
+        <!-- Class Assignment Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Classes"
+            android:text="Assign Class and Schedule"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Class Selection -->
+        <!-- Class -->
         <Spinner
             android:id="@+id/spinnerClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Select Class"
-            android:padding="12dp" />
+            android:layout_marginBottom="8dp"
+            android:prompt="@string/select_class_prompt" />
 
-        <!-- Section Selection -->
+        <!-- Section -->
         <Spinner
             android:id="@+id/spinnerSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Select Section"
-            android:padding="12dp" />
+            android:layout_marginBottom="8dp" />
 
-        <!-- Add Class/Section Button -->
+        <!-- Day of Week -->
+        <Spinner
+            android:id="@+id/spinnerDayOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:entries="@array/days_of_week" />
+
+        <!-- Start and End Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnStartTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select Start Time" />
+
+            <Button
+                android:id="@+id/btnEndTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Select End Time" />
+        </LinearLayout>
+
+        <!-- Room -->
+        <EditText
+            android:id="@+id/etRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="Room (e.g., Room 101)"
+            android:inputType="text" />
+
+        <!-- Add Assignment Button -->
         <Button
             android:id="@+id/btnAddAssignment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             android:text="Add Assignment" />
 
-        <!-- Assigned Classes Section -->
+        <!-- Assigned Classes List -->
         <TextView
             android:id="@+id/tvAssignedClassesLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Current Assignments (0):"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            android:layout_marginBottom="8dp"
+            android:text="Current Assignments (0):" />
 
-        <!-- Use a fixed height with maxHeight constraint -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/white"
-            android:elevation="4dp"
-            android:orientation="vertical">
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp">
 
             <ListView
                 android:id="@+id/listViewAssignedClasses"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:divider="@android:color/darker_gray"
-                android:dividerHeight="1dp"
-                android:maxHeight="300dp"
-                android:minHeight="80dp"
-                android:nestedScrollingEnabled="true"
-                android:padding="8dp"
-                android:scrollbars="vertical"
-                android:visibility="gone" />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
-        <!-- Bio / Notes -->
+
+        <!-- Notes -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Additional Information"
-            android:textSize="18sp"
+            android:text="Notes"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etNotes"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="8dp"
-            android:hint="Bio / Notes"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:hint="Enter any additional notes here"
             android:inputType="textMultiLine"
-            android:padding="12dp" />
+            android:minLines="3" />
 
         <!-- Save Button -->
         <Button
             android:id="@+id/btnSave"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Save"
-            android:textAllCaps="false" />
-
+            android:backgroundTint="@color/primaryColor"
+            android:text="Save Teacher"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </ScrollView>
