@@ -58,7 +58,10 @@ CREATE TABLE teachers
     email         VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255)        NOT NULL,
     DOB           DATE,
-    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    gender        VARCHAR(10),
+    phone         VARCHAR(10),
+    notes         TEXT
 );
 
 CREATE TABLE teacher_sections
@@ -450,6 +453,12 @@ VALUES ('Exam Notice', 'Mid-term exams will start from next week.', 1, 'All'),
        ('Meeting', 'Staff meeting scheduled on Friday.', 1, 'Teacher');
 
 
+# =================================================================================================================
+
+INSERT INTO teachers (name, email, password_hash, DOB)
+VALUES ('Dr. Ayman Nabil', 'ayman2004@example.com', '1220040', '2004-06-2');
+
+
 
 SELECT *
 FROM registrars;
@@ -459,7 +468,28 @@ SELECT *
 FROM sections;
 SELECT *
 FROM teachers;
+
+SELECT *
+FROM subjects;
+
+
+
 SELECT *
 FROM students;
 SELECT *
 FROM teacher_sections;
+
+
+
+SELECT DISTINCT subject_name
+FROM subjects
+
+
+
+
+
+
+
+
+
+

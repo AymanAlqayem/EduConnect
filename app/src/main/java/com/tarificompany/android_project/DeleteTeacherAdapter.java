@@ -43,7 +43,6 @@ public class DeleteTeacherAdapter extends RecyclerView.Adapter<DeleteTeacherAdap
         holder.tvTeacherName.setText(teacher.getFullName());
         holder.tvEmail.setText(teacher.getEmail());
         holder.tvSubject.setText(teacher.getSubject());
-        holder.tvGender.setText(teacher.getGender());
         holder.tvJoiningDate.setText(teacher.getJoiningDate());
 
         holder.ivDelete.setOnClickListener(v -> {

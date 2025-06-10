@@ -1,249 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:background="@android:color/white"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="20dp"
-        android:text="Update Teacher Information"
-        android:textColor="#1A237E"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ID:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:text="Full Name"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/etTeacherId"
-            android:layout_width="0dp"
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:enabled="false"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:hint="Enter full name" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Email"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/etTeacherName"
-            android:layout_width="0dp"
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:hint="Full Name"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:hint="Enter email"
+            android:inputType="textEmailAddress" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Email:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Phone"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/etTeacherEmail"
-            android:layout_width="0dp"
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp"
+            android:hint="Enter phone number"
+            android:inputType="phone" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Phone:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Date of Birth"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etTeacherPhone"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+            <EditText
+                android:id="@+id/etDOB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="YYYY-MM-DD"
+                android:inputType="date" />
+
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Date" />
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Gender:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/etTeacherGender"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:enabled="false"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Subject:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Subject"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/spTeacherSubject"
-            android:layout_width="0dp"
+            android:id="@+id/spinnerSubject"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:padding="8dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Joining Date:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Class"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etTeacherJoiningDate"
-            android:layout_width="0dp"
+        <Spinner
+            android:id="@+id/spinnerClass"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:focusable="false"
-            android:hint="Select Date"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Notes:"
-            android:textColor="#424242"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Section"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etTeacherNotes"
-            android:layout_width="0dp"
+        <Spinner
+            android:id="@+id/spinnerSection"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:background="@android:drawable/edit_text"
-            android:hint="Notes"
-            android:padding="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
+            android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnAddAssignment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#B0BEC5"
-            android:padding="8dp"
-            android:text="Cancel"
-            android:textColor="#C62828"
-            android:textSize="16sp" />
+            android:layout_marginTop="16dp"
+            android:text="Add Class Assignment" />
+
+        <TextView
+            android:id="@+id/tvAssignedClassesLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Current Assignments (0):"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ListView
+            android:id="@+id/listViewAssignedClasses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxHeight="200dp"
+            android:nestedScrollingEnabled="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Notes"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Enter notes"
+            android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#2E7D32"
-            android:padding="8dp"
-            android:text="Save"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:layout_marginTop="16dp"
+            android:text="Save" />
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

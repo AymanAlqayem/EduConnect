@@ -13,8 +13,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeleteTeacherFragment extends Fragment implements DeleteTeacherAdapter.OnTeacherDeleteListener {
 
@@ -23,6 +35,8 @@ public class DeleteTeacherFragment extends Fragment implements DeleteTeacherAdap
     private DeleteTeacherAdapter adapter;
     private List<Teacher> teacherList;
     private List<Teacher> filteredTeacherList;
+
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
 
     public static DeleteTeacherFragment newInstance() {
         return new DeleteTeacherFragment();
@@ -39,18 +53,11 @@ public class DeleteTeacherFragment extends Fragment implements DeleteTeacherAdap
         // Initialize SearchView
         searchView = view.findViewById(R.id.searchView);
 
-        // Initialize teacher list with 10 different teachers (with IDs)
+        // Initialize teacher list with 10 different teachers (with IDs) STATIC DATA
         teacherList = new ArrayList<>();
-        teacherList.add(new Teacher("122", "Alice Johnson", "alice.j@example.com", "1234567890", "Female", "Mathematics", "2023-01-15", "Math expert"));
-        teacherList.add(new Teacher("123", "Bob Smith", "bob.smith@example.com", "2345678901", "Male", "English", "2022-06-20", "Literature enthusiast"));
-        teacherList.add(new Teacher("124", "Carol White", "carol.w@example.com", "3456789012", "Female", "Science", "2021-09-10", "Physics specialist"));
-        teacherList.add(new Teacher("125", "David Brown", "david.b@example.com", "4567890123", "Male", "History", "2020-03-05", "World history buff"));
-        teacherList.add(new Teacher("126", "Emma Davis", "emma.d@example.com", "5678901234", "Female", "Geography", "2023-04-22", "Map enthusiast"));
-        teacherList.add(new Teacher("127", "Frank Wilson", "frank.w@example.com", "6789012345", "Male", "Computer Science", "2022-11-30", "Coding mentor"));
-        teacherList.add(new Teacher("128", "Grace Lee", "grace.l@example.com", "7890123456", "Female", "Physical Education", "2021-07-15", "Sports coach"));
-        teacherList.add(new Teacher("129", "Henry Moore", "henry.m@example.com", "8901234567", "Male", "Art", "2020-12-01", "Creative artist"));
-        teacherList.add(new Teacher("130", "Isabella Taylor", "isabella.t@example.com", "9012345678", "Female", "Music", "2023-02-28", "Piano virtuoso"));
-        teacherList.add(new Teacher("131", "James Anderson", "james.a@example.com", "0123456789", "Male", "Foreign Language", "2022-08-17", "Fluent in Spanish"));
+
+        // load teachers.
+        fetchTeachers();
 
         // Initialize filtered list (initially same as full list)
         filteredTeacherList = new ArrayList<>(teacherList);
@@ -95,14 +102,89 @@ public class DeleteTeacherFragment extends Fragment implements DeleteTeacherAdap
         adapter.notifyDataSetChanged();
     }
 
+    private void fetchTeachers() {
+        String url = BASE_URL + "get_teachers.php";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray teachersArray = response.getJSONArray("teachers");
+                            teacherList.clear();
+                            for (int i = 0; i < teachersArray.length(); i++) {
+                                JSONObject obj = teachersArray.getJSONObject(i);
+                                teacherList.add(new Teacher(
+                                        obj.getString("id"),
+                                        obj.getString("full_name"),
+                                        obj.getString("email"),
+                                        obj.optString("phone", ""),
+                                        obj.optString("subject", ""),
+                                        obj.getString("joining_date"),
+                                        obj.optString("notes", "")
+                                ));
+                            }
+                            filteredTeacherList.clear();
+                            filteredTeacherList.addAll(teacherList);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(requireContext(), "Error: " + response.optString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(requireContext(), "Error fetching teachers", Toast.LENGTH_SHORT).show();
+                }
+        );
+        queue.add(jsonObjectRequest);
+    }
+
     @Override
     public void onTeacherDelete(int position) {
-        // Remove teacher from both lists and update RecyclerView
-        Teacher deletedTeacher = filteredTeacherList.get(position);
-        String teacherName = deletedTeacher.getFullName();
-        teacherList.remove(deletedTeacher);
-        filteredTeacherList.remove(position);
-        adapter.notifyItemRemoved(position);
-        Toast.makeText(requireContext(), teacherName + " deleted successfully", Toast.LENGTH_SHORT).show();
+        if (position >= 0 && position < filteredTeacherList.size()) {
+            Teacher deletedTeacher = filteredTeacherList.get(position);
+            String teacherId = deletedTeacher.getId();
+            String teacherName = deletedTeacher.getFullName();
+
+            // Prepare request to soft-delete teacher
+            String url = BASE_URL + "delete_teacher.php";
+            RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+            StringRequest request = new StringRequest(Request.Method.POST, url,
+                    response -> {
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            if (json.getString("status").equals("success")) {
+                                // Remove teacher from both lists and update RecyclerView
+                                teacherList.remove(deletedTeacher);
+                                filteredTeacherList.remove(position);
+                                adapter.notifyItemRemoved(position);
+                                Toast.makeText(requireContext(), teacherName + " deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Error: " + json.optString("message"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    error -> {
+                        error.printStackTrace();
+                        Toast.makeText(requireContext(), "Error deleting teacher", Toast.LENGTH_SHORT).show();
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("teacher_id", teacherId);
+                    return params;
+                }
+            };
+
+            queue.add(request);
+        }
     }
 }

@@ -38,7 +38,6 @@ public class UpdateTeacherAdapter extends RecyclerView.Adapter<UpdateTeacherAdap
         holder.tvTeacherName.setText(teacher.getFullName());
         holder.tvEmail.setText(teacher.getEmail());
         holder.tvSubject.setText(teacher.getSubject());
-        holder.tvGender.setText(teacher.getGender());
         holder.tvJoiningDate.setText(teacher.getJoiningDate());
 
         holder.ivUpdate.setOnClickListener(v -> {
@@ -54,7 +53,7 @@ public class UpdateTeacherAdapter extends RecyclerView.Adapter<UpdateTeacherAdap
     }
 
     public static class TeacherViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTeacherName, tvEmail, tvSubject, tvGender, tvJoiningDate;
+        TextView tvTeacherName, tvEmail, tvSubject, tvJoiningDate;
         ImageView ivUpdate;
 
         public TeacherViewHolder(@NonNull View itemView) {
@@ -62,7 +61,6 @@ public class UpdateTeacherAdapter extends RecyclerView.Adapter<UpdateTeacherAdap
             tvTeacherName = itemView.findViewById(R.id.tvTeacherName);
             tvEmail = itemView.findViewById(R.id.tvEmail);
             tvSubject = itemView.findViewById(R.id.tvSubject);
-            tvGender = itemView.findViewById(R.id.tvGender);
             tvJoiningDate = itemView.findViewById(R.id.tvJoiningDate);
             ivUpdate = itemView.findViewById(R.id.ivUpdate);
         }

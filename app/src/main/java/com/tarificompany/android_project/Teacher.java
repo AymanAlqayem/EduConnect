@@ -5,17 +5,15 @@ public class Teacher {
     private String fullName;
     private String email;
     private String phone;
-    private String gender;
     private String subject;
     private String joiningDate;
     private String notes;
 
-    public Teacher(String id, String fullName, String email, String phone, String gender, String subject, String joiningDate, String notes) {
+    public Teacher(String id, String fullName, String email, String phone, String subject, String joiningDate, String notes) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
-        this.gender = gender;
         this.subject = subject;
         this.joiningDate = joiningDate;
         this.notes = notes;
@@ -36,10 +34,6 @@ public class Teacher {
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getGender() {
-        return gender;
     }
 
     public String getSubject() {
@@ -69,10 +63,6 @@ public class Teacher {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public void setSubject(String subject) {
