@@ -51,6 +51,7 @@ CREATE TABLE students
     FOREIGN KEY (section_id) REFERENCES sections (section_id)
 );
 
+-- Table for Teachers
 CREATE TABLE teachers
 (
     teacher_id    INT PRIMARY KEY AUTO_INCREMENT,
@@ -61,7 +62,8 @@ CREATE TABLE teachers
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     gender        VARCHAR(10),
     phone         VARCHAR(10),
-    notes         TEXT
+    notes         TEXT,
+    is_active     BOOLEAN   DEFAULT TRUE -- Added status column for soft delete
 );
 
 CREATE TABLE teacher_sections
@@ -190,306 +192,189 @@ CREATE TABLE announcements
 
 # ===========================   DATA  ===================================
 
-
-# ===========================   Registrar  ===================================
-
-INSERT INTO registrars (name, email, password_hash)
-VALUES ('Rania Khalil', 'rania.khalil@example.com', 'hashed_pw_1'),
-       ('Omar Saeed', 'omar.saeed@example.com', 'hashed_pw_2'),
-       ('Ayman', 'ayman@example.com', '1220040');
-
-
-# ===========================   Teachers  ===================================
--- Teachers
-INSERT INTO teachers (name, email, password_hash, DOB)
-VALUES ('Nadia Salem', 'nadia.salem@example.com', 'hashed_pw_3', '1980-04-12'),
-       ('Khaled Nasser', 'khaled.nasser@example.com', 'hashed_pw_4', '1975-11-22'),
-       ('Ayman Teacher', 'ayman@example.com', '1220040', '1975-11-22');
-
-
-# ===========================   Classes  ===================================
-
--- Insert classes
-INSERT INTO classes (class_name, created_by)
-VALUES ('10th', 1),
-       ('11th literature', 1),
-       ('11th science', 1),
-       ('12th literature', 1),
-       ('12th science', 1);
-
-
-# ===========================   sections  ===================================
-INSERT INTO sections (class_id, section_name, created_by)
-VALUES (1, 'Section A', 1),
-       (1, 'Section B', 1),
-
-       (2, 'Section A', 1),
-       (2, 'Section B', 1),
-
-       (3, 'Section A', 1),
-       (3, 'Section B', 1),
-
-       (4, 'Section A', 1),
-       (4, 'Section B', 1),
-
-       (5, 'Section A', 1),
-       (5, 'Section B', 1);
-
-
-# ==================================   Students  ==========================================
--- Insert students
-INSERT INTO students (first_name, middle_name, last_name, parent_phone, email, password_hash, DOB, class_id, section_id)
-VALUES
--- Class 1: 10th (Section A: section_id=1, Section B: section_id=2)
-('Amit', 'Kumar', 'Sharma', '9876543210', 'amit.sharma@example.com', 'hashed_password_123', '2009-03-15', 1, 1),
-('Priya', 'Anil', 'Verma', '9876543211', 'priya.verma@example.com', 'hashed_password_123', '2009-07-22', 1, 1),
-('Rahul', 'Suresh', 'Patel', '9876543212', 'rahul.patel@example.com', 'hashed_password_123', '2009-05-10', 1, 2),
-('Sneha', 'Ravi', 'Mehta', '9876543213', 'sneha.mehta@example.com', 'hashed_password_123', '2009-09-18', 1, 2),
-
--- Class 2: 11th literature (Section A: section_id=3, Section B: section_id=4)
-('Vikram', 'Arun', 'Singh', '9876543214', 'vikram.singh@example.com', 'hashed_password_123', '2008-11-05', 2, 3),
-('Ananya', 'Vijay', 'Gupta', '9876543215', 'ananya.gupta@example.com', 'hashed_password_123', '2008-12-12', 2, 3),
-('Rohan', 'Kishore', 'Joshi', '9876543216', 'rohan.joshi@example.com', 'hashed_password_123', '2008-10-20', 2, 4),
-('Kavya', 'Mohan', 'Nair', '9876543217', 'kavya.nair@example.com', 'hashed_password_123', '2008-08-30', 2, 4),
-
--- Class 3: 11th science (Section A: section_id=5, Section B: section_id=6)
-('Arjun', 'Deepak', 'Reddy', '9876543218', 'arjun.reddy@example.com', 'hashed_password_123', '2008-06-25', 3, 5),
-('Neha', 'Prakash', 'Kumar', '9876543219', 'neha.kumar@example.com', 'hashed_password_123', '2008-04-15', 3, 5),
-('Siddharth', 'Vikas', 'Rao', '9876543220', 'siddharth.rao@example.com', 'hashed_password_123', '2008-07-10', 3, 6),
-('Pooja', 'Sanjay', 'Desai', '9876543221', 'pooja.desai@example.com', 'hashed_password_123', '2008-09-05', 3, 6),
-
--- Class 4: 12th literature (Section A: section_id=7, Section B: section_id=8)
-('Aditya', 'Ramesh', 'Iyer', '9876543222', 'aditya.iyer@example.com', 'hashed_password_123', '2007-02-28', 4, 7),
-('Shreya', 'Ajay', 'Pandey', '9876543223', 'shreya.pandey@example.com', 'hashed_password_123', '2007-03-17', 4, 7),
-('Karan', 'Vinod', 'Malhotra', '9876543224', 'karan.malhotra@example.com', 'hashed_password_123', '2007-05-22', 4, 8),
-('Riya', 'Sunil', 'Chopra', '9876543225', 'riya.chopra@example.com', 'hashed_password_123', '2007-06-30', 4, 8),
-
--- Class 5: 12th science (Section A: section_id=9, Section B: section_id=10)
-('Vishal', 'Nitin', 'Bhatia', '9876543226', 'vishal.bhatia@example.com', 'hashed_password_123', '2007-01-10', 5, 9),
-('Meera', 'Rajesh', 'Saxena', '9876543227', 'meera.saxena@example.com', 'hashed_password_123', '2007-04-20', 5, 9),
-('Nikhil', 'Anand', 'Kapoor', '9876543228', 'nikhil.kapoor@example.com', 'hashed_password_123', '2007-08-15', 5, 10),
-('Tanya', 'Mukesh', 'Agarwal', '9876543229', 'tanya.agarwal@example.com', 'hashed_password_123', '2007-09-25', 5, 10);
-
-
-# ======================================= Teachers =====================================================
-
-INSERT INTO teachers (name, email, password_hash, DOB)
-VALUES ('Dr. Anil Sharma', 'anil.sharma@example.com', 'hashed_password_123', '1978-04-12'),   -- General (10th)
-       ('Prof. Meena Gupta', 'meena.gupta@example.com', 'hashed_password_123', '1982-07-19'), -- Literature
-       ('Ms. Priya Nair', 'priya.nair@example.com', 'hashed_password_123', '1985-02-25'),     -- Science
-       ('Mr. Rajesh Kumar', 'rajesh.kumar@example.com', 'hashed_password_123', '1980-11-03'), -- Literature
-       ('Dr. Vikram Singh', 'vikram.singh@example.com', 'hashed_password_123', '1976-09-10'), -- Science
-       ('Mrs. Sunita Patel', 'sunita.patel@example.com', 'hashed_password_123', '1983-12-15'); -- General (10th)
-
-
-INSERT INTO teacher_sections (teacher_id, class_id, section_id)
-VALUES
--- Class 1: 10th (Section A: section_id=1, Section B: section_id=2)
-
-(1, 1, 1), -- Dr. Anil Sharma for 10th Section A
-(1, 1, 2), -- Dr. Anil Sharma for 10th Section B
-(6, 1, 1), -- Mrs. Sunita Patel also for 10th Section A
-
--- Class 2: 11th literature (Section A: section_id=3, Section B: section_id=4)
-(2, 2, 3), -- Prof. Meena Gupta for 11th literature Section A
-(2, 2, 4), -- Prof. Meena Gupta for 11th literature Section B
-(4, 2, 4), -- Mr. Rajesh Kumar also for 11th literature Section B
-
--- Class 3: 11th science (Section A: section_id=5, Section B: section_id=6)
-(3, 3, 5), -- Ms. Priya Nair for 11th science Section A
-(3, 3, 6), -- Ms. Priya Nair for 11th science Section B
-
--- Class 4: 12th literature (Section A: section_id=7, Section B: section_id=8)
-(4, 4, 7), -- Mr. Rajesh Kumar for 12th literature Section A
-(2, 4, 8), -- Prof. Meena Gupta for 12th literature Section B
-
--- Class 5: 12th science (Section A: section_id=9, Section B: section_id=10)
-(5, 5, 9), -- Dr. Vikram Singh for 12th science Section A
-(5, 5, 10);
--- Dr. Vikram Singh for 12th science Section B
-
-
-# ============================= Subjects ==============================================
-
--- 10th Grade
-INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by)
-VALUES ('MTH10A', 'Mathematics', 1, 1, 1, 1),
-       ('SCI10A', 'Science', 2, 1, 1, 1),
-       ('ENG10A', 'English', 3, 1, 1, 1),
-       ('MTH10B', 'Mathematics', 1, 1, 2, 1),
-       ('SCI10B', 'Science', 2, 1, 2, 1),
-       ('ENG10B', 'English', 3, 1, 2, 1);
-
--- 11th Literature
-INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by)
-VALUES ('LIT11A', 'Literature', 4, 2, 3, 1),
-       ('HIS11A', 'History', 5, 2, 3, 1),
-       ('ENG11A', 'English', 3, 2, 3, 1),
-       ('LIT11B', 'Literature', 4, 2, 4, 1),
-       ('HIS11B', 'History', 5, 2, 4, 1),
-       ('ENG11B', 'English', 3, 2, 4, 1);
-
--- 11th Science
-INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by)
-VALUES ('PHY11A', 'Physics', 6, 3, 5, 1),
-       ('CHE11A', 'Chemistry', 7, 3, 5, 1),
-       ('BIO11A', 'Biology', 8, 3, 5, 1),
-       ('PHY11B', 'Physics', 6, 3, 6, 1),
-       ('CHE11B', 'Chemistry', 7, 3, 6, 1),
-       ('BIO11B', 'Biology', 8, 3, 6, 1);
-
--- 12th Literature
-INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by)
-VALUES ('LIT12A', 'Literature', 4, 4, 7, 1),
-       ('PHI12A', 'Philosophy', 9, 4, 7, 1),
-       ('ENG12A', 'English', 3, 4, 7, 1),
-       ('LIT12B', 'Literature', 4, 4, 8, 1),
-       ('PHI12B', 'Philosophy', 9, 4, 8, 1),
-       ('ENG12B', 'English', 3, 4, 8, 1);
-
--- 12th Science
-INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by)
-VALUES ('PHY12A', 'Physics', 6, 5, 9, 1),
-       ('CHE12A', 'Chemistry', 7, 5, 9, 1),
-       ('BIO12A', 'Biology', 8, 5, 9, 1),
-       ('PHY12B', 'Physics', 6, 5, 10, 1),
-       ('CHE12B', 'Chemistry', 7, 5, 10, 1),
-       ('BIO12B', 'Biology', 8, 5, 10, 1);
-
-
-# ===========================   Schedules  ===================================
-
--- Schedule for Math for 10th A by Teacher 1
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (1, 1, 1, 1, 'Monday', '08:00:00', '09:00:00', 'Room A1', 1, '2025-06-08 08:00:00');
-
--- Schedule for Physics for 11th Science A by Teacher 2
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (2, 2, 2, 2, 'Tuesday', '09:00:00', '10:00:00', 'Room B1', 1, '2025-06-08 08:05:00');
-
--- Schedule for Literature for 11th Literature B by Teacher 3
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (3, 3, 3, 3, 'Wednesday', '10:00:00', '11:00:00', 'Room C1', 1, '2025-06-08 08:10:00');
-
--- Schedule for Chemistry for 12th Science A by Teacher 4
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (4, 4, 4, 4, 'Thursday', '11:00:00', '12:00:00', 'Room D1', 1, '2025-06-08 08:15:00');
-
--- Schedule for Biology for 12th Literature A by Teacher 5
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (5, 5, 5, 1, 'Friday', '12:00:00', '13:00:00', 'Room E1', 1, '2025-06-08 08:20:00');
-
--- Schedule for Math for 10th B by Teacher 6
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (6, 6, 1, 2, 'Saturday', '13:00:00', '14:00:00', 'Room F1', 1, '2025-06-08 08:25:00');
-
--- Schedule for Physics for 11th Science B by Teacher 7
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (7, 7, 2, 3, 'Monday', '08:00:00', '09:00:00', 'Room A1', 1, '2025-06-08 08:30:00');
-
--- Schedule for Literature for 11th Literature A by Teacher 8
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (8, 8, 3, 4, 'Tuesday', '09:00:00', '10:00:00', 'Room B1', 1, '2025-06-08 08:35:00');
-
--- Schedule for Chemistry for 12th Science B by Teacher 9
-INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room,
-                       created_by, created_at)
-VALUES (9, 9, 4, 1, 'Wednesday', '10:00:00', '11:00:00', 'Room C1', 1, '2025-06-08 08:40:00');
-
-
-# ======================================= enrollments  =====================================================
-
--- Enrollments
-INSERT INTO enrollments (student_id, subject_id, enrollment_date)
-VALUES (1, 10, '2025-06-01'),
-       (1, 9, '2025-06-01'),
-       (1, 5, '2025-06-01'),
-       (2, 5, '2025-06-01'),
-       (2, 9, '2025-06-01');
-
-
-# ======================================= marks  =====================================================
-
--- Exam Marks
-INSERT INTO marks (student_id, subject_id, teacher_id, exam_name, score, published_at)
-VALUES (1, 10, 1, 'Mid Term Exam', 87.27, '2025-06-08 20:56:38'),
-       (1, 9, 9, 'Mid Term Exam', 64.85, '2025-06-08 20:56:38'),
-       (1, 5, 5, 'Mid Term Exam', 58.69, '2025-06-08 20:56:38'),
-       (2, 5, 5, 'Mid Term Exam', 93.13, '2025-06-08 20:56:38'),
-       (2, 9, 9, 'Mid Term Exam', 72.75, '2025-06-08 20:56:38');
-
-
-# ======================================= assignments  =====================================================
-
-INSERT INTO assignments (subject_id, teacher_id, title, description, due_date, max_score, created_at)
-VALUES (1, 1, 'Assignment for Subject 1', 'Complete the exercises for subject 1.', '2025-06-15 20:56:38', 100.00,
-        '2025-06-08 20:56:38'),
-       (2, 2, 'Assignment for Subject 2', 'Complete the exercises for subject 2.', '2025-06-15 20:56:38', 100.00,
-        '2025-06-08 20:56:38'),
-       (3, 3, 'Assignment for Subject 3', 'Complete the exercises for subject 3.', '2025-06-15 20:56:38', 100.00,
-        '2025-06-08 20:56:38');
-
-# ======================================= assignment_submissions  =====================================================
--- Assignment Submissions
-INSERT INTO assignment_submissions (assignment_id, student_id, submission_file, submission_text, submitted_at, score,
-                                    graded_by)
-VALUES (1, 1, 'file_1_1.pdf', 'Submitted via portal.', '2025-06-08 20:56:38', 96.71, 1),
-       (1, 2, 'file_1_2.pdf', 'Submitted via portal.', '2025-06-08 20:56:38', 94.89, 1),
-       (1, 3, 'file_1_3.pdf', 'Submitted via portal.', '2025-06-08 20:56:38', 89.47, 1);
-
-
-# ======================================= announcements  =====================================================
-INSERT INTO announcements (title, content, created_by, target_role)
-VALUES ('Exam Notice', 'Mid-term exams will start from next week.', 1, 'All'),
-       ('Assignment Deadline', 'Submit your assignments by the due date.', 1, 'Student'),
-       ('Meeting', 'Staff meeting scheduled on Friday.', 1, 'Teacher');
-
-
-# =================================================================================================================
-
-INSERT INTO teachers (name, email, password_hash, DOB)
-VALUES ('Dr. Ayman Nabil', 'ayman2004@example.com', '1220040', '2004-06-2');
-
-
-
-SELECT *
-FROM registrars;
-SELECT *
-FROM classes;
-SELECT *
-FROM sections;
-SELECT *
-FROM teachers;
-
-SELECT *
-FROM subjects;
-
-
-
-SELECT *
-FROM students;
-SELECT *
-FROM teacher_sections;
-
-
-
-SELECT DISTINCT subject_name
-FROM subjects
-
-
-
-
-
-
-
-
-
-
+-- Insert Registrars
+INSERT INTO registrars (name, email, password_hash) VALUES
+('John Smith', 'john.smith@school.com', 'hashed_password_1'),
+('Emma Wilson', 'emma.wilson@school.com', 'hashed_password_2'),
+('Michael Brown', 'michael.brown@school.com', 'hashed_password_3');
+
+-- Insert Classes
+INSERT INTO classes (class_name, created_by) VALUES
+('10th', 1),
+('11th literature', 1),
+('11th science', 1),
+('12th literature', 2),
+('12th science', 2);
+
+-- Insert Sections
+INSERT INTO sections (class_id, section_name, created_by) VALUES
+(1, 'Section A', 1), (1, 'Section B', 1), (1, 'Section C', 1),
+(2, 'Section A', 1), (2, 'Section B', 1), (2, 'Section C', 1),
+(3, 'Section A', 1), (3, 'Section B', 1), (3, 'Section C', 1),
+(4, 'Section A', 2), (4, 'Section B', 2), (4, 'Section C', 2),
+(5, 'Section A', 2), (5, 'Section B', 2), (5, 'Section C', 2);
+
+-- Insert Teachers
+INSERT INTO teachers (name, email, password_hash, DOB, gender, phone, notes, is_active) VALUES
+('Alice Johnson', 'alice.johnson@school.com', 'hashed_password_4', '1975-03-15', 'Female', '1234567890', 'Math specialist', TRUE),
+('Robert Davis', 'robert.davis@school.com', 'hashed_password_5', '1980-07-22', 'Male', '2345678901', 'Physics expert', TRUE),
+('Sarah Lee', 'sarah.lee@school.com', 'hashed_password_6', '1978-11-30', 'Female', '3456789012', 'Literature enthusiast', TRUE),
+('David Kim', 'david.kim@school.com', 'hashed_password_7', '1985-05-10', 'Male', '4567890123', 'Chemistry teacher', TRUE),
+('Laura Chen', 'laura.chen@school.com', 'hashed_password_8', '1972-09-18', 'Female', '5678901234', 'History specialist', TRUE),
+('James Patel', 'james.patel@school.com', 'hashed_password_9', '1983-01-25', 'Male', '6789012345', 'Biology teacher', TRUE);
+
+-- Insert Teacher Sections
+INSERT INTO teacher_sections (teacher_id, class_id, section_id) VALUES
+(1, 1, 1), (1, 1, 2), (1, 2, 1), (1, 3, 1), -- Alice: Math across multiple classes
+(2, 3, 1), (2, 3, 2), (2, 5, 1), -- Robert: Physics for science classes
+(3, 2, 1), (3, 2, 2), (3, 4, 1), (3, 4, 2), -- Sarah: Literature classes
+(4, 3, 2), (4, 5, 2), (4, 5, 3), -- David: Chemistry for science classes
+(5, 1, 3), (5, 2, 3), (5, 4, 3), -- Laura: History across classes
+(6, 3, 3), (6, 5, 1), (6, 5, 3); -- James: Biology for science classes
+
+-- Insert Subjects
+INSERT INTO subjects (subject_code, subject_name, teacher_id, class_id, section_id, created_by) VALUES
+('MATH101', 'Mathematics', 1, 1, 1, 1),
+('MATH102', 'Mathematics', 1, 1, 2, 1),
+('MATH201', 'Mathematics', 1, 2, 1, 1),
+('MATH301', 'Mathematics', 1, 3, 1, 1),
+('PHY301', 'Physics', 2, 3, 1, 1),
+('PHY302', 'Physics', 2, 3, 2, 1),
+('PHY501', 'Physics', 2, 5, 1, 2),
+('LIT201', 'Literature', 3, 2, 1, 1),
+('LIT202', 'Literature', 3, 2, 2, 1),
+('LIT401', 'Literature', 3, 4, 1, 2),
+('LIT402', 'Literature', 3, 4, 2, 2),
+('CHEM302', 'Chemistry', 4, 3, 2, 1),
+('CHEM501', 'Chemistry', 4, 5, 2, 2),
+('CHEM502', 'Chemistry', 4, 5, 3, 2),
+('HIST103', 'History', 5, 1, 3, 1),
+('HIST203', 'History', 5, 2, 3, 1),
+('HIST403', 'History', 5, 4, 3, 2),
+('BIO303', 'Biology', 6, 3, 3, 1),
+('BIO501', 'Biology', 6, 5, 1, 2),
+('BIO502', 'Biology', 6, 5, 3, 2),
+('ENG101', 'English', 3, 1, 1, 1),
+('ENG102', 'English', 3, 1, 2, 1);
+
+-- Insert Schedules (No classes on Sunday or Friday)
+INSERT INTO schedules (subject_id, teacher_id, class_id, section_id, day_of_week, start_time, end_time, room, created_by) VALUES
+(1, 1, 1, 1, 'Monday', '08:00:00', '09:00:00', 'Room 101', 1),
+(1, 1, 1, 1, 'Wednesday', '08:00:00', '09:00:00', 'Room 101', 1),
+(2, 1, 1, 2, 'Tuesday', '09:00:00', '10:00:00', 'Room 102', 1),
+(2, 1, 1, 2, 'Thursday', '09:00:00', '10:00:00', 'Room 102', 1),
+(3, 1, 2, 1, 'Monday', '10:00:00', '11:00:00', 'Room 201', 1),
+(4, 1, 3, 1, 'Tuesday', '08:00:00', '09:00:00', 'Room 301', 1),
+(5, 2, 3, 1, 'Monday', '09:00:00', '10:00:00', 'Room 302', 1),
+(6, 2, 3, 2, 'Wednesday', '10:00:00', '11:00:00', 'Room 302', 1),
+(7, 2, 5, 1, 'Thursday', '08:00:00', '09:00:00', 'Room 501', 2),
+(8, 3, 2, 1, 'Tuesday', '10:00:00', '11:00:00', 'Room 202', 1),
+(9, 3, 2, 2, 'Thursday', '10:00:00', '11:00:00', 'Room 203', 1),
+(10, 3, 4, 1, 'Monday', '11:00:00', '12:00:00', 'Room 401', 2),
+(11, 3, 4, 2, 'Wednesday', '11:00:00', '12:00:00', 'Room 402', 2),
+(12, 4, 3, 2, 'Tuesday', '11:00:00', '12:00:00', 'Room 303', 1),
+(13, 4, 5, 2, 'Monday', '12:00:00', '13:00:00', 'Room 502', 2),
+(14, 4, 5, 3, 'Thursday', '11:00:00', '12:00:00', 'Room 503', 2),
+(15, 5, 1, 3, 'Monday', '09:00:00', '10:00:00', 'Room 103', 1),
+(16, 5, 2, 3, 'Wednesday', '09:00:00', '10:00:00', 'Room 204', 1),
+(17, 5, 4, 3, 'Tuesday', '12:00:00', '13:00:00', 'Room 403', 2),
+(18, 6, 3, 3, 'Thursday', '09:00:00', '10:00:00', 'Room 304', 1),
+(19, 6, 5, 1, 'Monday', '10:00:00', '11:00:00', 'Room 504', 2),
+(20, 6, 5, 3, 'Wednesday', '12:00:00', '13:00:00', 'Room 505', 2),
+(21, 3, 1, 1, 'Tuesday', '08:00:00', '09:00:00', 'Room 104', 1),
+(22, 3, 1, 2, 'Thursday', '08:00:00', '09:00:00', 'Room 105', 1);
+
+-- Insert Students
+INSERT INTO students (first_name, middle_name, last_name, parent_phone, email, password_hash, DOB, class_id, section_id) VALUES
+('Emily', 'Jane', 'Taylor', '7890123456', 'emily.taylor@school.com', 'hashed_password_10', '2008-04-12', 1, 1),
+('Noah', 'James', 'Wilson', '8901234567', 'noah.wilson@school.com', 'hashed_password_11', '2008-06-15', 1, 2),
+('Sophia', 'Marie', 'Clark', '9012345678', 'sophia.clark@school.com', 'hashed_password_12', '2007-09-20', 2, 1),
+('Liam', 'Thomas', 'Lewis', '0123456789', 'liam.lewis@school.com', 'hashed_password_13', '2007-02-10', 2, 2),
+('Olivia', 'Grace', 'Walker', '1234567891', 'olivia.walker@school.com', 'hashed_password_14', '2006-11-05', 4, 1),
+('Ethan', 'Michael', 'Hall', '2345678902', 'ethan.hall@school.com', 'hashed_password_15', '2006-03-22', 4, 2),
+('Ava', 'Rose', 'Allen', '3456789013', 'ava.allen@school.com', 'hashed_password_16', '2007-07-18', 3, 1),
+('Mason', 'David', 'Young', '4567890124', 'mason.young@school.com', 'hashed_password_17', '2007-01-30', 3, 2),
+('Isabella', 'Anne', 'King', '5678901235', 'isabella.king@school.com', 'hashed_password_18', '2006-05-25', 5, 1),
+('Jacob', 'Paul', 'Wright', '6789012346', 'jacob.wright@school.com', 'hashed_password_19', '2006-08-14', 5, 2);
+
+-- Insert Enrollments
+INSERT INTO enrollments (student_id, subject_id, enrollment_date) VALUES
+(1, 1, '2025-01-10'), (1, 21, '2025-01-10'),
+(2, 2, '2025-01-10'), (2, 22, '2025-01-10'),
+(3, 3, '2025-01-10'), (3, 8, '2025-01-10'),
+(4, 9, '2025-01-10'),
+(5, 10, '2025-01-10'),
+(6, 11, '2025-01-10'),
+(7, 5, '2025-01-10'), (7, 12, '2025-01-10'),
+(8, 6, '2025-01-10'), (8, 12, '2025-01-10'),
+(9, 7, '2025-01-10'), (9, 13, '2025-01-10'), (9, 19, '2025-01-10'),
+(10, 14, '2025-01-10'), (10, 20, '2025-01-10');
+
+-- Insert Marks
+INSERT INTO marks (student_id, subject_id, teacher_id, exam_name, score) VALUES
+(1, 1, 1, 'Midterm', 85.50),
+(2, 2, 1, 'Midterm', 78.00),
+(3, 3, 1, 'Midterm', 92.00),
+(4, 9, 3, 'Midterm', 88.50),
+(5, 10, 3, 'Midterm', 90.00),
+(7, 5, 2, 'Midterm', 79.50),
+(9, 7, 2, 'Midterm', 82.00);
+
+-- Insert Assignments
+INSERT INTO assignments (subject_id, teacher_id, title, description, due_date, max_score) VALUES
+(1, 1, 'Math Assignment 1', 'Solve quadratic equations', '2025-06-20 23:59:00', 100.00),
+(5, 2, 'Physics Lab Report', 'Write a report on motion experiment', '2025-06-25 23:59:00', 100.00),
+(8, 3, 'Literature Essay', 'Analyze a poem', '2025-06-22 23:59:00', 100.00),
+(12, 4, 'Chemistry Lab', 'Complete chemical reaction analysis', '2025-06-23 23:59:00', 100.00);
+
+-- Insert Assignment Submissions
+INSERT INTO assignment_submissions (assignment_id, student_id, submission_text, score, graded_by) VALUES
+(1, 1, 'Submitted quadratic equations solutions', 90.00, 1),
+(2, 7, 'Submitted motion experiment report', 85.00, 2),
+(3, 3, 'Submitted poem analysis', 88.00, 3),
+(4, 8, 'Submitted chemical reaction analysis', 92.00, 4);
+
+-- Insert Announcements
+INSERT INTO announcements (title, content, created_by, target_role) VALUES
+('School Holiday', 'No classes on June 15th due to holiday.', 1, 'All'),
+('Exam Schedule', 'Midterm exams start on June 20th.', 2, 'Student'),
+('Teacher Meeting', 'Staff meeting on June 12th at 3 PM.', 3, 'Teacher');
+
+
+#Teacher Schedule.
+SELECT
+    s.day_of_week,
+    s.start_time,
+    s.end_time,
+    c.class_name,
+    sec.section_name,
+    subj.subject_name,
+    s.room
+FROM schedules s
+JOIN classes c ON s.class_id = c.class_id
+JOIN sections sec ON s.section_id = sec.section_id
+JOIN subjects subj ON s.subject_id = subj.subject_id
+WHERE s.teacher_id = 3 -- Replace with the actual teacher_id
+ORDER BY FIELD(s.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), s.start_time;
+
+
+#Student Schedule.
+SELECT
+    s.day_of_week,
+    s.start_time,
+    s.end_time,
+    subj.subject_name,
+    t.name AS teacher_name,
+    s.room
+FROM students st
+JOIN schedules s ON st.class_id = s.class_id AND st.section_id = s.section_id
+JOIN subjects subj ON s.subject_id = subj.subject_id
+JOIN teachers t ON s.teacher_id = t.teacher_id
+WHERE st.student_id = 2
+ORDER BY FIELD(s.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'), s.start_time;
+
+
+
+SELECT * FROM registrars;
+SELECT * FROM teachers;
+SELECT * FROM students;
