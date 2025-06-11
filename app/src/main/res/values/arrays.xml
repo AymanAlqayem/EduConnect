@@ -7,4 +7,11 @@
         <item>Thursday</item>
         <item>Saturday</item>
     </string-array>
+
+<string-array name="assignment_filters">
+    <item>All Assignments</item>
+    <item>Pending</item>
+    <item>Submitted</item>
+    <item>Graded</item>
+</string-array>
 </resources>

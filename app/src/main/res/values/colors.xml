@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="purple_500">#6200EE</color>
+    <color name="purple_500">#394EC1</color>
     <color name="purple_700">#3700B3</color>
     <color name="teal_200">#03DAC5</color>
     <color name="toolbar_background">#FF8F00</color>
@@ -11,13 +11,13 @@
     <color name="nav_item_background">#FFF7E6</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
-    <color name="highlight">#0288D1</color>
+    <color name="highlight">#3F53BF</color>
     <color name="delete_background">#FFCDD2</color>
     <color name="delete_icon">#D32F2F</color>
     <color name="gradient_start">#BBDEFB</color>
     <color name="gradient_end">#E1BEE7</color>
     <color name="text_primary">#1A237E</color>
-    <color name="card_background">#FFF7E6</color>
+    <color name="card_background">#FFFFFF</color>
     <color name="text_color_primary">#333333</color>
     <color name="gray_700">#757575</color>
     <color name="background_color">#FFFFFF</color>
@@ -25,7 +25,8 @@
     <color name="accentColor">#FF4081</color>
     <color name="primaryDarkColor">#303F9F</color>
     <color name="gray">#FF757575</color>
-
+    <color name="primary_color">#3D50B6</color>
+    <color name="text_secondary">#757575</color>
 
 
 

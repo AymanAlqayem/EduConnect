@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFFFFF"
     android:foreground="?android:attr/selectableItemBackground"
-    android:transitionName="card_transition">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Icon -->
+        <!-- Assignment Icon -->
         <ImageView
             android:id="@+id/iv_assignment_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_assignment"
-            android:tint="#1E88E5"
+            android:tint="@color/primary_color"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
 
         <!-- Title -->
         <TextView
@@ -32,24 +35,34 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Assignment Title"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_status"
             app:layout_constraintStart_toEndOf="@id/iv_assignment_icon"
             app:layout_constraintTop_toTopOf="@id/iv_assignment_icon" />
 
-        <!-- Course -->
+        <!-- Status -->
         <TextView
-            android:id="@+id/tv_assignment_course"
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pending"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14sp"
+            android:padding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_assignment_title" />
+
+        <!-- Subject -->
+        <TextView
+            android:id="@+id/tv_assignment_subject"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Course"
-            android:textColor="#757575"
+            android:text="Subject"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
             app:layout_constraintEnd_toEndOf="@id/tv_assignment_title"
             app:layout_constraintStart_toStartOf="@id/tv_assignment_title"
             app:layout_constraintTop_toBottomOf="@id/tv_assignment_title" />
@@ -60,13 +73,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Due Date"
-            android:textColor="#757575"
+            android:text="Due: 2025-06-20"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            app:layout_constraintEnd_toEndOf="@id/tv_assignment_course"
-            app:layout_constraintStart_toStartOf="@id/tv_assignment_course"
-            app:layout_constraintTop_toBottomOf="@id/tv_assignment_course" />
+            app:layout_constraintEnd_toEndOf="@id/tv_assignment_subject"
+            app:layout_constraintStart_toStartOf="@id/tv_assignment_subject"
+            app:layout_constraintTop_toBottomOf="@id/tv_assignment_subject" />
+
+        <!-- Teacher Name -->
+        <TextView
+            android:id="@+id/tv_teacher_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Teacher: Alice Johnson"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tv_assignment_subject"
+            app:layout_constraintStart_toStartOf="@id/tv_assignment_subject"
+            app:layout_constraintTop_toBottomOf="@id/tv_assignment_due_date" />
+
+        <!-- Class Name -->
+        <TextView
+            android:id="@+id/tv_class_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Class: 10th"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tv_teacher_name"
+            app:layout_constraintStart_toStartOf="@id/tv_teacher_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -84,17 +84,16 @@ public class Schedule_Student_Fragment extends Fragment {
                             JSONObject obj = dataArray.getJSONObject(i);
 
                             String className = obj.optString("subject_name", "No subject");
-                            String day = obj.optString("day_of_week", "Unknown");
+                            String day = obj.optString("day", "Unknown");
                             String startTime = obj.optString("start_time", "");
                             String endTime = obj.optString("end_time", "");
                             String time = startTime + " - " + endTime;
                             String room = obj.optString("room", "N/A");
-                            int studentCount = obj.optInt("students_count", 0);
-                            String classGroup = obj.optString("class_group", "");
-                            String sectionName = obj.optString("class_section", "");
+                            int studentCount = obj.optInt("student_count", 0);
+                            String classGroup = obj.optString("class_name", "") + " (" + obj.optString("room", "N/A") + ")";
+                            String sectionName = obj.optString("section_name", "");
 
-
-                            ClassSchedule classSchedule = new ClassSchedule(className, time, classGroup, room, day, studentCount,sectionName);
+                            ClassSchedule classSchedule = new ClassSchedule(className, time, classGroup, room, day, studentCount, sectionName);
                             classScheduleList.add(classSchedule);
                         }
                         adapter.updateData(classScheduleList);

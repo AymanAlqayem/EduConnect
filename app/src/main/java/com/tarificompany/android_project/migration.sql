@@ -224,10 +224,10 @@ CREATE TABLE teacher_class_subject (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
-    CONSTRAINT fk_class FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
-    CONSTRAINT fk_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
-    CONSTRAINT fk_subject FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+    CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES teachers(teacher_id) ON DELETE CASCADE,
+    CONSTRAINT fk_class FOREIGN KEY (class_id) REFERENCES classes(class_id) ON DELETE CASCADE,
+    CONSTRAINT fk_section FOREIGN KEY (section_id) REFERENCES sections(section_id) ON DELETE CASCADE,
+    CONSTRAINT fk_subject FOREIGN KEY (subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE
 );
 
 
@@ -497,8 +497,20 @@ INSERT INTO teacher_class_subject (teacher_id, class_id, section_id, subject_id)
 (3, 1, 1, 21),
 (3, 1, 2, 22);
 
+-- .................................................................................................
+-- Add status column to assignment_submissions
+ALTER TABLE assignment_submissions
+ADD COLUMN status ENUM('Submitted', 'Graded') DEFAULT 'Submitted' AFTER submitted_at;
 
+-- Update existing submissions to set status
+UPDATE assignment_submissions SET status = 'Graded' WHERE score IS NOT NULL;
 
+-- Insert additional dummy assignments for testing
+INSERT INTO assignments (subject_id, teacher_id, title, description, due_date, max_score)
+VALUES
+(21, 3, 'English Essay', 'Write a 500-word essay on a topic of your choice.', '2025-06-30 23:59:00', 100.00),
+(2, 1, 'Math Homework', 'Complete exercises 1-10 from Chapter 3.', '2025-06-18 23:59:00', 50.00);
+-- .................................................................................................
 
 SELECT *
 FROM messages

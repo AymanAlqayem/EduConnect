@@ -29,10 +29,11 @@ public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradeViewH
     @Override
     public void onBindViewHolder(@NonNull GradeViewHolder holder, int position) {
         GradeItem grade = gradeList.get(position);
-        holder.tvSubject.setText(grade.getSubjectName() + " (" + grade.getSubjectCode() + ")");
-        holder.tvExam.setText(grade.getExamName());
+        holder.tvSubjectName.setText(grade.getSubjectName());
+        holder.tvSubjectCode.setText(grade.getSubjectCode());
+        holder.tvExamName.setText(grade.getExamName());
         holder.tvScore.setText(String.format("%.2f", grade.getScore()));
-        holder.tvDate.setText(grade.getPublishedAt());
+        holder.tvPublishedAt.setText("Published: " + grade.getPublishedAt());
     }
 
     @Override
@@ -40,15 +41,22 @@ public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.GradeViewH
         return gradeList.size();
     }
 
+    public void updateData(List<GradeItem> newGradeList) {
+        this.gradeList.clear();
+        this.gradeList.addAll(newGradeList);
+        notifyDataSetChanged();
+    }
+
     static class GradeViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSubject, tvExam, tvScore, tvDate;
+        TextView tvSubjectName, tvSubjectCode, tvExamName, tvScore, tvPublishedAt;
 
         public GradeViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSubject = itemView.findViewById(R.id.tv_subject);
-            tvExam = itemView.findViewById(R.id.tv_exam);
+            tvSubjectName = itemView.findViewById(R.id.tv_subject_name);
+            tvSubjectCode = itemView.findViewById(R.id.tv_subject_code);
+            tvExamName = itemView.findViewById(R.id.tv_exam_name);
             tvScore = itemView.findViewById(R.id.tv_score);
-            tvDate = itemView.findViewById(R.id.tv_date);
+            tvPublishedAt = itemView.findViewById(R.id.tv_published_at);
         }
     }
 }

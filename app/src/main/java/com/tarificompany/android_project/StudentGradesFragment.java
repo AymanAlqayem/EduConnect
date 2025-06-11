@@ -2,9 +2,7 @@ package com.tarificompany.android_project;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +32,7 @@ public class StudentGradesFragment extends Fragment {
     private GradesAdapter adapter;
     private List<GradeItem> gradeList = new ArrayList<>();
     private ProgressBar progressBar;
+    private View emptyViewContainer;
     private TextView emptyView;
 
     @Override
@@ -45,144 +43,90 @@ public class StudentGradesFragment extends Fragment {
         // Initialize views
         recyclerView = view.findViewById(R.id.rv_grades);
         progressBar = view.findViewById(R.id.progressBar);
+        emptyViewContainer = view.findViewById(R.id.empty_view_container);
         emptyView = view.findViewById(R.id.tv_empty_view);
 
         // Setup RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
         adapter = new GradesAdapter(gradeList);
         recyclerView.setAdapter(adapter);
 
         // Load grades data
-        new FetchGradesTask().execute();
+        fetchGrades();
 
         return view;
     }
 
-    private class FetchGradesTask extends AsyncTask<Void, Void, String> {
-        private boolean isSuccess = false;
-        private List<GradeItem> tempList = new ArrayList<>();
+    private void fetchGrades() {
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        emptyViewContainer.setVisibility(View.GONE);
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.GONE);
-        }
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String studentId = prefs.getString("student_id", "");
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-            String jsonResponse = null;
-
-            try {
-                // Get student ID from SharedPreferences
-                SharedPreferences prefs = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-                String studentId = prefs.getString("student_id", "0");
-
-                if (studentId.equals("0")) {
-                    return "Student ID not found";
-                }
-
-                // Create URL
-                URL url = new URL("http://10.0.2.2/AndroidProject/get_student_grades.php?student_id=" + studentId);
-                Log.d(TAG, "Request URL: " + url.toString());
-
-                // Create connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setConnectTimeout(10000);
-                urlConnection.setReadTimeout(15000);
-                urlConnection.connect();
-
-                // Check response code
-                int responseCode = urlConnection.getResponseCode();
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    return "HTTP error code: " + responseCode;
-                }
-
-                // Read response
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuilder buffer = new StringBuilder();
-                if (inputStream == null) {
-                    return "Input stream is null";
-                }
-
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line).append("\n");
-                }
-
-                if (buffer.length() == 0) {
-                    return "Response is empty";
-                }
-
-                jsonResponse = buffer.toString();
-                Log.d(TAG, "Response: " + jsonResponse);
-
-                // Parse JSON
-                JSONObject response = new JSONObject(jsonResponse);
-                if (response.getString("status").equals("success")) {
-                    JSONArray data = response.getJSONArray("data");
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject item = data.getJSONObject(i);
-                        tempList.add(new GradeItem(
-                                item.getString("subject_name"),
-                                item.getString("subject_code"),
-                                item.getString("exam_name"),
-                                item.getDouble("score"),
-                                item.getString("published_at")
-                        ));
-                    }
-                    isSuccess = true;
-                    return "Successfully loaded " + tempList.size() + " grades";
-                } else {
-                    return "Server error: " + response.optString("message", "Unknown error");
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, "Error fetching grades", e);
-                return "Error: " + e.getMessage();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error closing stream", e);
-                    }
-                }
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
+        if (studentId.isEmpty()) {
             progressBar.setVisibility(View.GONE);
-
-            if (isSuccess) {
-                if (tempList.isEmpty()) {
-                    emptyView.setText("No grades available");
-                    emptyView.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                } else {
-                    gradeList.clear();
-                    gradeList.addAll(tempList);
-                    adapter.notifyDataSetChanged();
-                    recyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
-                }
-            } else {
-                emptyView.setText("Error: " + result);
-                emptyView.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Failed to load grades", Toast.LENGTH_SHORT).show();
-            }
-
-            Log.d(TAG, result);
+            emptyView.setText("Student ID not found");
+            emptyViewContainer.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "Student ID not found", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        String url = "http://10.0.2.2/AndroidProject/get_student_grades.php?student_id=" + studentId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    progressBar.setVisibility(View.GONE);
+                    try {
+                        String status = response.optString("status", "error");
+                        if (!status.equals("success")) {
+                            String message = response.optString("message", "Unknown error");
+                            emptyView.setText("Server error: " + message);
+                            emptyViewContainer.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), "Server error: " + message, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        gradeList.clear();
+                        JSONArray data = response.getJSONArray("data");
+                        if (data.length() == 0) {
+                            emptyView.setText("No grades available");
+                            emptyViewContainer.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        } else {
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject item = data.getJSONObject(i);
+                                gradeList.add(new GradeItem(
+                                        item.getString("subject_name"),
+                                        item.getString("subject_code"),
+                                        item.getString("exam_name"),
+                                        item.getDouble("score"),
+                                        item.getString("published_at")
+                                ));
+                            }
+                            adapter.notifyDataSetChanged();
+                            recyclerView.setVisibility(View.VISIBLE);
+                            emptyViewContainer.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        emptyView.setText("Error parsing data: " + e.getMessage());
+                        emptyViewContainer.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Error parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressBar.setVisibility(View.GONE);
+                    emptyView.setText("Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"));
+                    emptyViewContainer.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show();
+                });
+
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 }

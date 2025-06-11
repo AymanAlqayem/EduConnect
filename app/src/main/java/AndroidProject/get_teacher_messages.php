@@ -39,7 +39,6 @@ try {
         JOIN message_recipients mr ON m.message_id = mr.message_id
         WHERE mr.recipient_id = ?
           AND mr.recipient_role = 'Teacher'
-          AND mr.is_read = 0
         ORDER BY m.sent_at DESC
     ";
 
