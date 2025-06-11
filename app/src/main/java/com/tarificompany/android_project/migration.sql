@@ -1,3 +1,4 @@
+SET SQL_SAFE_UPDATES = 0;
 drop database androiddb;
 create database androiddb;
 use androiddb;
@@ -37,9 +38,7 @@ CREATE TABLE sections
 CREATE TABLE students
 (
     student_id    INT PRIMARY KEY AUTO_INCREMENT,
-    first_name    VARCHAR(50)         NOT NULL,
-    middle_name   VARCHAR(50)         NOT NULL,
-    last_name     VARCHAR(50)         NOT NULL,
+    name     VARCHAR(50)         NOT NULL,
     parent_phone  VARCHAR(10) UNIQUE  NOT NULL,
     email         VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255)        NOT NULL,
@@ -360,18 +359,18 @@ VALUES (1, 1, 1, 1, 'Monday', '08:00:00', '09:00:00', 'Room 101', 1),
        (22, 3, 1, 2, 'Thursday', '08:00:00', '09:00:00', 'Room 105', 1);
 
 -- Insert Students
-INSERT INTO students (first_name, middle_name, last_name, parent_phone, email, password_hash, DOB, class_id, section_id)
-VALUES ('Emily', 'Jane', 'Taylor', '7890123456', 'emily.taylor@school.com', 'hashed_password_10', '2008-04-12', 1, 1),
-       ('Noah', 'James', 'Wilson', '8901234567', 'noah.wilson@school.com', 'hashed_password_11', '2008-06-15', 1, 2),
-       ('Sophia', 'Marie', 'Clark', '9012345678', 'sophia.clark@school.com', 'hashed_password_12', '2007-09-20', 2, 1),
-       ('Liam', 'Thomas', 'Lewis', '0123456789', 'liam.lewis@school.com', 'hashed_password_13', '2007-02-10', 2, 2),
-       ('Olivia', 'Grace', 'Walker', '1234567891', 'olivia.walker@school.com', 'hashed_password_14', '2006-11-05', 4,
+INSERT INTO students (name, parent_phone, email, password_hash, DOB, class_id, section_id)
+VALUES ('Emily Taylor', '7890123456', 'emily.taylor@school.com', 'hashed_password_10', '2008-04-12', 1, 1),
+       ('Noah Wilson', '8901234567', 'noah.wilson@school.com', 'hashed_password_11', '2008-06-15', 1, 2),
+       ('Sophia Clark', '9012345678', 'sophia.clark@school.com', 'hashed_password_12', '2007-09-20', 2, 1),
+       ('Liam Lewis', '0123456789', 'liam.lewis@school.com', 'hashed_password_13', '2007-02-10', 2, 2),
+       ('Olivia Walker', '1234567891', 'olivia.walker@school.com', 'hashed_password_14', '2006-11-05', 4,
         1),
-       ('Ethan', 'Michael', 'Hall', '2345678902', 'ethan.hall@school.com', 'hashed_password_15', '2006-03-22', 4, 2),
-       ('Ava', 'Rose', 'Allen', '3456789013', 'ava.allen@school.com', 'hashed_password_16', '2007-07-18', 3, 1),
-       ('Mason', 'David', 'Young', '4567890124', 'mason.young@school.com', 'hashed_password_17', '2007-01-30', 3, 2),
-       ('Isabella', 'Anne', 'King', '5678901235', 'isabella.king@school.com', 'hashed_password_18', '2006-05-25', 5, 1),
-       ('Jacob', 'Paul', 'Wright', '6789012346', 'jacob.wright@school.com', 'hashed_password_19', '2006-08-14', 5, 2);
+       ('Ethan Hall', '2345678902', 'ethan.hall@school.com', 'hashed_password_15', '2006-03-22', 4, 2),
+       ('Ava Allen', '3456789013', 'ava.allen@school.com', 'hashed_password_16', '2007-07-18', 3, 1),
+       ('Mason Young', '4567890124', 'mason.young@school.com', 'hashed_password_17', '2007-01-30', 3, 2),
+       ('Isabella King', '5678901235', 'isabella.king@school.com', 'hashed_password_18', '2006-05-25', 5, 1),
+       ('Jacob Wright', '6789012346', 'jacob.wright@school.com', 'hashed_password_19', '2006-08-14', 5, 2);
 
 -- Insert Enrollments
 INSERT INTO enrollments (student_id, subject_id, enrollment_date)
@@ -531,15 +530,7 @@ WHERE r.class_id = 1
 
 SELECT * from assignments
 
-
-#Student Schedule.
-SELECT
-    s.day_of_week,
-    s.start_time,
-    s.end_time,
-    subj.subject_name,
-    t.name AS teacher_name,
-    s.room
+SELECT s.day_of_week, s.start_time, s.end_time, subj.subject_name, t.name AS teacher_name, s.room
 FROM students st
 JOIN schedules s ON st.class_id = s.class_id AND st.section_id = s.section_id
 JOIN subjects subj ON s.subject_id = subj.subject_id
@@ -562,9 +553,4 @@ FROM schedules s
 WHERE s.teacher_id = 11 -- Replace with the actual teacher_id
 ORDER BY FIELD(s.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
          s.start_time;
-
-
-
-SELECT * FROM registrars;
-SELECT * FROM teachers;
-SELECT * FROM students;
+SET SQL_SAFE_UPDATES = 1;

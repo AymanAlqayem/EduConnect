@@ -1,19 +1,17 @@
 package com.tarificompany.android_project;
 
-import java.util.Date;
-
 public class Student {
     private String stdId;
     private String name;
-    private double average;
+    private String email;
     private String stdClass;
     private String parentPhone;
     private String birthDate;
 
-    public Student(String stdId, String name, double average, String stdClass, String parentPhone, String birthDate) {
+    public Student(String stdId, String name, String email, String stdClass, String parentPhone, String birthDate) {
         this.stdId = stdId;
         this.name = name;
-        this.average = average;
+        this.email = email;
         this.stdClass = stdClass;
         this.parentPhone = parentPhone;
         this.birthDate = birthDate;
@@ -35,12 +33,12 @@ public class Student {
         this.name = name;
     }
 
-    public double getAverage() {
-        return average;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAverage(double average) {
-        this.average = average;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getStdClass() {

@@ -89,7 +89,7 @@ public class StudentDashboardFragment extends Fragment {
                         try {
                             if (response.getString("status").equals("success")) {
                                 JSONObject data = response.getJSONObject("data");
-                                String firstName = data.getString("first_name");
+                                String firstName = data.getString("name");
                                 tvWelcomeMessage.setText("Welcome " + firstName);
 
                                 // Populate assignments

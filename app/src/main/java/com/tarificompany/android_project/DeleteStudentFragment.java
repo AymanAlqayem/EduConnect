@@ -14,8 +14,21 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeleteStudentFragment extends Fragment implements DeleteStudentAdapter.OnStudentDeleteListener{
 
@@ -24,6 +37,8 @@ public class DeleteStudentFragment extends Fragment implements DeleteStudentAdap
     private DeleteStudentAdapter adapter;
     private List<Student> studentsList;
     private List<Student> filteredList;
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
+
 
     public static DeleteStudentFragment newInstance() {
         return new DeleteStudentFragment();
@@ -36,8 +51,8 @@ public class DeleteStudentFragment extends Fragment implements DeleteStudentAdap
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_delete_student, container, false);
         setUpViews(view);
-
         setUpSearch();
+        fetchStudents();
 
         return view;
     }
@@ -48,15 +63,6 @@ public class DeleteStudentFragment extends Fragment implements DeleteStudentAdap
         etStudentSearch = view.findViewById(R.id.etStudentSearch_Delete);
 
         studentsList = new ArrayList<>();
-        studentsList.add(new Student("101", "Adam Smith", 89, "11L", "0595237162", "29-7-2008"));
-        studentsList.add(new Student("101", "Bob Smith", 89, "11L", "0595237162", "8-6-2008"));
-        studentsList.add(new Student("102", "Chris Smith", 89, "12L", "0595237162", "7-7-2007"));
-        studentsList.add(new Student("103", "Dan Smith", 89, "12S", "0595237162","8-3-2007"));
-        studentsList.add(new Student("104", "Evans Smith", 89, "12S", "0595237162","17-9-2007"));
-        studentsList.add(new Student("105", "Fadi Smith", 89, "10", "0595237162","19-12-2009"));
-        studentsList.add(new Student("106", "Grayson Smith", 89, "11S", "0595237162","8-3-2008"));
-        studentsList.add(new Student("107", "Hill Smith", 89, "11S", "0595237162","8-9-2008"));
-        studentsList.add(new Student("108", "Ian Smith", 89, "11S", "0595237162","3-1-2008"));
 
         filteredList = new ArrayList<>(studentsList);
 
@@ -99,13 +105,89 @@ public class DeleteStudentFragment extends Fragment implements DeleteStudentAdap
         adapter.notifyDataSetChanged();
     }
 
+    private void fetchStudents(){
+        String url = BASE_URL + "get_students.php";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray studentsArray = response.getJSONArray("students");
+                            studentsList.clear();
+                            for (int i = 0; i < studentsArray.length(); i++) {
+                                JSONObject obj = studentsArray.getJSONObject(i);
+                                studentsList.add(new Student(
+                                        obj.getString("student_id"),
+                                        obj.getString("name"),
+                                        obj.getString("email"),
+                                        obj.optString("class_name", ""),
+                                        obj.optString("parent_phone", ""),
+                                        obj.getString("DOB")
+                                ));
+                            }
+                            filteredList.clear();
+                            filteredList.addAll(studentsList);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(requireContext(), "Error: " + response.optString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(requireContext(), "Error fetching students", Toast.LENGTH_SHORT).show();
+                }
+        );
+        queue.add(jsonObjectRequest);
+    }
+
+
     @Override
     public void onStudentDelete(int position) {
-        Student toDelete = filteredList.get(position);
-        studentsList.remove(toDelete);
-        filteredList.remove(position);
-        adapter.notifyItemRemoved(position);
-        Toast.makeText(requireContext(), "Student deleted successfully", Toast.LENGTH_SHORT).show();
+        if (position >= 0 && position < filteredList.size()) {
+            Student toDelete = filteredList.get(position);
+            String studentId = toDelete.getStdId();  // assuming getStdId() returns student ID
+            String studentName = toDelete.getName();
+
+            String url = BASE_URL + "delete_student.php";
+            RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+            StringRequest request = new StringRequest(Request.Method.POST, url,
+                    response -> {
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            if (json.getString("status").equals("success")) {
+                                studentsList.remove(toDelete);
+                                filteredList.remove(position);
+                                adapter.notifyItemRemoved(position);
+                                Toast.makeText(requireContext(), studentName + " deleted successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Error: " + json.optString("message"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                        }
+                    },
+                    error -> {
+                        error.printStackTrace();
+                        Toast.makeText(requireContext(), "Error deleting student", Toast.LENGTH_SHORT).show();
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("student_id", studentId);
+                    return params;
+                }
+            };
+
+            queue.add(request);
+        }
     }
+
 
 }

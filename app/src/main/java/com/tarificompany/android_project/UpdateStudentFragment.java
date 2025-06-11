@@ -14,10 +14,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpdateStudentFragment extends Fragment implements UpdateStudentAdapter.OnStudentUpdateListener{
+    private static final String BASE_URL = "http://10.0.2.2/AndroidProject/";
     private Spinner gradeSpinner;
     private RecyclerView rvStudents;
     private EditText etStudentSearch;
@@ -28,12 +42,11 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
     private List<Student> studentsList;
     private List<Student> filteredList;
     private Student selectedStudent = null;
-
-
+    private RequestQueue queue;
     private static final String[] GRADES = {
             "Class",  // Hint
-            "10th grade", "11th Scientific grade", "11th Literature grade",
-            "12th Scientific grade", "12th Literature grade"
+            "10th", "11th science", "11th literature",
+            "12th science", "12th literature"
     };
 
     public static UpdateStudentFragment newInstance() {
@@ -48,7 +61,7 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
         View view = inflater.inflate(R.layout.fragment_update_student, container, false);
 
         setUpViews(view);
-
+        fetchStudents();
         setUpSearch();
         onStudentUpdate(null);
 
@@ -88,15 +101,6 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
         gradeSpinner.setSelection(0);
 
         studentsList = new ArrayList<>();
-        studentsList.add(new Student("101", "Adam Smith", 89, "11L", "0595237162", "29-7-2008"));
-        studentsList.add(new Student("101", "Bob Smith", 89, "11L", "0595237162", "8-6-2008"));
-        studentsList.add(new Student("102", "Chris Smith", 89, "12L", "0595237162", "7-7-2007"));
-        studentsList.add(new Student("103", "Dan Smith", 89, "12S", "0595237162","8-3-2007"));
-        studentsList.add(new Student("104", "Evans Smith", 89, "12S", "0595237162","17-9-2007"));
-        studentsList.add(new Student("105", "Fadi Smith", 89, "10", "0595237162","19-12-2009"));
-        studentsList.add(new Student("106", "Grayson Smith", 89, "11S", "0595237162","8-3-2008"));
-        studentsList.add(new Student("107", "Hill Smith", 89, "11S", "0595237162","8-9-2008"));
-        studentsList.add(new Student("108", "Ian Smith", 89, "11S", "0595237162","3-1-2008"));
 
         filteredList = new ArrayList<>(studentsList);
 
@@ -139,6 +143,46 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
         adapter.notifyDataSetChanged();
     }
 
+    private void fetchStudents(){
+        String url = BASE_URL + "get_students.php";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray studentsArray = response.getJSONArray("students");
+                            studentsList.clear();
+                            for (int i = 0; i < studentsArray.length(); i++) {
+                                JSONObject obj = studentsArray.getJSONObject(i);
+                                studentsList.add(new Student(
+                                        obj.getString("student_id"),
+                                        obj.getString("name"),
+                                        obj.getString("email"),
+                                        obj.optString("class_name", ""),
+                                        obj.optString("parent_phone", ""),
+                                        obj.getString("DOB")
+                                ));
+                            }
+                            filteredList.clear();
+                            filteredList.addAll(studentsList);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(requireContext(), "Error: " + response.optString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(requireContext(), "Error fetching students", Toast.LENGTH_SHORT).show();
+                }
+        );
+        queue.add(jsonObjectRequest);
+    }
+
     @Override
     public void onStudentSelected(Student student) {
         selectedStudent = student;
@@ -147,19 +191,19 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
         etStudentPhone.setText(student.getParentPhone());
 
         switch (student.getStdClass()) {
-            case "10":
+            case "1":
                 gradeSpinner.setSelection(1);
                 break;
-            case "11S":
+            case "2":
                 gradeSpinner.setSelection(2);
                 break;
-            case "11L":
+            case "3":
                 gradeSpinner.setSelection(3);
                 break;
-            case "12S":
+            case "4":
                 gradeSpinner.setSelection(4);
                 break;
-            case "12L":
+            case "5":
                 gradeSpinner.setSelection(5);
                 break;
             default:
@@ -188,34 +232,68 @@ public class UpdateStudentFragment extends Fragment implements UpdateStudentAdap
             selectedStudent.setParentPhone(updatedPhone);
 
             switch (selectedGrade) {
-                case "10th grade":
-                    selectedStudent.setStdClass("10");
-                    break;
-                case "11th Scientific grade":
-                    selectedStudent.setStdClass("11S");
-                    break;
-                case "11th Literature grade":
-                    selectedStudent.setStdClass("11L");
-                    break;
-                case "12th Scientific grade":
-                    selectedStudent.setStdClass("12S");
-                    break;
-                case "12th Literature grade":
-                    selectedStudent.setStdClass("12L");
-                    break;
-                default:
-                    break;
+                case "10th":
+                    selectedStudent.setStdClass("1"); break;
+                case "11th science":
+                    selectedStudent.setStdClass("3"); break;
+                case "11th literature":
+                    selectedStudent.setStdClass("2"); break;
+                case "12th science":
+                    selectedStudent.setStdClass("5"); break;
+                case "12th literature":
+                    selectedStudent.setStdClass("4"); break;
             }
 
-            adapter.notifyDataSetChanged();
 
+            final String studentId = selectedStudent.getStdId();
+            final String name = updatedName;
+            final String phone = updatedPhone;
+            final String classId = selectedStudent.getStdClass();
+
+            // Clear input & UI state
             etStudentName.setText("");
             etStudentPhone.setText("");
             gradeSpinner.setSelection(0);
             selectedStudent = null;
 
+            // Prepare and send request
+            String url = BASE_URL + "update_student.php";
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    response -> {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("status").equals("success")) {
+                                Toast.makeText(requireContext(), "Updated in database", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Server error: " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(requireContext(), "Response parse error", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    },
+                    error -> {
+                        Toast.makeText(requireContext(), "Failed to update student", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("student_id", studentId);
+                    params.put("name", name);
+                    params.put("parent_phone", phone);
+                    params.put("class_id", classId);
+                    return params;
+                }
+            };
+
+            Volley.newRequestQueue(requireContext()).add(stringRequest);
+            adapter.notifyDataSetChanged();
+
             Toast.makeText(requireContext(), "Student updated successfully", Toast.LENGTH_SHORT).show();
         });
-
     }
+
 }
