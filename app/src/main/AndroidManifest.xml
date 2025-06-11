@@ -31,7 +31,6 @@
             android:exported="false"
             android:theme="@style/ourAppTheme" />
 
-
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -47,26 +46,18 @@
         <activity
             android:name=".DeleteStudentActivity"
             android:exported="false" />
+
+        <!-- حذفنا تعريفات الفراجمنت لأنهم مش Activities -->
+
         <activity
-            android:name=".AddStudentFragment"
+            android:name=".ComposeMessageActivity"
             android:exported="false" />
-        <activity
-            android:name=".AddAssignmentFragment"
-            android:exported="false"
-            tools:ignore="Instantiatable" />
 
-        <activity android:name=".ComposeMessageActivity" />
+        <!-- أضفنا MessageDetailActivity -->
         <activity
-            android:name=".MessagesFragment"
-            tools:ignore="Instantiatable" />
-
-        <activity
-            android:name=".MessagesFragment"
-            tools:ignore="DuplicateActivity,Instantiatable" />
-
+            android:name=".MessageDetailActivity"
+            android:exported="false" />
 
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

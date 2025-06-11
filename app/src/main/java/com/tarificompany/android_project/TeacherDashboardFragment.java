@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -23,16 +22,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TeacherDashboardFragment extends Fragment {
 
-    private UpcomingClassesAdapter adapter;
-    private List<ClassSchedule> classSchedules;
-
     private TextView tvWelcome, tvTodayClasses, tvStudentsCount, tvUnreadMessages;
-
     private String teacherId;
 
     @SuppressLint("MissingInflatedId")
@@ -40,24 +32,17 @@ public class TeacherDashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_teacher_dashboard, container, false);
 
-        tvWelcome = view.findViewById(R.id.tv_welcome_message);
+        tvWelcome = view.findViewById(R.id.tv_welcome);
         tvTodayClasses = view.findViewById(R.id.tv_today_classes);
         tvStudentsCount = view.findViewById(R.id.tv_students_count);
-        tvUnreadMessages = view.findViewById(R.id.tv_unread_messages);
-
-
-        //rvUpcomingClasses = view.findViewById(R.id.rv_upcoming_classes);
-        //rvUpcomingClasses.setLayoutManager(new LinearLayoutManaager(getContext()));
-
-        //classSchedules = new ArrayList<>();
-        //adapter = new UpcomingClassesAdapter(classSchedules);
-        //rvUpcomingClasses.setAdapter(adapter);
+        tvUnreadMessages = view.findViewById(R.id.tv_total_messages);
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         teacherId = prefs.getString("teacher_id", "");
 
         fetchTeacherName(teacherId);
         fetchTotalClassesAndStudents(teacherId);
+        fetchUnreadMessagesCount(teacherId);
 
         return view;
     }
@@ -69,77 +54,26 @@ public class TeacherDashboardFragment extends Fragment {
                 Request.Method.GET, url, null,
                 response -> {
                     try {
-                        Log.d("API_RESPONSE", response.toString());
-
                         if (response.getString("status").equals("success")) {
                             JSONArray teachersArray = response.getJSONArray("teachers");
-                            boolean teacherFound = false;
-
                             for (int i = 0; i < teachersArray.length(); i++) {
                                 JSONObject teacherObj = teachersArray.getJSONObject(i);
                                 if (teacherObj.getString("id").equals(teacherId)) {
                                     String fullName = teacherObj.getString("full_name");
-                                    if (null != tvWelcome) {
-                                        tvWelcome.setText(fullName);
-                                    } else {
-                                        Log.e("UI_ERROR", "tvWelcome is null");
-                                    }
-                                    teacherFound = true;
+                                    tvWelcome.setText(fullName);
                                     break;
                                 }
                             }
-
-                            if (!teacherFound) {
-                                Toast.makeText(getContext(), "Teacher ID not found in list", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getContext(), "API returned error", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Error parsing data: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.e("PARSING_ERROR", "Error: ", e);
+                        Log.e("fetchTeacherName", "Error parsing", e);
                     }
                 },
-                error -> {
-                    Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("NETWORK_ERROR", "Error: ", error);
-                }
+                error -> Log.e("fetchTeacherName", "Network error", error)
         );
 
         Volley.newRequestQueue(requireContext()).add(request);
     }
-
-
-
-
-//    private void fetchUpcomingClasses(String teacherId) {
-//        String url = "http://10.0.2.2/AndroidProject/get_teacher_schedule.php?teacher_id=" + teacherId;
-//
-//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-//                response -> {
-//                    try {
-//                        classSchedules.clear();
-//                        for (int i = 0; i < response.length(); i++) {
-//                            JSONObject obj = response.getJSONObject(i);
-//                            String className = obj.getString("subject_name");
-//                            String time = obj.getString("start_time") + " - " + obj.getString("end_time");
-//                            String classGroup = obj.getString("class_name") + " (" + obj.getString("room") + ")";
-//                            String room = obj.getString("room");
-//                            String day = obj.optString("day", "Unknown");
-//                            int studentCount = obj.optInt("student_count", 0);
-//
-//                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount));
-//                        }
-//
-//                        adapter.updateData(classSchedules);
-//                    } catch (Exception e) {
-//                        Toast.makeText(getContext(), "Error parsing data", Toast.LENGTH_SHORT).show();
-//                    }
-//                },
-//                error -> Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
-//
-//        Volley.newRequestQueue(requireContext()).add(request);
-//    }
 
     private void fetchTotalClassesAndStudents(String teacherId) {
         String urlClasses = "http://10.0.2.2/AndroidProject/get_teacher_classes.php?teacher_id=" + teacherId;
@@ -203,9 +137,79 @@ public class TeacherDashboardFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    private void fetchUnreadMessagesCount(String teacherId) {
+        String url = "http://10.0.2.2/AndroidProject/get_teacher_message.php?teacher_id=" + teacherId;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        Log.d("API_RESPONSE", response.toString());  // <== اطبع الرد كامل هنا
+
+                        int unreadCount = 0;
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject message = response.getJSONObject(i);
+
+                            int isReadValue = message.getInt("is_read");
+                            Log.d("MESSAGE_STATUS", "Message id: " + message.getInt("id") + ", is_read: " + isReadValue);
+
+                            boolean isRead = isReadValue == 1;
+                            if (!isRead) unreadCount++;
+                        }
+                        tvUnreadMessages.setText(unreadCount + " unread messages");
+                    } catch (Exception e) {
+                        tvUnreadMessages.setText("0 unread messages");
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    tvUnreadMessages.setText("0 unread messages");
+                    error.printStackTrace();
+                });
+
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    private void markMessageAsRead(int messageId) {
+        String url = "http://10.0.2.2/AndroidProject/mark_as_read.php";
+
+        JSONObject requestData = new JSONObject();
+        try {
+            requestData.put("message_id", messageId);
+            requestData.put("recipient_id", teacherId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestData,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            int currentCount = getUnreadCountFromTextView();
+                            int newCount = Math.max(0, currentCount - 1);
+                            tvUnreadMessages.setText(newCount + " unread messages");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> error.printStackTrace()
+        );
+
+        Volley.newRequestQueue(requireContext()).add(request);
+    }
+
+    private int getUnreadCountFromTextView() {
+        String text = tvUnreadMessages.getText().toString();
+        try {
+            return Integer.parseInt(text.split(" ")[0]);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
     interface StudentsCountCallback {
         void onResult(int count);
-
         void onError();
     }
 }

@@ -10,6 +10,7 @@ public class Message implements Serializable {
     private String preview;
     private String timestamp;
     private String content;
+    private boolean isRead;
 
     public Message(String sender, String preview, String timestamp, String content) {
         this.sender = sender;
@@ -30,6 +31,14 @@ public class Message implements Serializable {
         return content;
     }
 
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
     public String getFormattedTimestamp() {
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
@@ -40,4 +49,7 @@ public class Message implements Serializable {
             return timestamp;
         }
     }
+
+
+
 }

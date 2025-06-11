@@ -64,22 +64,19 @@ public class StudentActivity extends AppCompatActivity {
             if (id == R.id.nav_dashboard) {
                 fragment = new StudentDashboardFragment();
                 title = "Student Dashboard";
-
             } else if (id == R.id.nav_schedule) {
-//                fragment = AddStudentFragment.newInstance();
-                title = "Schedule";
-
+                fragment = new Schedule_Student_Fragment();
+                title = "My Schedule";
             } else if (id == R.id.nav_grades) {
-//                fragment = UpdateStudentFragment.newInstance();
-                title = "Grades";
-
+                fragment = new StudentGradesFragment();
+                title = "My Grades";
             } else if (id == R.id.nav_assignment) {
-//                fragment = DeleteStudentFragment.newInstance();
-                title = "Assignments";
-
+                fragment = new StudentAssignmentsFragment();
+                title = "Assignment";
             } else if (id == R.id.nav_messages) {
-//                fragment = AddTeacherFragment.newInstance();
-                title = "Messages.";
+                fragment = GenericFragment.newInstance(R.layout.item_message);
+                title = "Messages";
+
             } else if (id == R.id.nav_logout) {
                 Intent intent = new Intent(StudentActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

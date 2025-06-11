@@ -56,7 +56,7 @@ public class PublishGradesFragment extends Fragment {
         setupSpinners();
         setupClickListeners();
 
-        // Handle back press to prevent Activity destruction
+        // منع الإغلاق بالضغط على زر العودة
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -82,7 +82,7 @@ public class PublishGradesFragment extends Fragment {
     }
 
     private void setupSpinners() {
-        // Setup assessment types
+        // أنواع التقييم
         List<String> assessments = new ArrayList<>();
         assessments.add("Quiz");
         assessments.add("Assignment");
@@ -94,7 +94,7 @@ public class PublishGradesFragment extends Fragment {
         assessmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAssessmentType.setAdapter(assessmentAdapter);
 
-        // Fetch teacher ID
+        // جلب معرّف الاستاذ من SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
         if (teacherId.isEmpty()) {
@@ -102,7 +102,7 @@ public class PublishGradesFragment extends Fragment {
             return;
         }
 
-        // Fetch classes
+        // جلب الصفوف للمدرس
         fetchClasses(teacherId);
     }
 
@@ -119,7 +119,7 @@ public class PublishGradesFragment extends Fragment {
                         }
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject obj = response.getJSONObject(i);
-                            classList.add(obj.getString("class_name")); // e.g., "Grade 10 (Section A)"
+                            classList.add(obj.getString("class_name"));
                             classIds.add(obj.getString("class_id"));
                         }
                         ArrayAdapter<String> classAdapter = new ArrayAdapter<>(
@@ -273,7 +273,7 @@ public class PublishGradesFragment extends Fragment {
             JSONObject grade = new JSONObject();
             try {
                 grade.put("student_id", studentIds.get(i));
-                grade.put("score", studentGrades.get(studentIds.get(i)));
+                grade.put("score", Float.parseFloat(studentGrades.get(studentIds.get(i))));
                 gradesArray.put(grade);
             } catch (Exception e) {
                 showToast("Error preparing grades: " + e.getMessage());
@@ -286,7 +286,6 @@ public class PublishGradesFragment extends Fragment {
             payload.put("class_id", classId);
             payload.put("teacher_id", teacherId);
             payload.put("exam_name", assessmentType);
-            payload.put("max_score", gradesArray);
             payload.put("grades", gradesArray);
         } catch (Exception e) {
             showToast("Error preparing submission: " + e.getMessage());

@@ -215,6 +215,21 @@ CREATE TABLE message_recipients
     FOREIGN KEY (class_id) REFERENCES classes (class_id),
     FOREIGN KEY (section_id) REFERENCES sections (section_id)
 );
+CREATE TABLE teacher_class_subject (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacher_id INT NOT NULL,
+    class_id INT NOT NULL,
+    section_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_teacher FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
+    CONSTRAINT fk_class FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
+    CONSTRAINT fk_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE,
+    CONSTRAINT fk_subject FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+);
+
 
 
 # ===========================   DATA  ===================================
@@ -458,6 +473,30 @@ INSERT INTO message_recipients (message_id, recipient_id, recipient_role, class_
 (13, 3, 'Teacher', NULL, NULL),
 (14, 4, 'Teacher', NULL, NULL),
 (15, 5, 'Teacher', NULL, NULL);
+INSERT INTO teacher_class_subject (teacher_id, class_id, section_id, subject_id) VALUES
+(1, 1, 1, 1),
+(1, 1, 2, 2),
+(1, 2, 1, 3),
+(1, 3, 1, 4),
+(2, 3, 1, 5),
+(2, 3, 2, 6),
+(2, 5, 1, 7),
+(3, 2, 1, 8),
+(3, 2, 2, 9),
+(3, 4, 1, 10),
+(3, 4, 2, 11),
+(4, 3, 2, 12),
+(4, 5, 2, 13),
+(4, 5, 3, 14),
+(5, 1, 3, 15),
+(5, 2, 3, 16),
+(5, 4, 3, 17),
+(6, 3, 3, 18),
+(6, 5, 1, 19),
+(6, 5, 3, 20),
+(3, 1, 1, 21),
+(3, 1, 2, 22);
+
 
 
 

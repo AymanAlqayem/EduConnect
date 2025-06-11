@@ -12,7 +12,7 @@ public class MessageDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_message_detail);
+        setContentView(R.layout.activity_message_detail);
 
         // Initialize Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);

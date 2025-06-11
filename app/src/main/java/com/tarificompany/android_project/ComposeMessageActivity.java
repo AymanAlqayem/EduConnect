@@ -28,11 +28,10 @@ import java.util.List;
 public class ComposeMessageActivity extends AppCompatActivity {
 
     private Spinner spinnerRecipientType, spinnerRecipient;
-    private EditText etMessage;
+    private EditText etSubject, etMessage; // أضفت etSubject
     private Button btnSend;
     private List<String> recipientIds;
     private List<String> recipientNames;
-
     private RequestQueue requestQueue;
 
     @Override
@@ -50,6 +49,7 @@ public class ComposeMessageActivity extends AppCompatActivity {
     private void initViews() {
         spinnerRecipientType = findViewById(R.id.spinner_recipient_type);
         spinnerRecipient = findViewById(R.id.spinner_recipient);
+        etSubject = findViewById(R.id.et_subject);  // عرفت المتغير
         etMessage = findViewById(R.id.et_message);
         btnSend = findViewById(R.id.btn_send);
     }
@@ -58,7 +58,6 @@ public class ComposeMessageActivity extends AppCompatActivity {
         List<String> recipientTypes = new ArrayList<>();
         recipientTypes.add("Individual Student");
         recipientTypes.add("Entire Class");
-        recipientTypes.add("Group of Students");
 
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, recipientTypes);
@@ -88,10 +87,8 @@ public class ComposeMessageActivity extends AppCompatActivity {
         String url;
         if (selectedType.equals("Individual Student")) {
             url = "http://10.0.2.2/AndroidProject/get_students.php";
-        } else if (selectedType.equals("Entire Class")) {
-            url = "http://10.0.2.2/AndroidProject/get_classes.php";
         } else {
-            url = "http://10.0.2.2/AndroidProject/get_groups.php";
+            url = "http://10.0.2.2/AndroidProject/get_classes.php";
         }
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -104,12 +101,9 @@ public class ComposeMessageActivity extends AppCompatActivity {
                             if (selectedType.equals("Individual Student")) {
                                 recipientNames.add(obj.getString("name"));
                                 recipientIds.add(obj.getString("student_id"));
-                            } else if (selectedType.equals("Entire Class")) {
+                            } else {
                                 recipientNames.add(obj.getString("class_name"));
                                 recipientIds.add(obj.getString("class_id"));
-                            } else {
-                                recipientNames.add(obj.getString("group_name"));
-                                recipientIds.add(obj.getString("group_id"));
                             }
                         }
                         ArrayAdapter<String> recipientAdapter = new ArrayAdapter<>(
@@ -124,7 +118,7 @@ public class ComposeMessageActivity extends AppCompatActivity {
                 },
                 error -> Toast.makeText(ComposeMessageActivity.this, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show());
 
-        requestQueue.add(request); // ✅ استخدام requestQueue مباشرة
+        requestQueue.add(request);
     }
 
     private void setupClickListeners() {
@@ -136,6 +130,10 @@ public class ComposeMessageActivity extends AppCompatActivity {
     }
 
     private boolean validateInput() {
+        if (etSubject.getText().toString().trim().isEmpty()) {
+            etSubject.setError("Subject cannot be empty");
+            return false;
+        }
         if (etMessage.getText().toString().trim().isEmpty()) {
             etMessage.setError("Message cannot be empty");
             return false;
@@ -150,6 +148,7 @@ public class ComposeMessageActivity extends AppCompatActivity {
     private void sendMessage() {
         String recipientType = spinnerRecipientType.getSelectedItem().toString();
         String recipientId = recipientIds.get(spinnerRecipient.getSelectedItemPosition());
+        String subject = etSubject.getText().toString().trim();
         String message = etMessage.getText().toString().trim();
 
         SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
@@ -160,8 +159,8 @@ public class ComposeMessageActivity extends AppCompatActivity {
             payload.put("sender_id", teacherId);
             payload.put("sender_type", "Teacher");
             payload.put("recipient_id", recipientId);
-            payload.put("recipient_type", recipientType.equals("Individual Student") ? "Student" : recipientType.equals("Entire Class") ? "Class" : "Group");
-            payload.put("subject", "Message from Teacher");
+            payload.put("recipient_type", recipientType.equals("Individual Student") ? "Student" : "Class");
+            payload.put("subject", subject);
             payload.put("content", message);
         } catch (Exception e) {
             Toast.makeText(this, "Error preparing message", Toast.LENGTH_SHORT).show();

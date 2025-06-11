@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF">
 
-    <TextView
-        android:id="@+id/tv_sender"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sender"
-        android:textSize="16sp"/>
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/tv_message_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Preview"/>
+        <TextView
+            android:id="@+id/tv_detail_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Noah"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_timestamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Timestamp"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_detail_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test2"
+            android:textColor="#424242"
+            android:textSize="20sp"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/tv_detail_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:37 PM, Jun 10"
+            android:textColor="#424242"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
