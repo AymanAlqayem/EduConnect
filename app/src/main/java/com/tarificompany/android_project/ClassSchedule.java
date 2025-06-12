@@ -21,14 +21,14 @@ public class ClassSchedule implements Serializable {
         this.sectionName = sectionName;
     }
 
-    public ClassSchedule(String className, String time, String classGroup) {
+    public ClassSchedule(String className, String time, String sectionName,String day) {
         this.className = className;
         this.time = time;
-        this.classGroup = classGroup;
+        this.sectionName = sectionName;
+        this.day = day;
+        this.classGroup = "";
         this.room = "";
-        this.day = "";
         this.studentCount = 0;
-        this.sectionName = "";
     }
 
     public String getClassName() {

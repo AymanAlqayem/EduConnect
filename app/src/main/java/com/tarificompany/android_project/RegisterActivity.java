@@ -80,6 +80,9 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (id == R.id.nav_delete_teacher) {
                 fragment = DeleteTeacherFragment.newInstance();
                 title = "Delete Teacher";
+            } else if (id == R.id.nav_generate_schedule) {
+                fragment = GenerateScheduleFragment.newInstance();
+                title = "Generate Schedule";
             } else if (id == R.id.nav_logout) {
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -13,12 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Schedule_Teacher_Fragment extends Fragment {
@@ -63,31 +66,47 @@ public class Schedule_Teacher_Fragment extends Fragment {
 
         String url = BASE_URL + "get_teacher_schedule.php?teacher_id=" + teacherId;
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
+                        String id = response.getString("teacher_id");  // Can be used for validation/logging
+                        JSONObject schedule = response.getJSONObject("schedule");
+
+                        List<ClassSchedule> tempList = new ArrayList<>();
+
+                        Iterator<String> days = schedule.keys();
+                        while (days.hasNext()) {
+                            String day = days.next();
+                            JSONObject periods = schedule.getJSONObject(day);
+
+                            Iterator<String> periodKeys = periods.keys();
+                            while (periodKeys.hasNext()) {
+                                String period = periodKeys.next();
+                                JSONObject entry = periods.getJSONObject(period);
+                                String subject = entry.getString("subject");
+                                String section = entry.getString("section");
+
+                                tempList.add(new ClassSchedule(subject, period, section, day));
+                            }
+                        }
+
                         classSchedules.clear();
-                        if (response.length() == 0) {
-                            Toast.makeText(getContext(), "No schedules found", Toast.LENGTH_SHORT).show();
-                        }
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject obj = response.getJSONObject(i);
-                            String className = obj.getString("subject_name");
-                            String time = obj.getString("start_time") + " - " + obj.getString("end_time");
-                            String classGroup = obj.getString("class_name") + " (" + obj.getString("room") + ")";
-                            String room = obj.getString("room");
-                            String day = obj.optString("day", "Unknown");
-                            int studentCount = obj.optInt("student_count", 0);
-                            String sectionName = obj.optString("section_name", "");
-                            classSchedules.add(new ClassSchedule(className, time, classGroup, room, day, studentCount, sectionName));
-                        }
-                        adapter.updateData(classSchedules);
+                        classSchedules.addAll(tempList);
+                        adapter.updateData(classSchedules);  // Make sure your adapter has this method
+
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Error parsing data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Error parsing schedule", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(getContext(), "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show());
+                error -> {
+                    error.printStackTrace();
+                    Toast.makeText(getContext(), "Failed to load schedule", Toast.LENGTH_SHORT).show();
+                });
 
-        Volley.newRequestQueue(requireContext()).add(request);
+        queue.add(request);
     }
+
 }
