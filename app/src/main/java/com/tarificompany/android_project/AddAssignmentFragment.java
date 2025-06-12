@@ -29,7 +29,7 @@ import java.util.List;
 
 public class AddAssignmentFragment extends Fragment {
 
-    private Spinner spinnerClass, spinnerSubject;
+    private Spinner spinnerClass, spinnerSubject; // Added spinnerSubject
     private EditText etTitle, etDescription, etMaxScore;
     private DatePicker datePicker;
     private Button btnAddAssignment;
@@ -56,7 +56,7 @@ public class AddAssignmentFragment extends Fragment {
 
     private void initViews(View view) {
         spinnerClass = view.findViewById(R.id.spinner_class);
-        spinnerSubject = view.findViewById(R.id.spinner_subject);
+        spinnerSubject = view.findViewById(R.id.spinner_subject); // Initialize subject Spinner
         etTitle = view.findViewById(R.id.et_assignment_title);
         etDescription = view.findViewById(R.id.et_assignment_desc);
         etMaxScore = view.findViewById(R.id.et_max_score);
@@ -128,6 +128,7 @@ public class AddAssignmentFragment extends Fragment {
                             subjectList.add(obj.getString("subject_name"));
                             subjectIds.add(obj.getString("subject_id"));
                         }
+                        // Set adapter for subject Spinner
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_item, subjectList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -154,13 +155,10 @@ public class AddAssignmentFragment extends Fragment {
             String title = etTitle.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
             String maxScoreStr = etMaxScore.getText().toString().trim();
+            String subjectId = spinnerSubject.getSelectedItemPosition() >= 0 ? subjectIds.get(spinnerSubject.getSelectedItemPosition()) : "";
+            String classId = spinnerClass.getSelectedItemPosition() >= 0 ? classIds.get(spinnerClass.getSelectedItemPosition()) : "";
 
-            if (spinnerSubject.getSelectedItem() == null || spinnerClass.getSelectedItem() == null) {
-                Toast.makeText(getContext(), "Please select class and subject", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (title.isEmpty() || maxScoreStr.isEmpty()) {
+            if (title.isEmpty() || maxScoreStr.isEmpty() || subjectId.isEmpty()) {
                 Toast.makeText(getContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -178,19 +176,19 @@ public class AddAssignmentFragment extends Fragment {
             int year = datePicker.getYear();
             String dueDate = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", day);
 
-            String subjectId = subjectIds.get(spinnerSubject.getSelectedItemPosition());
-
             SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
             String teacherId = prefs.getString("teacher_id", "");
 
             JSONObject postData = new JSONObject();
             try {
-                postData.put("subject_id", subjectId);
                 postData.put("teacher_id", teacherId);
+                postData.put("subject_id", subjectId); // Add subject_id
                 postData.put("title", title);
                 postData.put("description", description);
                 postData.put("due_date", dueDate);
                 postData.put("max_score", maxScore);
+                // Optionally include class_id if needed by the server
+                // postData.put("class_id", classId);
             } catch (Exception e) {
                 Toast.makeText(getContext(), "Error preparing data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return;
@@ -201,12 +199,27 @@ public class AddAssignmentFragment extends Fragment {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData,
                     response -> {
                         if (isAdded()) {
-                            Toast.makeText(getContext(), "Assignment added successfully", Toast.LENGTH_SHORT).show();
+                            try {
+                                boolean success = response.getBoolean("success");
+                                String message = response.getString("message");
+                                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                                if (success) {
+                                    // Optionally clear the form or navigate back
+                                    etTitle.setText("");
+                                    etDescription.setText("");
+                                    etMaxScore.setText("");
+                                    spinnerSubject.setSelection(0);
+                                    spinnerClass.setSelection(0);
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(getContext(), "Error parsing response", Toast.LENGTH_LONG).show();
+                            }
                         }
                     },
                     error -> {
                         if (isAdded()) {
-                            Toast.makeText(getContext(), "Failed to add assignment", Toast.LENGTH_LONG).show();
+                            String errorMsg = error.getMessage() != null ? error.getMessage() : "Failed to add assignment";
+                            Toast.makeText(getContext(), "Network error: " + errorMsg, Toast.LENGTH_LONG).show();
                         }
                     });
 
