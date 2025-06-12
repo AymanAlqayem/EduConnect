@@ -3,43 +3,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
+        <!-- Message Icon -->
+        <ImageView
+            android:id="@+id/iv_assignment_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_messages"
+            android:tint="@color/primary_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
+
+        <!-- Sender Name -->
         <TextView
             android:id="@+id/tv_detail_sender"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Noah"
             android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/iv_assignment_icon"
+            app:layout_constraintTop_toTopOf="@id/iv_assignment_icon"
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Detail Subject -->
+
+        <!-- Timestamp -->
         <TextView
             android:id="@+id/tv_detail_subject"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
             android:text="Test2"
             android:textColor="#424242"
-            android:textSize="20sp"
-            android:layout_marginTop="4dp" />
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_sender"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_sender" />
 
         <TextView
             android:id="@+id/tv_detail_timestamp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="11:37 PM, Jun 10"
             android:textColor="#424242"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp" />
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="@id/tv_detail_subject"
+            app:layout_constraintTop_toBottomOf="@id/tv_detail_subject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

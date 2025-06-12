@@ -10,18 +10,18 @@ public class DetailViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView tvSender;
     private final TextView tvTimestamp;
-    private final TextView tvContent;
+    private final TextView tvSubject;
 
     public DetailViewHolder(@NonNull View itemView) {
         super(itemView);
         tvSender = itemView.findViewById(R.id.tv_detail_sender);
         tvTimestamp = itemView.findViewById(R.id.tv_detail_timestamp);
-        tvContent = itemView.findViewById(R.id.tv_detail_content);
+        tvSubject = itemView.findViewById(R.id.tv_detail_subject);
     }
 
     public void bind(Message message) {
         tvSender.setText(message.getSender());
         tvTimestamp.setText(message.getFormattedTimestamp());
-        tvContent.setText(message.getContent());
+        tvSubject.setText(message.getContent());
     }
 }

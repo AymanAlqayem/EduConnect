@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -56,7 +58,7 @@ public class PublishGradesFragment extends Fragment {
         setupSpinners();
         setupClickListeners();
 
-        // منع الإغلاق بالضغط على زر العودة
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -82,7 +84,6 @@ public class PublishGradesFragment extends Fragment {
     }
 
     private void setupSpinners() {
-        // أنواع التقييم
         List<String> assessments = new ArrayList<>();
         assessments.add("Quiz");
         assessments.add("Assignment");
@@ -94,7 +95,6 @@ public class PublishGradesFragment extends Fragment {
         assessmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAssessmentType.setAdapter(assessmentAdapter);
 
-        // جلب معرّف الاستاذ من SharedPreferences
         SharedPreferences prefs = requireActivity().getSharedPreferences("TeacherPrefs", Context.MODE_PRIVATE);
         String teacherId = prefs.getString("teacher_id", "");
         if (teacherId.isEmpty()) {
@@ -102,7 +102,6 @@ public class PublishGradesFragment extends Fragment {
             return;
         }
 
-        // جلب الصفوف للمدرس
         fetchClasses(teacherId);
     }
 
