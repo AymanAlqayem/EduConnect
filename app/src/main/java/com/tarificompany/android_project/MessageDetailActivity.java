@@ -7,14 +7,13 @@ import androidx.appcompat.widget.Toolbar;
 
 public class MessageDetailActivity extends AppCompatActivity {
 
-    private TextView tvSender, tvTimestamp, tvContent;
+    private TextView tvSender, tvTimestamp, tvSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_detail);
 
-        // Initialize Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -23,10 +22,9 @@ public class MessageDetailActivity extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
 
-        // Initialize views
         tvSender = findViewById(R.id.tv_detail_sender);
         tvTimestamp = findViewById(R.id.tv_detail_timestamp);
-        tvContent = findViewById(R.id.tv_detail_content);
+        tvSubject = findViewById(R.id.tv_detail_subject);
 
         // Get Message object from Intent
         Message message = (Message) getIntent().getSerializableExtra("message");
@@ -35,11 +33,11 @@ public class MessageDetailActivity extends AppCompatActivity {
         if (message != null) {
             tvSender.setText(message.getSender());
             tvTimestamp.setText(message.getFormattedTimestamp());
-            tvContent.setText(message.getContent());
+            tvSubject.setText(message.getContent());
         } else {
             tvSender.setText("Unknown Sender");
             tvTimestamp.setText("Unknown Time");
-            tvContent.setText("No content available");
+            tvSubject.setText("No content available");
         }
     }
 }

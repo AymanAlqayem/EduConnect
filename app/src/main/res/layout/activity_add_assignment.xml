@@ -1,151 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFF7E6"
-    android:padding="16dp">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_500"
-        app:title="Add New Assignment"
-        app:titleTextAppearance="@style/ToolbarTextStyle"
-        android:elevation="10dp">
-
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:tint="@color/white"
-            tools:ignore="UseAppTint" />
-    </androidx.appcompat.widget.Toolbar>
+    android:background="@drawable/gradient_background_blue"
+    android:padding="20dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
             <!-- Assignment Title -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Assignment Title"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:id="@+id/et_assignment_title"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter assignment title"
-                style="@style/CustomEditText"
-                android:layout_marginBottom="16dp"/>
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/et_assignment_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter assignment title"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#A3BFFA"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif" />
+            </androidx.cardview.widget.CardView>
 
             <!-- Assignment Description -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Assignment Description"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:id="@+id/et_assignment_desc"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:hint="Enter assignment description"
-                style="@style/CustomEditText"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:layout_marginBottom="16dp"/>
+                android:layout_height="wrap_content"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/et_assignment_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Enter assignment description"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#A3BFFA"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif" />
+            </androidx.cardview.widget.CardView>
 
             <!-- Max Score -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Max Score"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <EditText
-                android:id="@+id/et_max_score"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter max score"
-                android:inputType="number"
-                style="@style/CustomEditText"
-                android:layout_marginBottom="16dp"/>
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/et_max_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter max score"
+                    android:inputType="number"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#A3BFFA"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif" />
+            </androidx.cardview.widget.CardView>
 
             <!-- Target Class -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Target Class"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner
-                android:id="@+id/spinner_class"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/CustomSpinner"
-                android:layout_marginBottom="16dp"/>
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
 
-            <!-- Subject Spinner -->
+                <Spinner
+                    android:id="@+id/spinner_class"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:spinnerMode="dropdown" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- File Upload -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload File (Optional)"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <Button
+                        android:id="@+id/btn_upload_file"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Choose File"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#3B82F6"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp" />
+
+                    <TextView
+                        android:id="@+id/tv_file_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No file selected"
+                        android:textColor="#A3BFFA"
+                        android:textSize="12sp"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Subject -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Subject"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <Spinner
-                android:id="@+id/spinner_subject"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/CustomSpinner"
-                android:layout_marginBottom="16dp"/>
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="16dp">
+
+                <Spinner
+                    android:id="@+id/spinner_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:spinnerMode="dropdown" />
+            </androidx.cardview.widget.CardView>
+
 
             <!-- Due Date -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Due Date"
-                style="@style/CustomTextView"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
 
-            <DatePicker
-                android:id="@+id/datePicker"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:calendarViewShown="true"
-                android:layout_marginBottom="24dp" />
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#2D4B9D"
+                android:layout_marginBottom="24dp">
+
+                <DatePicker
+                    android:id="@+id/datePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:calendarViewShown="false"
+                    android:datePickerMode="spinner"
+                    android:padding="16dp"
+                    android:background="@null"
+                    android:theme="@style/TimePickerDialogTheme" />
+            </androidx.cardview.widget.CardView>
 
             <Button
                 android:id="@+id/btn_add"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:text="Add Assignment"
-                style="@style/CustomButton"
-                android:backgroundTint="@color/purple_500"
-                android:layout_marginTop="16dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:backgroundTint="#2D4B9D"
+                android:elevation="4dp"
+                app:cornerRadius="12dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

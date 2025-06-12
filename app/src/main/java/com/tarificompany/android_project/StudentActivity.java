@@ -28,7 +28,6 @@ public class StudentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student);
 
 
-        // Initialize toolbar
         toolbar = findViewById(R.id.studentToolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Student Dashboard");
@@ -37,7 +36,6 @@ public class StudentActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-        // Set up drawer toggle
         toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open,
@@ -45,7 +43,6 @@ public class StudentActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        // Load default fragment (Dashboard)
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -54,7 +51,6 @@ public class StudentActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
-        // Set up navigation item click listener
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             Fragment fragment = null;
@@ -74,7 +70,7 @@ public class StudentActivity extends AppCompatActivity {
                 fragment = new StudentAssignmentsFragment();
                 title = "Assignment";
             } else if (id == R.id.nav_messages) {
-                fragment = GenericFragment.newInstance(R.layout.item_message);
+                fragment = new MessagesStudentFragment();
                 title = "Messages";
 
             } else if (id == R.id.nav_logout) {

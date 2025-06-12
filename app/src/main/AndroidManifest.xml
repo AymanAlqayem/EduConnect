@@ -47,7 +47,7 @@
             android:name=".DeleteStudentActivity"
             android:exported="false" />
 
-        <!-- حذفنا تعريفات الفراجمنت لأنهم مش Activities -->
+        <activity android:name=".ComposeStudentActivity" />
 
         <activity
             android:name=".ComposeMessageActivity"
