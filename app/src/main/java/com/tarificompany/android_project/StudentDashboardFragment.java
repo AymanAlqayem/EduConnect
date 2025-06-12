@@ -157,4 +157,13 @@ public class StudentDashboardFragment extends Fragment {
         // Add the request to the queue
         queue.add(jsonObjectRequest);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Cancel all pending requests to prevent memory leaks
+        if (queue != null) {
+            queue.cancelAll(this);
+        }
+    }
 }

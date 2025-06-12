@@ -2,8 +2,10 @@ package com.tarificompany.android_project;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,12 +32,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentAssignmentsFragment extends Fragment {
+public class TeacherAssignmentsFragment extends Fragment {
 
     private RecyclerView rvAssignments;
     private ProgressBar progressBar;
     private Spinner spinnerFilter;
-    private StudentAssignmentAdapter adapter;
+    private TeacherAssignmentAdapter adapter;
     private List<JSONObject> assignments;
     private List<JSONObject> filteredAssignments;
     private RequestQueue requestQueue;
@@ -48,15 +49,16 @@ public class StudentAssignmentsFragment extends Fragment {
         filteredAssignments = new ArrayList<>();
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_assignments, container, false);
+        View view = inflater.inflate(R.layout.fragment_teacher_assignments, container, false);
 
-        rvAssignments = view.findViewById(R.id.rv_assignments);
+        rvAssignments = view.findViewById(R.id.teacher_assignments);
         progressBar = view.findViewById(R.id.progressBar);
         spinnerFilter = view.findViewById(R.id.spinner_assignment_filter);
 
-        adapter = new StudentAssignmentAdapter(filteredAssignments);
+        adapter = new TeacherAssignmentAdapter(filteredAssignments);
         rvAssignments.setLayoutManager(new LinearLayoutManager(getContext()));
         rvAssignments.setAdapter(adapter);
 
@@ -64,25 +66,33 @@ public class StudentAssignmentsFragment extends Fragment {
         fetchAssignments();
 
         adapter.setOnItemClickListener(position -> {
+            if (getContext() == null) {
+                Toast.makeText(requireActivity(), "Fragment not attached", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 JSONObject assignment = filteredAssignments.get(position);
-                AssignmentDetailFragment detailFragment = new AssignmentDetailFragment();
+                Log.d("TeacherAssignments", "Selected Assignment: " + assignment.toString());
+                EvaluationAssignmentFragment evaluationFragment = new EvaluationAssignmentFragment();
                 Bundle args = new Bundle();
-                args.putString("assignment_id", assignment.getString("assignment_id"));
-                args.putString("title", assignment.getString("title"));
-                args.putString("subject", assignment.getString("subject_name"));
-                args.putString("due_date", assignment.getString("due_date"));
-                args.putString("description", assignment.getString("description"));
-                args.putString("teacher_name", assignment.getString("teacher_name"));
-                args.putString("class_name", assignment.getString("class_name"));
-                detailFragment.setArguments(args);
+                args.putString("assignment_id", assignment.optString("assignment_id", ""));
+                args.putString("title", assignment.optString("title", "No Title"));
+                args.putString("subject", assignment.optString("subject_name", "No Subject"));
+                args.putString("due_date", assignment.optString("due_date", "No Date"));
+                args.putString("description", assignment.optString("description", "No Description"));
+                args.putString("student_name", assignment.optString("student_name", "Unknown Student"));
+                args.putString("class_name", assignment.optString("class_name", "Unknown Class"));
+                args.putString("submission_text", assignment.optString("submission_text", "No Submission"));
+                args.putString("submission_file", assignment.optString("submission_file", ""));
+                evaluationFragment.setArguments(args);
 
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, detailFragment);
+                transaction.replace(R.id.fragment_container, evaluationFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e("TeacherAssignments", "Error opening assignment details", e);
                 Toast.makeText(getContext(), "Error opening assignment details", Toast.LENGTH_SHORT).show();
             }
         });
@@ -90,14 +100,12 @@ public class StudentAssignmentsFragment extends Fragment {
         return view;
     }
 
-    // Called every time the user returns to the Fragment, useful for updating data
     @Override
     public void onResume() {
         super.onResume();
         fetchAssignments();
     }
 
-    // Cancel requests to avoid memory leaks
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -107,7 +115,7 @@ public class StudentAssignmentsFragment extends Fragment {
     }
 
     private void setupFilterSpinner() {
-        String[] filterOptions = {"All", "Pending", "Submitted", "Graded"};
+        String[] filterOptions = {"All", "Submitted", "Graded"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, filterOptions);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -121,7 +129,7 @@ public class StudentAssignmentsFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                filterAssignments("All");
+                filterAssignments("Submitted");
             }
         });
     }
@@ -133,7 +141,7 @@ public class StudentAssignmentsFragment extends Fragment {
         } else {
             for (JSONObject assignment : assignments) {
                 try {
-                    String submissionStatus = assignment.getString("submission_status");
+                    String submissionStatus = assignment.optString("submission_status", "Unknown");
                     if (submissionStatus.equals(status)) {
                         filteredAssignments.add(assignment);
                     }
@@ -149,19 +157,21 @@ public class StudentAssignmentsFragment extends Fragment {
     private void fetchAssignments() {
         progressBar.setVisibility(View.VISIBLE);
         SharedPreferences prefs = requireActivity().getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String studentId = prefs.getString("student_id", "1");
-        String url = "http://10.0.2.2/AndroidProject/get_assignments.php?student_id=" + studentId;
+        String teacherId = prefs.getString("teacher_id", "1");
+        String url = "http://10.0.2.2/AndroidProject/get_teacher_assignments.php?teacher_id=" + teacherId;
 
         requestQueue = Volley.newRequestQueue(requireContext());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         progressBar.setVisibility(View.GONE);
+                        Log.d("TeacherAssignments", "Response: " + response.toString());
                         if (response.getString("status").equals("success")) {
                             JSONArray data = response.getJSONArray("data");
                             assignments.clear();
                             for (int i = 0; i < data.length(); i++) {
                                 assignments.add(data.getJSONObject(i));
+                                Log.d("TeacherAssignments", "Assignment: " + data.getJSONObject(i).toString());
                             }
                             filterAssignments(spinnerFilter.getSelectedItem().toString());
                         } else {
@@ -169,13 +179,16 @@ public class StudentAssignmentsFragment extends Fragment {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e("TeacherAssignments", "Error parsing response", e);
                         Toast.makeText(getContext(), "Error parsing response", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
                     progressBar.setVisibility(View.GONE);
+                    Log.e("TeacherAssignments", "Network error", error);
                     Toast.makeText(getContext(), "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                }
+        );
 
         requestQueue.add(request);
     }

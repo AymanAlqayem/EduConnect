@@ -226,4 +226,12 @@ public class AddAssignmentFragment extends Fragment {
             requestQueue.add(request);
         });
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Cancel all pending requests to prevent memory leaks
+        if (requestQueue != null) {
+            requestQueue.cancelAll(this);
+        }
+    }
 }

@@ -76,6 +76,9 @@ public class TeacherActivity extends AppCompatActivity {
             } else if (id == R.id.nav_assignment) {
                 fragment = new AddAssignmentFragment();
                 title = "Assignments";
+            } else if (id == R.id.nav_assignment_evl) {
+                fragment = new TeacherAssignmentsFragment();
+                title = "Assignment evaluation";
             } else if (id == R.id.nav_logout) {
                 SharedPreferences prefs = getSharedPreferences("TeacherPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();

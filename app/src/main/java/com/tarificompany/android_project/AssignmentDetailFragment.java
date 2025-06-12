@@ -125,4 +125,5 @@ public class AssignmentDetailFragment extends Fragment {
             Toast.makeText(getContext(), "Error preparing submission", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

@@ -162,4 +162,13 @@ public class TeacherDashboardFragment extends Fragment {
 
         queue.add(request);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Cancel all pending requests to prevent memory leaks
+        if (queue != null) {
+            queue.cancelAll(this);
+        }
+    }
 }

@@ -24,6 +24,12 @@
         android:title="Add Assignment" />
 
     <item
+        android:id="@+id/nav_assignment_evl"
+        android:icon="@drawable/ic_assignment_evl"
+        android:title="Assignment evaluation" />
+
+
+    <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_logout"
         android:title="Logout" />
