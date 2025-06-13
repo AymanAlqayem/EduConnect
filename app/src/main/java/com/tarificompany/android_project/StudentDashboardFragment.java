@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class StudentDashboardFragment extends Fragment {
         rvEvents.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvEvents.setAdapter(eventAdapter);
 
+        checkForBirthdays();
         fetchDashboardData();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -156,6 +159,34 @@ public class StudentDashboardFragment extends Fragment {
 
         // Add the request to the queue
         queue.add(jsonObjectRequest);
+    }
+    private void checkForBirthdays() {
+        String url = "http://10.0.2.2/AndroidProject/get_birthdays_today.php";
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray birthdays = response.getJSONArray("birthdays");
+                            if (birthdays.length() > 0) {
+                                // Show PNG
+                                ImageView birthdayIcon = requireView().findViewById(R.id.ivBirthdayIcon);
+                                birthdayIcon.setVisibility(View.VISIBLE);
+                                Toast.makeText(requireContext(), "Happy Birthday!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> error.printStackTrace()
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        queue.add(request);
     }
 
     @Override

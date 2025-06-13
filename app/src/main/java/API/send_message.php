@@ -27,7 +27,7 @@ if (!$sender_id || !$sender_type || !$subject || !$content) {
 try {
     $pdo = getPDOConnection();
 
-    $sql = "INSERT INTO messages (sender_id, sender_role, subject, content)
+    $sql = "INSERT INTO messages (sender_id, sender_type, subject, content)
             VALUES (:sender_id, :sender_role, :subject, :content)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([

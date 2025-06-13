@@ -44,6 +44,8 @@ public class ComposeMessageActivity extends AppCompatActivity {
             requestQueue = Volley.newRequestQueue(this);
 
             initViews();
+            recipientIds = new ArrayList<>();
+            recipientNames = new ArrayList<>();
 
             androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -51,7 +53,6 @@ public class ComposeMessageActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
-
             setupSpinners();
             setupClickListeners();
 
@@ -86,20 +87,19 @@ public class ComposeMessageActivity extends AppCompatActivity {
             typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerRecipientType.setAdapter(typeAdapter);
 
-            recipientIds = new ArrayList<>();
-            recipientNames = new ArrayList<>();
-            updateRecipientsList();
-
+            // When user changes type (e.g. student or class), update recipient list accordingly
             spinnerRecipientType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    updateRecipientsList();
+                    updateRecipientsList(); // this method loads recipients based on selected type
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
                 }
             });
+
         } catch (Exception e) {
             Toast.makeText(this, "Error initializing spinners: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -202,7 +202,12 @@ public class ComposeMessageActivity extends AppCompatActivity {
     private void sendMessage() {
         try {
             String recipientType = spinnerRecipientType.getSelectedItem().toString();
-            String recipientId = recipientIds.get(spinnerRecipient.getSelectedItemPosition());
+            int selectedPos = spinnerRecipient.getSelectedItemPosition();
+            if (recipientIds.isEmpty() || selectedPos < 0 || selectedPos >= recipientIds.size()) {
+                Toast.makeText(this, "Please select a valid recipient", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String recipientId = recipientIds.get(selectedPos);
             String subject = etSubject.getText().toString().trim();
             String message = etMessage.getText().toString().trim();
 

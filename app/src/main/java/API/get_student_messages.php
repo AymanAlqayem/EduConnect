@@ -12,38 +12,51 @@ if (!$student_id || !is_numeric($student_id)) {
 try {
     $pdo = getPDOConnection();
 
-    // Get unread messages where student is recipient or part of recipient class
-   $sql = "SELECT
-            m.message_id,
+    // Get class_id and section_id for the student
+    $stmt = $pdo->prepare("SELECT class_id, section_id FROM students WHERE student_id = :student_id");
+    $stmt->execute([':student_id' => $student_id]);
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$student) {
+        echo json_encode(['error' => 'Student not found']);
+        exit;
+    }
+
+    $class_id = $student['class_id'];
+    $section_id = $student['section_id'];
+
+    $sql = "
+        SELECT 
+            m.message_id, 
             m.subject,
-            m.content,
+            m.content, 
             m.sent_at,
-            m.sender_role,
-            CASE
-                WHEN m.sender_role = 'Teacher' THEN t.name
-                WHEN m.sender_role = 'Student' THEN s.name
+            CASE 
+                WHEN m.sender_type = 'Teacher' THEN t.name
+                WHEN m.sender_type = 'Student' THEN s.name
                 ELSE 'Unknown'
             END AS sender_name
         FROM messages m
-        LEFT JOIN teachers t ON m.sender_id = t.teacher_id AND m.sender_role = 'Teacher'
-        LEFT JOIN students s ON m.sender_id = s.student_id AND m.sender_role = 'Student'
-        INNER JOIN message_recipients mr ON m.message_id = mr.message_id
-        WHERE
+        JOIN message_recipients mr ON mr.message_id = m.message_id
+        LEFT JOIN teachers t ON m.sender_id = t.teacher_id AND m.sender_type = 'Teacher'
+        LEFT JOIN students s ON m.sender_id = s.student_id AND m.sender_type = 'Student'
+        WHERE 
             (
-                mr.recipient_role = 'Student'
-                AND mr.recipient_id = :student_id
+                (mr.recipient_id = :student_id AND mr.recipient_role = 'Student') OR
+                (mr.class_id = :class_id) OR
+                (mr.section_id = :section_id)
             )
-            OR
-            (
-                mr.class_id = (SELECT class_id FROM students WHERE student_id = :student_id)
-                OR mr.section_id = (SELECT section_id FROM students WHERE student_id = :student_id)
-            )
-        ORDER BY m.sent_at DESC";
+        ORDER BY m.sent_at DESC
+    ";
 
-$stmt = $pdo->prepare($sql);
-$stmt->execute([':student_id' => $student_id]);
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':student_id' => $student_id,
+        ':class_id' => $class_id,
+        ':section_id' => $section_id
+    ]);
+    
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($messages);
 

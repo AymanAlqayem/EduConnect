@@ -28,8 +28,8 @@ try {
     $sql = "
         SELECT 
             CASE 
-                WHEN m.sender_role = 'Teacher' THEN (SELECT t.name FROM teachers t WHERE t.teacher_id = m.sender_id)
-                WHEN m.sender_role = 'Student' THEN (SELECT s.name FROM students s WHERE s.student_id = m.sender_id)
+                WHEN m.sender_type = 'Teacher' THEN (SELECT t.name FROM teachers t WHERE t.teacher_id = m.sender_id)
+                WHEN m.sender_type = 'Student' THEN (SELECT s.name FROM students s WHERE s.student_id = m.sender_id)
                 ELSE 'Unknown Sender'
             END AS sender_name,
             m.subject,

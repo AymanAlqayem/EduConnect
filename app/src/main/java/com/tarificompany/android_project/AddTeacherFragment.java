@@ -45,8 +45,8 @@ public class AddTeacherFragment extends Fragment {
 
     private EditText etFullName, etEmail, etPhone, etNotes, etDOB, etPassword, etRoom;
     private RadioGroup rgGender;
-    private Spinner spinnerSubject, spinnerClass, spinnerSection, spinnerDayOfWeek;
-    private Button btnSave, btnAddAssignment, btnDatePicker, btnGeneratePassword, btnStartTime, btnEndTime;
+    private Spinner spinnerSubject, spinnerClass, spinnerSection;
+    private Button btnSave, btnDatePicker, btnGeneratePassword;
     private ListView listViewAssignedClasses;
     private TextView tvAssignedClassesLabel;
 
@@ -71,8 +71,6 @@ public class AddTeacherFragment extends Fragment {
         loadSubjects();
         loadClasses();
 
-        setUpAssignedClassesList();
-
         btnDatePicker.setOnClickListener(v -> showDatePickerDialog());
 
         btnGeneratePassword.setOnClickListener(v -> {
@@ -80,10 +78,6 @@ public class AddTeacherFragment extends Fragment {
             etPassword.setText(randomPassword);
         });
 
-        btnStartTime.setOnClickListener(v -> showTimePickerDialog(true));
-        btnEndTime.setOnClickListener(v -> showTimePickerDialog(false));
-
-        btnAddAssignment.setOnClickListener(v -> addClassAssignment());
 
         btnSave.setOnClickListener(v -> saveTeacher());
 
@@ -100,15 +94,11 @@ public class AddTeacherFragment extends Fragment {
         spinnerSubject = view.findViewById(R.id.spinnerSubject);
         spinnerClass = view.findViewById(R.id.spinnerClass);
         spinnerSection = view.findViewById(R.id.spinnerSection);
-        spinnerDayOfWeek = view.findViewById(R.id.spinnerDayOfWeek);
         etNotes = view.findViewById(R.id.etNotes);
         etRoom = view.findViewById(R.id.etRoom);
         btnSave = view.findViewById(R.id.btnSave);
-        btnAddAssignment = view.findViewById(R.id.btnAddAssignment);
         btnDatePicker = view.findViewById(R.id.btnDatePicker);
         btnGeneratePassword = view.findViewById(R.id.btnGeneratePassword);
-        btnStartTime = view.findViewById(R.id.btnStartTime);
-        btnEndTime = view.findViewById(R.id.btnEndTime);
         listViewAssignedClasses = view.findViewById(R.id.listViewAssignedClasses);
         tvAssignedClassesLabel = view.findViewById(R.id.tvAssignedClassesLabel);
 
@@ -117,14 +107,6 @@ public class AddTeacherFragment extends Fragment {
 
         queue = Volley.newRequestQueue(requireContext());
 
-        // Setup Day of Week spinner
-        ArrayAdapter<CharSequence> dayAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.days_of_week,
-                android.R.layout.simple_spinner_item
-        );
-        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDayOfWeek.setAdapter(dayAdapter);
     }
 
     private void loadSubjects() {
@@ -300,37 +282,6 @@ public class AddTeacherFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void showTimePickerDialog(boolean isStartTime) {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                requireContext(),
-                R.style.TimePickerDialogTheme,
-                (view, hourOfDay, minuteOfHour) -> {
-                    String time = String.format(Locale.US, "%02d:%02d", hourOfDay, minuteOfHour);
-                    if (isStartTime) {
-                        btnStartTime.setText(time);
-                    } else {
-                        btnEndTime.setText(time);
-                    }
-                },
-                hour, minute, true);
-
-        // Set positive button (OK)
-        timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", (dialog, which) -> {
-            // The OnTimeSetListener will handle setting the time
-        });
-
-        // Set negative button (Cancel)
-        timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
-            // Do nothing, just dismiss
-        });
-
-        timePickerDialog.show();
-    }
-
     private String generateRandomPassword(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
         Random random = new Random();
@@ -341,23 +292,6 @@ public class AddTeacherFragment extends Fragment {
         return sb.toString();
     }
 
-    private void setUpAssignedClassesList() {
-        assignedClassesAdapter = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                assignedClasses
-        );
-        listViewAssignedClasses.setAdapter(assignedClassesAdapter);
-        listViewAssignedClasses.setOnItemLongClickListener((parent, view, position, id) -> {
-            String removed = assignedClasses.remove(position);
-            assignedClassesAdapter.notifyDataSetChanged();
-            updateAssignedClassesVisibility();
-            Toast.makeText(requireContext(), "Removed: " + removed, Toast.LENGTH_SHORT).show();
-            return true;
-        });
-        updateAssignedClassesVisibility();
-    }
-
     private void updateAssignedClassesVisibility() {
         if (assignedClasses.isEmpty()) {
             tvAssignedClassesLabel.setVisibility(View.GONE);
@@ -366,41 +300,6 @@ public class AddTeacherFragment extends Fragment {
             tvAssignedClassesLabel.setVisibility(View.VISIBLE);
             listViewAssignedClasses.setVisibility(View.VISIBLE);
             tvAssignedClassesLabel.setText("Current Assignments (" + assignedClasses.size() + "):");
-        }
-    }
-
-    private void addClassAssignment() {
-        if (spinnerClass.getSelectedItem() == null || spinnerSection.getSelectedItem() == null ||
-                spinnerDayOfWeek.getSelectedItem() == null || btnStartTime.getText().toString().equals("Select Start Time") ||
-                btnEndTime.getText().toString().equals("Select End Time") || etRoom.getText().toString().trim().isEmpty()) {
-            Toast.makeText(requireContext(), "Please fill all assignment fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ClassItem selectedClass = (ClassItem) spinnerClass.getSelectedItem();
-        String selectedSection = spinnerSection.getSelectedItem().toString();
-        String dayOfWeek = spinnerDayOfWeek.getSelectedItem().toString();
-        String startTime = btnStartTime.getText().toString();
-        String endTime = btnEndTime.getText().toString();
-        String room = etRoom.getText().toString().trim();
-
-        String assignment = selectedClass.getName() + " - Section " + selectedSection +
-                " (" + dayOfWeek + ", " + startTime + " - " + endTime + ", " + room + ")";
-
-        if (!assignedClasses.contains(assignment)) {
-            assignedClasses.add(assignment);
-            assignedClassesAdapter.notifyDataSetChanged();
-            updateAssignedClassesVisibility();
-            Toast.makeText(requireContext(), "Added: " + assignment, Toast.LENGTH_SHORT).show();
-            // Reset assignment fields
-            spinnerClass.setSelection(0);
-            spinnerSection.setAdapter(null);
-            spinnerDayOfWeek.setSelection(0);
-            btnStartTime.setText("Select Start Time");
-            btnEndTime.setText("Select End Time");
-            etRoom.setText("");
-        } else {
-            Toast.makeText(requireContext(), "This assignment already exists", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -443,10 +342,6 @@ public class AddTeacherFragment extends Fragment {
             return;
         }
 
-        if (assignedClasses.isEmpty()) {
-            Toast.makeText(requireContext(), "Please add at least one class assignment", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         String subject = spinnerSubject.getSelectedItem().toString();
 
@@ -459,16 +354,6 @@ public class AddTeacherFragment extends Fragment {
         params.put("gender", gender);
         params.put("subject", subject);
         params.put("notes", notes);
-
-        // Combine assignments with scheduling details
-        StringBuilder assignmentsBuilder = new StringBuilder();
-        for (String assignment : assignedClasses) {
-            assignmentsBuilder.append(assignment).append(";");
-        }
-        if (assignmentsBuilder.length() > 0) {
-            assignmentsBuilder.setLength(assignmentsBuilder.length() - 1);
-        }
-        params.put("assignments", assignmentsBuilder.toString());
 
         sendSaveRequest(params);
     }
@@ -513,12 +398,6 @@ public class AddTeacherFragment extends Fragment {
         spinnerSubject.setSelection(0);
         spinnerClass.setSelection(0);
         spinnerSection.setAdapter(null);
-        spinnerDayOfWeek.setSelection(0);
-        btnStartTime.setText("Select Start Time");
-        btnEndTime.setText("Select End Time");
-        assignedClasses.clear();
-        assignedClassesAdapter.notifyDataSetChanged();
-        updateAssignedClassesVisibility();
     }
 
     private static class ClassItem {

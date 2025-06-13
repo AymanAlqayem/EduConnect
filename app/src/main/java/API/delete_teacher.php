@@ -17,14 +17,15 @@ try {
     $teacher_id = $_POST['teacher_id'];
 
     // Update is_active to FALSE for the specified teacher
-    $stmt = $pdo->prepare("UPDATE teachers SET is_active = FALSE WHERE teacher_id = ?");
+    $stmt = $pdo->prepare("SET FOREIGN_KEY_CHECKS = 0; DELETE from teachers WHERE teacher_id = ?; SET FOREIGN_KEY_CHECKS = 1;
+");
     $stmt->execute([$teacher_id]);
 
     // Check if any row was affected
     if ($stmt->rowCount() > 0) {
         echo json_encode([
             "status" => "success",
-            "message" => "Teacher soft-deleted successfully"
+            "message" => "Teacher deleted successfully"
         ]);
     } else {
         echo json_encode([
@@ -38,4 +39,3 @@ try {
         "message" => $e->getMessage()
     ]);
 }
-?>

@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TeacherDashboardFragment extends Fragment {
@@ -103,42 +104,31 @@ public class TeacherDashboardFragment extends Fragment {
     }
 
     private void fetchTotalClassesAndStudents(String teacherId) {
-        String urlSchedule = "http://10.0.2.2/AndroidProject/get_teacher_schedule.php?teacher_id=" + teacherId;
+        String url = "http://10.0.2.2/AndroidProject/get_teacher_dashboard_schedule.php?teacher_id=" + teacherId;
 
-        JsonArrayRequest scheduleRequest = new JsonArrayRequest(Request.Method.GET, urlSchedule, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        int totalClasses = response.length();
+                        int totalClasses = response.getInt("class_count");
+                        int studentCount = response.getInt("student_count");
+
                         tvTodayClasses.setText(String.valueOf(totalClasses));
-                        fetchTotalStudentsForClasses(response);
-                    } catch (Exception e) {
-                        Log.e("fetchTotalClasses", "Error parsing: " + e.getMessage());
+                        tvStudentsCount.setText(String.valueOf(studentCount));
+                    } catch (JSONException e) {
+                        Log.e("fetchTotalClasses", "JSON parsing error: " + e.getMessage());
                         tvTodayClasses.setText("0");
                         tvStudentsCount.setText("0");
                     }
                 },
                 error -> {
                     Log.e("fetchTotalClasses", "Network error: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"));
-                    Toast.makeText(getContext(), "Error loading classes: " + (error.getMessage() != null ? error.getMessage() : "Unknown error"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
                     tvTodayClasses.setText("0");
                     tvStudentsCount.setText("0");
-                });
+                }
+        );
 
-        queue.add(scheduleRequest);
-    }
-
-    private void fetchTotalStudentsForClasses(JSONArray scheduleArray) {
-        int totalStudents = 0;
-        try {
-            for (int i = 0; i < scheduleArray.length(); i++) {
-                JSONObject scheduleObj = scheduleArray.getJSONObject(i);
-                totalStudents += scheduleObj.getInt("student_count");
-            }
-            tvStudentsCount.setText(String.valueOf(totalStudents));
-        } catch (Exception e) {
-            Log.e("fetchTotalStudents", "Error parsing: " + e.getMessage());
-            tvStudentsCount.setText("0");
-        }
+        queue.add(request);
     }
 
     private void fetchTotalMessages(String teacherId) {
