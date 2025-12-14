@@ -1,50 +1,66 @@
-EduConnect – School Management Android Application
+# EduConnect – School Management Android Application
 
-EduConnect is an Android application designed to streamline school management by connecting Students, Teachers, and Registrars in a single platform. The app facilitates class scheduling, assignment management, messaging, and grade tracking in a user-friendly mobile interface.
+EduConnect is an **Android-based school management application** designed to streamline academic and administrative workflows.  
+The platform connects **Students, Teachers, and Registrars** within a single mobile application, enabling efficient class scheduling, assignment management, messaging, and grade tracking through a clean and intuitive user interface.
 
-Features
-User Roles
+---
 
-Registrar:
+## 🚀 Key Features
 
-Add teachers and students to classes and sections
+### 👥 User Roles & Capabilities
 
-Generate schedules for students and teachers
+#### Registrar
+- Add and manage teachers and students
+- Assign students and teachers to classes and sections
+- Generate and manage schedules for both students and teachers
 
-Teacher:
+#### Teacher
+- Upload and share class materials
+- Create and publish assignments
+- Evaluate submissions and publish grades
+- Respond to messages from students
+- View personal teaching schedules
 
-Upload and share class materials and assignments
+#### Student
+- View class schedules
+- Submit assignments
+- Send messages to teachers
+- Track grades for enrolled courses
 
-Publish grades for students
+---
 
-Respond to messages from students
+## 🔧 Common Features
+- **Role-Based Access Control** with tailored functionality for each user
+- **Activity-Based Navigation** for smooth and intuitive interaction
+- **Messaging System** for communication between teachers and students
+- **User-Friendly Interface** implemented using ViewBinding for cleaner and safer UI code
+- **Local Data Persistence** for storing application data
 
-View personal schedules
+---
 
-Student:
+## 🛠 Technology Stack
+- **Programming Language:** Java  
+- **Platform:** Android SDK  
+- **UI:** Activity-based layouts with ViewBinding  
+- **Database:** SQLite (or other local storage solutions, if applicable)  
 
-View schedules
+---
 
-Submit assignments
+## ⚙️ Installation & Setup
 
-Send messages to teachers
+### Prerequisites
+- Android Studio
+- JDK 8+
+- Android SDK
 
-Track grades for enrolled courses
+### Steps
+```bash
+# Clone the repository
+git clone <repository-url>
+cd EduConnect
 
-Common Features
+# Open the project in Android Studio
 
-Role-based access and tailored functionality for each user
+# Sync Gradle dependencies
 
-Activity-based navigation for smooth interaction
-
-User-friendly interface with ViewBinding for cleaner UI code
-
-Technology Stack
-
-Programming Language: Java
-
-Platform: Android SDK
-
-UI: ViewBinding, activity-based layouts
-
-Database: SQLite or any local storage solution (if applicable)
+# Run the application on an emulator or physical device
